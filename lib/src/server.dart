@@ -7,6 +7,7 @@ import 'dart:isolate';
 import 'package:minerva/src/core.dart';
 import 'package:minerva/src/http/minerva_http_headers.dart';
 
+import 'auth.dart';
 import 'isolate.dart';
 import 'routing.dart';
 import 'http.dart';

@@ -3,18 +3,18 @@ part of minerva_server;
 typedef TokenVerifyCallback = FutureOr<bool> Function(
     ServerContext context, String token);
 
-typedef GetRolesCallback = FutureOr<List<String>> Function(
+typedef GetRolesCallback = FutureOr<Role> Function(
     ServerContext context, String token);
 
 class AuthMiddleware extends Middleware {
   final TokenVerifyCallback _tokenVerify;
 
-  final GetRolesCallback? _getRoles;
+  final GetRolesCallback? _getRole;
 
   const AuthMiddleware(
-      {required TokenVerifyCallback tokenVerify, GetRolesCallback? getRoles})
+      {required TokenVerifyCallback tokenVerify, GetRolesCallback? getRole})
       : _tokenVerify = tokenVerify,
-        _getRoles = getRoles;
+        _getRole = getRole;
 
   @override
   Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
@@ -29,10 +29,10 @@ class AuthMiddleware extends Middleware {
         var isVerified = await _tokenVerify(context.context, token);
 
         if (isVerified) {
-          if (_getRoles != null) {
-            var roles = await _getRoles!.call(context.context, token);
+          if (_getRole != null) {
+            var role = await _getRole!.call(context.context, token);
 
-            context.request.addRoles(roles);
+            context.request.setRole(role);
           }
         } else {
           UnauthorizedResult();

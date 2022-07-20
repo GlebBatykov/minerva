@@ -3,9 +3,9 @@ part of minerva_http;
 class MinervaRequest {
   final HttpRequest _request;
 
-  final List<String> _roles = [];
+  Role? _role;
 
-  List<String> get roles => _roles;
+  Role? get role => _role;
 
   HttpSession get session => _request.session;
 
@@ -38,11 +38,11 @@ class MinervaRequest {
 
   MinervaRequest(HttpRequest request) : _request = request;
 
-  void addRole(String role) {
-    _roles.add(role);
+  void setRole(Role role) {
+    _role = role;
   }
 
-  void addRoles(List<String> roles) {
-    _roles.addAll(roles);
+  void removeRole() {
+    _role = null;
   }
 }

@@ -11,51 +11,51 @@ class Endpoints {
       List.unmodifiable(_webSocketEndpoints);
 
   void get(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.get, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.get, path, handler, errorHandler, authOptions));
   }
 
   void post(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.post, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.post, path, handler, errorHandler, authOptions));
   }
 
   void put(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.put, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.put, path, handler, errorHandler, authOptions));
   }
 
   void head(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.head, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.head, path, handler, errorHandler, authOptions));
   }
 
   void delete(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.delete, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.delete, path, handler, errorHandler, authOptions));
   }
 
   void patch(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.patch, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.patch, path, handler, errorHandler, authOptions));
   }
 
   void options(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.options, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.options, path, handler, errorHandler, authOptions));
   }
 
   void trace(String path, EndpointHandler handler,
-      {EndpointErrorHandler? errorHandler, List<String>? roles}) {
+      {EndpointErrorHandler? errorHandler, AuthOptions? authOptions}) {
     _httpEndpoints.add(
-        Endpoint(HttpMethod.trace, path, handler, errorHandler, roles ?? []));
+        Endpoint(HttpMethod.trace, path, handler, errorHandler, authOptions));
   }
 
   void ws(String path, WebSocketHandler handler) {

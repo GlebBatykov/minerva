@@ -18,3 +18,5 @@ export 'src/server.dart'
 export 'src/routing.dart' show Endpoints, Endpoint;
 
 export 'src/http.dart';
+
+export 'src/auth.dart';

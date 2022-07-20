@@ -21,8 +21,7 @@ class EndpointMiddleware extends Middleware {
       }
 
       if (endpoint != null) {
-        if (endpoint.roles.isNotEmpty &&
-            request.roles.intersection(endpoint.roles).isEmpty) {
+        if (!_isHaveAccess(request, endpoint)) {
           return UnauthorizedResult();
         } else {
           try {
@@ -48,5 +47,33 @@ class EndpointMiddleware extends Middleware {
     } else {
       return NotFoundResult();
     }
+  }
+
+  bool _isHaveAccess(MinervaRequest request, Endpoint endpoint) {
+    bool isHaveAccess = false;
+
+    var authOptions = endpoint.authOptions;
+
+    var role = request.role;
+
+    if (authOptions != null) {
+      if ((authOptions.permissionLevel != null &&
+          (role != null &&
+              role.permissionLevel != null &&
+              authOptions.permissionLevel! <= role.permissionLevel!))) {
+        isHaveAccess = true;
+      }
+
+      if (!isHaveAccess &&
+          (authOptions.roles != null &&
+              role != null &&
+              authOptions.roles!.contains(role.name))) {
+        isHaveAccess = true;
+      }
+    } else {
+      isHaveAccess = true;
+    }
+
+    return isHaveAccess;
   }
 }

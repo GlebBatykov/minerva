@@ -15,7 +15,8 @@ class Endpoint {
 
   final EndpointErrorHandler? errorHandler;
 
-  final List<String> roles;
+  final AuthOptions? authOptions;
 
-  Endpoint(this.method, this.path, this.handler, this.errorHandler, this.roles);
+  Endpoint(this.method, this.path, this.handler, this.errorHandler,
+      this.authOptions);
 }
