@@ -37,7 +37,7 @@ class JsonResult extends Result {
 }
 
 class NotFoundResult extends Result {
-  NotFoundResult({super.headers}) : super(statusCode: 404);
+  NotFoundResult({super.body, super.headers}) : super(statusCode: 404);
 }
 
 class FileResult extends Result {
