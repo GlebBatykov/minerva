@@ -9,7 +9,11 @@ export 'src/server.dart'
         Agent,
         AgentData,
         AuthMiddleware,
-        EndpointMiddleware;
+        EndpointMiddleware,
+        Middleware,
+        ErrorMiddleware,
+        MiddlewareContext,
+        PipelineNode;
 
 export 'src/routing.dart' show Endpoints, Endpoint;
 
