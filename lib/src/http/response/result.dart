@@ -32,8 +32,8 @@ class InternalServerErrorResult extends Result {
 }
 
 class JsonResult extends Result {
-  JsonResult(Map<String, dynamic> json, {super.headers})
-      : super(statusCode: 200, body: jsonEncode(json));
+  JsonResult(Map<String, dynamic> json, {int? statusCode, super.headers})
+      : super(statusCode: statusCode ?? 200, body: jsonEncode(json));
 }
 
 class NotFoundResult extends Result {
