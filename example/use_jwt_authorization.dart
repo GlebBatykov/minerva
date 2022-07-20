@@ -19,17 +19,17 @@ bool tokenVerify(ServerContext context, String token) {
   return true;
 }
 
-Role getRoles(ServerContext context, String token) {
+Role getRole(ServerContext context, String token) {
   //
 
-  return Role('User', permissionLevel: 2);
+  return Role('User');
 }
 
 void main() async {
   //
   var middlewares = [
     ErrorMiddleware(),
-    AuthMiddleware(tokenVerify: tokenVerify, getRole: getRoles),
+    AuthMiddleware(tokenVerify: tokenVerify, getRole: getRole),
     EndpointMiddleware()
   ];
 
