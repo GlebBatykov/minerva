@@ -23,7 +23,7 @@ class Pipeline {
     }
   }
 
-  Future<Result> handle(MiddlewareContext context) async {
+  Future<dynamic> handle(MiddlewareContext context) async {
     if (_first != null) {
       return await _first!.handle(context);
     } else {

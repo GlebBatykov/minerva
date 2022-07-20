@@ -6,7 +6,7 @@ class ErrorMiddleware extends Middleware {
   const ErrorMiddleware({this.handler});
 
   @override
-  Future<Result> handle(MiddlewareContext context, PipelineNode? next) async {
+  Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
     if (next != null) {
       try {
         return await next.handle(context);

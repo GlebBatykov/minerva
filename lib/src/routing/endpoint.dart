@@ -1,9 +1,9 @@
 part of minerva_routing;
 
-typedef EndpointHandler = FutureOr<Result> Function(
+typedef EndpointHandler = FutureOr<dynamic> Function(
     ServerContext context, MinervaRequest request);
 
-typedef EndpointErrorHandler = FutureOr<Result> Function(
+typedef EndpointErrorHandler = FutureOr<dynamic> Function(
     ServerContext context, MinervaRequest request, Object error);
 
 class Endpoint {

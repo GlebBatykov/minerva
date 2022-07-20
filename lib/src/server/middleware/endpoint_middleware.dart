@@ -4,7 +4,7 @@ class EndpointMiddleware extends Middleware {
   const EndpointMiddleware();
 
   @override
-  Future<Result> handle(MiddlewareContext context, PipelineNode? next) async {
+  Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
     var request = context.request;
 
     var endpoints = context.endpoints

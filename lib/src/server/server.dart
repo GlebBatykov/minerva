@@ -74,7 +74,13 @@ class Server {
 
     var result = await _pipeline.handle(context);
 
-    var minervaResponse = await result.response;
+    late MinervaResponse minervaResponse;
+
+    if (result is Result) {
+      minervaResponse = await result.response;
+    } else {
+      minervaResponse = await OkResult(body: result).response;
+    }
 
     var response = request.response;
 

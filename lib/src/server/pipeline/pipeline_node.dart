@@ -9,7 +9,7 @@ class PipelineNode {
       : _current = current,
         _next = next;
 
-  Future<Result> handle(MiddlewareContext context) async {
+  Future<dynamic> handle(MiddlewareContext context) async {
     return await _current.handle(context, _next);
   }
 }
