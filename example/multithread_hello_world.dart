@@ -4,8 +4,7 @@ import 'package:minerva/minerva.dart';
 
 void endpointsBuilder(Endpoints endpoints) {
   //
-  endpoints.get(
-      '/hello', (context, request) => OkResult(body: 'Hello, world!'));
+  endpoints.get('/hello', (context, request) => 'Hello, world!');
 }
 
 void main() async {

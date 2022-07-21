@@ -2,7 +2,12 @@ import 'package:minerva/minerva.dart';
 
 void endpointsBuilder(Endpoints endpoints) {
   //
-  endpoints.get('/hello', (context, request) => 'Hello, world!');
+  endpoints.get('/hello', (context, request) {
+    //
+    context.logger.info('Log!');
+
+    return 'Hello, world!';
+  });
 }
 
 void main() async {
