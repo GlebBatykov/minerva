@@ -15,7 +15,9 @@ import 'core.dart';
 import 'logging.dart';
 
 part 'server/exception/server_store_exception.dart';
+part 'server/exception/request_handle_exception.dart';
 part 'server/exception/endpoint_handle_exception.dart';
+part 'server/exception/middleware_handle_exception.dart';
 
 part 'server/minerva.dart';
 part 'server/server.dart';
