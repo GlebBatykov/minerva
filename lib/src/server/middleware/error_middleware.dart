@@ -16,8 +16,9 @@ class ErrorMiddleware extends Middleware {
         } else {
           try {
             return handler!.call(context.context, context.request, object);
-          } catch (object) {
-            return InternalServerErrorResult(object);
+          } catch (object, stackTrace) {
+            return InternalServerErrorResult(
+                MiddlewareHandleException(object, stackTrace));
           }
         }
       }
