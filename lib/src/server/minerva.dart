@@ -7,14 +7,19 @@ class Minerva {
 
   final Agents _agents = Agents();
 
-  Minerva._(int instance, EndpointsBuilder builder);
+  final Logger _logger;
+
+  Minerva._(int instance, EndpointsBuilder builder, Logger logger)
+      : _logger = logger;
 
   static Future<Minerva> bind(
       {int instance = 1,
       required ServerSetting setting,
       required EndpointsBuilder builder,
+      Logger? logger,
       List<AgentData>? agents}) async {
-    var minerva = Minerva._(instance, builder);
+    var minerva = Minerva._(instance, builder,
+        logger ?? MinervaLogger('[&time] [&level] &message'));
 
     await minerva._initialize(instance, setting, builder, agents ?? []);
 
@@ -27,7 +32,10 @@ class Minerva {
 
     var connectors = AgentConnectors(_agents.connectors);
 
-    await _servers.initialize(instance, setting, builder, connectors);
+    await _servers.initialize(instance, setting, builder, _logger, connectors);
+
+    _logger
+        .info('Server starting in http://${setting.address}:${setting.port}.');
   }
 
   Future<void> pause() async {

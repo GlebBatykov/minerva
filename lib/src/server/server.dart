@@ -34,16 +34,16 @@ class Server {
         _pipeline = Pipeline(middlewares);
 
   static Future<Server> bind(ServerSetting setting, Endpoints endpoints,
-      AgentConnectors connectors) async {
+      Logger logger, AgentConnectors connectors) async {
     var server = Server._(setting.address, setting.port, setting.builder,
         setting.securityContext, endpoints, setting.middlewares);
 
-    await server._initialize(connectors);
+    await server._initialize(logger, connectors);
 
     return server;
   }
 
-  Future<void> _initialize(AgentConnectors connectors) async {
+  Future<void> _initialize(Logger logger, AgentConnectors connectors) async {
     if (_securityContext == null) {
       _server = await HttpServer.bind(_address, _port, shared: true);
     } else {
@@ -51,7 +51,7 @@ class Server {
           shared: true);
     }
 
-    _context = ServerContext(connectors);
+    _context = ServerContext(logger, connectors);
 
     await _builder?.call(_context);
 

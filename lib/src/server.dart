@@ -12,6 +12,7 @@ import 'isolate.dart';
 import 'routing.dart';
 import 'http.dart';
 import 'core.dart';
+import 'logging.dart';
 
 part 'server/exception/server_store_exception.dart';
 part 'server/exception/endpoint_handle_exception.dart';

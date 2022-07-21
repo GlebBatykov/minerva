@@ -3,7 +3,9 @@ part of minerva_server;
 class ServerContext {
   final ServerStore store = ServerStore();
 
+  final Logger logger;
+
   final AgentConnectors connectors;
 
-  ServerContext(this.connectors);
+  ServerContext(this.logger, this.connectors);
 }

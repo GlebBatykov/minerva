@@ -3,8 +3,12 @@ part of minerva_server;
 class Servers {
   final List<IsolateSupervisor> _supervisors = [];
 
-  Future<void> initialize(int instance, ServerSetting setting,
-      EndpointsBuilder builder, AgentConnectors connectors) async {
+  Future<void> initialize(
+      int instance,
+      ServerSetting setting,
+      EndpointsBuilder builder,
+      Logger logger,
+      AgentConnectors connectors) async {
     var endpoints = Endpoints();
 
     await builder(endpoints);
@@ -13,7 +17,7 @@ class Servers {
         .addAll(List.generate(instance, (index) => IsolateSupervisor()));
 
     await Future.wait(_supervisors.map((e) => e.initialize().then((value) =>
-        e.start(ServerTaskHandler(setting, endpoints, connectors)))));
+        e.start(ServerTaskHandler(setting, endpoints, logger, connectors)))));
   }
 
   Future<void> pause() async {
