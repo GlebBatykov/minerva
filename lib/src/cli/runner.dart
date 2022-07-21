@@ -4,8 +4,10 @@ class Runner {
   Future<void> run(List<String> arguments) async {
     var runner = CommandRunner('minerva', 'Server side framework for Dart.');
 
-    runner.addCommand(CreateCommand());
-    runner.addCommand(RunCommand());
+    runner.addCommand(Create());
+    runner.addCommand(Run());
+    runner.addCommand(Build());
+    runner.addCommand(Clear());
 
     await runner.run(arguments).catchError((error) {
       if (error is UsageException) {
