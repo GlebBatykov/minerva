@@ -49,11 +49,7 @@ class RunCommand extends Command {
     if (compileType == 'AOT') {
       try {
         await _buildAOT();
-      } catch (object, stackTrace) {
-        print(object);
-
-        print(stackTrace);
-
+      } catch (_) {
         usageException(
             'Incorrect project build. Use the "minerva clear" command to clear the build.');
       }
