@@ -50,14 +50,10 @@ class CompileCommand extends CLICommand<void> {
 
     var libDirectory = Directory.fromUri(Uri.directory('$projectPath/lib'));
 
-    var fileCounter = 0;
-
     var fileLogs = <Map<String, dynamic>>[];
 
     for (var entity in await libDirectory.list(recursive: true).toList()) {
       if (entity is File && entity.fileExtension == 'dart') {
-        fileCounter++;
-
         var entityStat = await entity.stat();
 
         var modificationTime = entityStat.modified;
@@ -69,10 +65,7 @@ class CompileCommand extends CLICommand<void> {
       }
     }
 
-    var details = <String, dynamic>{
-      'numbersOfFiles': fileCounter,
-      'fileLogs': fileLogs
-    };
+    var details = <String, dynamic>{'fileLogs': fileLogs};
 
     var json = jsonEncode(details);
 

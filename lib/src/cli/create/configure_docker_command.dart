@@ -3,9 +3,7 @@ part of minerva_cli;
 class ConfigureDockerCommand extends CLICommand<void> {
   final String projectPath;
 
-  final String dockerCompileType;
-
-  ConfigureDockerCommand(this.projectPath, this.dockerCompileType);
+  ConfigureDockerCommand(this.projectPath);
 
   @override
   Future<void> run() async {
@@ -37,46 +35,27 @@ build/
   Future<void> _createDockerFile() async {
     var filePath = '$projectPath/Dockerfile';
 
-    var file = File.fromUri(Uri.file(filePath));
+    var dockerFile = File.fromUri(Uri.file(filePath));
 
-    await file.create();
+    await dockerFile.create();
 
-    await file.writeAsString('''
-FROM dart:stable AS build
+    await dockerFile.writeAsString('''
+# Specify the Dart SDK base image
+FROM dart:stable
 
-WORKDIR /minerva
-COPY pubspec.* ./
-RUN dart pub get
-RUN dart pub global activate minerva
+# Create application directory.
+WORKDIR /app
 
+# Copy project.
 COPY . .
 
-${() {
-      if (dockerCompileType == 'AOT') {
-        return '''
+# Resolve app dependencies and activate Minerva.
 RUN dart pub get --offline
-RUN dart compile exe bin/main.dart -o bin/main
-        ''';
-      } else {
-        return '''
-RUN dart pub get --offline
-        ''';
-      }
-    }()}
+RUN dart pub global activate minerva
 
-FROM scratch
-COPY --from=build /runtime/ /
-COPY --from=build /minerva/bin/main /minerva/bin/
-
+# Start server.
 EXPOSE 8080
-
-${() {
-      if (dockerCompileType == 'AOT') {
-        return 'CMD ["/minerva/bin/main"]';
-      } else {
-        return 'CMD ["dart", "/minerva/bin/main.dart"]';
-      }
-    }()}
+CMD ["minerva", "run", "-d", "/app", "-m", "release"]
 ''');
   }
 }

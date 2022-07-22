@@ -97,8 +97,7 @@ class Run extends Command {
       var details =
           jsonDecode(await detailsFile.readAsString()) as Map<String, dynamic>;
 
-      if (details.containsKey('numbersOfFiles') &&
-          details.containsKey('fileLogs')) {
+      if (details.containsKey('fileLogs')) {
         var directoryPath = argResults!['directory'];
 
         var libDirectory =
@@ -109,12 +108,12 @@ class Run extends Command {
                 (element) => element is File && element.fileExtension == 'dart')
             .cast<File>();
 
-        if (dartFiles.length != details['numbersOfFiles']) {
-          return true;
-        }
-
         var fileLogs =
             (details['fileLogs'] as List).cast<Map<String, dynamic>>();
+
+        if (dartFiles.length < fileLogs.length) {
+          return true;
+        }
 
         for (var fileLog in fileLogs) {
           var files =
