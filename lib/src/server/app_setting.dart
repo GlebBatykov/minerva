@@ -24,21 +24,24 @@ class AppSetting {
   }
 
   Future<void> _initialize() async {
-    _path = '${Directory.current.path}/appsetting.json';
+    var appSettingDirectory =
+        Directory.fromUri(Uri.directory(Platform.script.path)).parent.parent;
+
+    _path = '${appSettingDirectory.path}/appsetting.json';
 
     _file = File.fromUri(Uri.file(_path));
 
-    if (await _file!.exists()) {
-      try {
-        _data = jsonDecode(await _file!.readAsString());
-      } catch (_) {
-        throw AppSettingException(
-            message:
-                'An error occurred while parsing app setting.json file by path: $_path.');
-      }
-    } else {
+    if (!await _file!.exists()) {
       throw AppSettingException(
-          message: 'The setting.json file not exist by path: $_path.');
+          message: 'The appsetting.json file not exist by path: $_path.');
+    }
+
+    try {
+      _data = jsonDecode(await _file!.readAsString());
+    } catch (_) {
+      throw AppSettingException(
+          message:
+              'An error occurred while parsing appsetting.json file by path: $_path.');
     }
   }
 

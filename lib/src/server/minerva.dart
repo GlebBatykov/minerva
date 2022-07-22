@@ -33,12 +33,13 @@ class Minerva {
 
     if (data.containsKey('host') && data.containsKey('port')) {
       try {
-        var port = int.parse(data['port']);
+        var port = data['port'];
 
-        return ServerAddress(data['address'], port);
+        return ServerAddress(data['host'], port);
       } catch (_) {
         throw MinervaBindException(
-            message: 'Invalid port value in the appsetting.json file.');
+            message:
+                'Invalid host or port values in the appsetting.json file.');
       }
     } else {
       throw MinervaBindException(
