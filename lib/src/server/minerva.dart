@@ -43,7 +43,7 @@ class Minerva {
       }
     } else {
       throw MinervaBindException(
-          message: 'In the appsetting file.json is missing host or port.');
+          message: 'In the appsetting.json file is missing host or port.');
     }
   }
 

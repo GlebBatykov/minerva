@@ -26,7 +26,8 @@ class BuildCommand extends Command {
 
   @override
   Future<void> run() async {
-    _directoryPath = argResults!['directory'];
+    _directoryPath =
+        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
 
     _mode = argResults!['mode'];
 
@@ -55,6 +56,12 @@ class BuildCommand extends Command {
 
     var compileType = currentBuildSetting['compile-type'] ?? 'AOT';
 
+    var isNeedClear = await _isNeedClearBuildDirectory(compileType);
+
+    if (isNeedClear) {
+      await _clearBuildDirectory();
+    }
+
     if (compileType == 'AOT') {
       await _buildAOT(appSetting, currentBuildSetting);
     } else {
@@ -62,12 +69,63 @@ class BuildCommand extends Command {
     }
   }
 
+  Future<bool> _isNeedClearBuildDirectory(String compileType) async {
+    var detailsFile =
+        File.fromUri(Uri.file('$_directoryPath/build/$_mode/details.json'));
+
+    var detailsFileExists = await detailsFile.exists();
+
+    if (!detailsFileExists) {
+      return true;
+    }
+
+    late Map<String, dynamic> details;
+
+    try {
+      details = jsonDecode(await detailsFile.readAsString());
+    } catch (_) {
+      return true;
+    }
+
+    if (!details.containsKey('compile-type')) {
+      return true;
+    }
+
+    if (details['compile-type'] != compileType) {
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<void> _clearBuildDirectory() async {
+    var buildDirectory =
+        Directory.fromUri(Uri.directory('$_directoryPath/build/$_mode'));
+
+    if (await buildDirectory.exists()) {
+      print('The build folder is being cleared...');
+
+      await buildDirectory.delete(recursive: true);
+
+      print('The build folder has been cleared...');
+    }
+  }
+
   Future<void> _buildAOT(Map<String, dynamic> appSetting,
       Map<String, dynamic> buildSetting) async {
     try {
-      await CompileCLICommand(_directoryPath, _mode).run();
+      var detailsFile =
+          File.fromUri(Uri.file('$_directoryPath/build/$_mode/details.json'));
 
-      await _createBuildAppSetting(appSetting, buildSetting);
+      var isNeedBuild = await _isNeedBuild(detailsFile);
+
+      if (isNeedBuild) {
+        await _clearBuildDirectory();
+
+        await CompileCLICommand(_directoryPath, _mode).run();
+
+        await _createBuildAppSetting(appSetting, buildSetting);
+      }
     } on CLICommandException catch (object) {
       usageException(object.message);
     }
@@ -76,12 +134,74 @@ class BuildCommand extends Command {
   Future<void> _buildJIT(Map<String, dynamic> appSetting,
       Map<String, dynamic> buildSetting) async {
     try {
-      await _transferDartFiles();
+      var detailsFile =
+          File.fromUri(Uri.file('$_directoryPath/build/$_mode/details.json'));
 
-      await _createBuildAppSetting(appSetting, buildSetting);
+      var isNeedBuild = await _isNeedBuild(detailsFile);
+
+      if (isNeedBuild) {
+        await _clearBuildDirectory();
+
+        Future.wait([
+          _transferDartFiles(),
+          _createBuildAppSetting(appSetting, buildSetting)
+        ]);
+      }
     } on CLICommandException catch (object) {
       usageException(object.message);
     }
+  }
+
+  Future<bool> _isNeedBuild(File detailsFile) async {
+    var detailsFileExists = await detailsFile.exists();
+
+    if (!detailsFileExists) {
+      return true;
+    }
+
+    late Map<String, dynamic> details;
+
+    try {
+      details = jsonDecode(await detailsFile.readAsString());
+    } catch (_) {
+      return true;
+    }
+
+    if (!details.containsKey('fileLogs')) {
+      return true;
+    }
+
+    var libDirectory = Directory.fromUri(Uri.directory('$_directoryPath/lib'));
+
+    var dartFiles = (await libDirectory.list(recursive: true).toList())
+        .whereType<File>()
+        .where((element) => element.fileExtension == 'dart');
+
+    var fileLogs = (details['fileLogs'] as List).cast<Map<String, dynamic>>();
+
+    if (dartFiles.length < fileLogs.length) {
+      return true;
+    }
+
+    for (var fileLog in fileLogs) {
+      var files = dartFiles
+          .where((element) => element.absolute.path == fileLog['path']);
+
+      if (files.isEmpty) {
+        return true;
+      }
+
+      var file = files.first;
+
+      var fileStat = await file.stat();
+
+      if (fileStat.modified
+          .isAfter(DateTime.parse(fileLog['modificationTime']))) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   Future<void> _transferDartFiles() async {
@@ -101,14 +221,41 @@ class BuildCommand extends Command {
 
     var futures = <Future>[];
 
+    var fileLogs = <Map<String, dynamic>>[];
+
     for (var file in files) {
       var filePathSegment = file.pathStartingFrom('lib');
 
-      futures.add(File.fromUri(Uri.file('$buildLibPath/$filePathSegment'))
-          .create(recursive: true));
+      var buildfilePath = '$buildLibPath/$filePathSegment';
+
+      var buildFile = File.fromUri(Uri.file(buildfilePath));
+
+      var entityStat = await file.stat();
+
+      var modificationTime = entityStat.modified;
+
+      fileLogs.add({
+        'path': file.absolute.path,
+        'modificationTime': modificationTime.toString()
+      });
+
+      futures.add(buildFile.create(recursive: true).then(
+          (value) async => buildFile.writeAsBytes(await file.readAsBytes())));
     }
 
     await Future.wait(futures);
+
+    var detailsFile =
+        File.fromUri(Uri.file('$_directoryPath/build/$_mode/details.json'));
+
+    var details = <String, dynamic>{
+      'compile-type': 'JIT',
+      'fileLogs': fileLogs
+    };
+
+    var json = jsonEncode(details);
+
+    await detailsFile.writeAsString(json);
   }
 
   Future<void> _createBuildAppSetting(Map<String, dynamic> appSetting,

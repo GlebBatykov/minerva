@@ -64,7 +64,10 @@ class CompileCLICommand extends CLICommand<void> {
       }
     }
 
-    var details = <String, dynamic>{'fileLogs': fileLogs};
+    var details = <String, dynamic>{
+      'compile-type': 'AOT',
+      'fileLogs': fileLogs
+    };
 
     var json = jsonEncode(details);
 

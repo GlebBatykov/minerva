@@ -6,7 +6,6 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:minerva/src/core.dart';
-import 'package:minerva/src/logging.dart';
 import 'package:path/path.dart';
 
 import 'core.dart';
@@ -28,4 +27,5 @@ part 'cli/create/project_clear_cli_command.dart';
 part 'cli/create/project_create_cli_command.dart';
 part 'cli/create/configure_project_cli_command.dart';
 
-part 'cli/build/compile_cli_command.dart';
+part 'cli/build/aot/compile_cli_command.dart';
+part 'cli/build/jit/transfer_files_cli_command.dart';

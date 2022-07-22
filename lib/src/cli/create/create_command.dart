@@ -27,11 +27,10 @@ class CreateCommand extends Command {
 
   @override
   Future<void> run() async {
-    var results = argResults!;
+    var projectName = argResults!['name'];
 
-    var projectName = results['name'];
-
-    var directoryPath = results['directory'];
+    var directoryPath =
+        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
 
     if (projectName == null) {
       usageException('Project name must be specified.');
@@ -51,7 +50,7 @@ class CreateCommand extends Command {
 
     var projectPath = '$directoryPath/$projectName';
 
-    var compileType = results['compile-type'];
+    var compileType = argResults!['compile-type'];
 
     var pipeline = CLIPipeline([
       ProjectClearCLICommand(projectPath),

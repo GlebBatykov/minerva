@@ -12,6 +12,8 @@ class ClearCommand extends Command {
     -d  --directory points to the project directory.
   ''';
 
+  late final String _directoryPath;
+
   ClearCommand() {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
@@ -19,9 +21,11 @@ class ClearCommand extends Command {
 
   @override
   Future<void> run() async {
-    var directory = argResults!['directory'];
+    _directoryPath =
+        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
 
-    var buildDirectory = Directory.fromUri(Uri.directory('$directory/build'));
+    var buildDirectory =
+        Directory.fromUri(Uri.directory('$_directoryPath/build'));
 
     var futures = <Future>[];
 
