@@ -1,6 +1,6 @@
 part of minerva_core;
 
-class MinervaException implements Exception {
+abstract class MinervaException implements Exception {
   final String? message;
 
   MinervaException([this.message]);

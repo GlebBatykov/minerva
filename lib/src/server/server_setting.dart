@@ -1,9 +1,7 @@
 part of minerva_server;
 
 class ServerSetting {
-  final dynamic address;
-
-  final int port;
+  final ServerAddress address;
 
   final SecurityContext? securityContext;
 
@@ -11,8 +9,6 @@ class ServerSetting {
 
   final ServerBuilder? builder;
 
-  ServerSetting(this.address, this.port,
-      {this.securityContext,
-      this.middlewares = const [ErrorMiddleware(), EndpointMiddleware()],
-      this.builder});
+  ServerSetting(
+      this.address, this.securityContext, this.middlewares, this.builder);
 }

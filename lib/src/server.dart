@@ -1,11 +1,9 @@
 library minerva_server;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
-
-import 'package:minerva/src/core.dart';
-import 'package:minerva/src/http/minerva_http_headers.dart';
 
 import 'auth.dart';
 import 'isolate.dart';
@@ -13,18 +11,25 @@ import 'routing.dart';
 import 'http.dart';
 import 'core.dart';
 import 'logging.dart';
+import 'util.dart';
 
 part 'server/exception/server_store_exception.dart';
 part 'server/exception/request_handle_exception.dart';
 part 'server/exception/endpoint_handle_exception.dart';
 part 'server/exception/middleware_handle_exception.dart';
+part 'server/exception/app_setting_exception.dart';
+part 'server/exception/minerva_bind_exception.dart';
 
 part 'server/minerva.dart';
 part 'server/server.dart';
-part 'server/server_setting.dart';
+part 'server/minerva_setting.dart';
 part 'server/server_context.dart';
 part 'server/server_store.dart';
 part 'server/servers.dart';
+part 'server/server_setting.dart';
+part 'server/server_address.dart';
+
+part 'server/app_setting.dart';
 
 part 'server/task_handler/server_task_handler.dart';
 part 'server/task_handler/agent_taks_handler.dart';

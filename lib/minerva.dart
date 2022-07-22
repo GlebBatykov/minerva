@@ -5,7 +5,7 @@ export 'src/server.dart'
         ServerBuilder,
         ServerStore,
         ServerContext,
-        ServerSetting,
+        MinervaSetting,
         Agent,
         AgentData,
         AuthMiddleware,

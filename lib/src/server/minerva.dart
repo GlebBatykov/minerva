@@ -9,21 +9,41 @@ class Minerva {
 
   final Logger _logger;
 
-  Minerva._(int instance, EndpointsBuilder builder, Logger logger)
-      : _logger = logger;
+  Minerva._(Logger logger) : _logger = logger;
 
   static Future<Minerva> bind(
-      {int instance = 1,
-      required ServerSetting setting,
-      required EndpointsBuilder builder,
-      Logger? logger,
-      List<AgentData>? agents}) async {
-    var minerva = Minerva._(instance, builder,
-        logger ?? MinervaLogger('[&time] [&level] &message'));
+      {required List<String> args, required MinervaSetting setting}) async {
+    var minerva = Minerva._(setting.logger ?? MinervaLogger());
 
-    await minerva._initialize(instance, setting, builder, agents ?? []);
+    var address = await _getAddress();
+
+    var serverSetting = ServerSetting(address, setting.securityContext,
+        setting.middlewares, setting.serverBuilder);
+
+    await minerva._initialize(setting.instance, serverSetting,
+        setting.endpointsBuilder, setting.agents ?? []);
 
     return minerva;
+  }
+
+  static Future<ServerAddress> _getAddress() async {
+    var appSetting = await AppSetting.instance;
+
+    var data = appSetting.data;
+
+    if (data.containsKey('host') && data.containsKey('port')) {
+      try {
+        var port = int.parse(data['port']);
+
+        return ServerAddress(data['address'], port);
+      } catch (_) {
+        throw MinervaBindException(
+            message: 'Invalid port value in the appsetting.json file.');
+      }
+    } else {
+      throw MinervaBindException(
+          message: 'In the appsetting file.json is missing host or port.');
+    }
   }
 
   Future<void> _initialize(int instance, ServerSetting setting,
@@ -34,8 +54,9 @@ class Minerva {
 
     await _servers.initialize(instance, setting, builder, _logger, connectors);
 
-    _logger
-        .info('Server starting in http://${setting.address}:${setting.port}.');
+    var address = setting.address;
+
+    _logger.info('Server starting in http://${address.host}:${address.port}.');
   }
 
   Future<void> pause() async {

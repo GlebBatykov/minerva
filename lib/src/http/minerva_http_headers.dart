@@ -1,3 +1,5 @@
+part of minerva_http;
+
 class MinervaHttpHeaders {
   final bool? chunkedTransferEncoding;
 

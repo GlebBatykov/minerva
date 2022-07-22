@@ -1,5 +1,5 @@
 import 'package:minerva/src/cli.dart';
 
-void main(List<String> arguments) async {
-  await Runner().run(arguments);
+void main(List<String> args) async {
+  await Runner().run(args);
 }

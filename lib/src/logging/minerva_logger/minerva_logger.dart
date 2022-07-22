@@ -10,7 +10,8 @@ class MinervaLogger extends Logger {
     MessageMiddleware()
   ];
 
-  MinervaLogger(String template) : _template = template;
+  MinervaLogger({String? template})
+      : _template = template ?? '[&time] [&level] &message';
 
   @override
   void info(dynamic object, {String? template}) {

@@ -35,7 +35,9 @@ class Server {
 
   static Future<Server> bind(ServerSetting setting, Endpoints endpoints,
       Logger logger, AgentConnectors connectors) async {
-    var server = Server._(setting.address, setting.port, setting.builder,
+    var address = setting.address;
+
+    var server = Server._(address.host, address.port, setting.builder,
         setting.securityContext, endpoints, setting.middlewares);
 
     await server._initialize(logger, connectors);
