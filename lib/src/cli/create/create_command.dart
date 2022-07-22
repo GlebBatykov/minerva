@@ -1,6 +1,6 @@
 part of minerva_cli;
 
-class Create extends Command {
+class CreateCommand extends Command {
   @override
   String get name => 'create';
 
@@ -12,14 +12,17 @@ class Create extends Command {
     -n,   --name                  required parameter specifying the name of the project.
     -d,   --directory             parameter indicating the directory in which the directory with the project will be created.
     -c,   --compile-type          specifies compile type of project. Possible values: AOT (default), JIT.
+    -o,   --docker-compile-type   specifies the compilation type to be used in the docker container. Possible values: AOT (default), JIT.
   ''';
 
-  Create() {
+  CreateCommand() {
     argParser.addOption('name', abbr: 'n');
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
     argParser.addOption('compile-type',
         abbr: 'c', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
+    argParser.addOption('docker-compile-type',
+        abbr: 'o', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
   }
 
   @override
@@ -51,9 +54,9 @@ class Create extends Command {
     var compileType = results['compile-type'];
 
     var pipeline = CLIPipeline([
-      ProjectClearCommand(projectPath),
-      ConfigureProjectCommand(projectName, projectPath, compileType),
-      ConfigureDockerCommand(projectPath)
+      ProjectClearCLICommand(projectPath),
+      ConfigureProjectCLICommand(projectName, projectPath, compileType),
+      ConfigureDockerCLICommand(projectPath)
     ]);
 
     await pipeline.run();

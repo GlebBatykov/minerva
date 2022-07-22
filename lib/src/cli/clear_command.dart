@@ -1,6 +1,6 @@
 part of minerva_cli;
 
-class Clear extends Command {
+class ClearCommand extends Command {
   @override
   String get name => 'clear';
 
@@ -12,7 +12,9 @@ class Clear extends Command {
     -d  --directory points to the project directory.
   ''';
 
-  Clear() {
+  final Logger _logger = MinervaLogger();
+
+  ClearCommand() {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
   }
@@ -26,11 +28,28 @@ class Clear extends Command {
     var futures = <Future>[];
 
     if (await buildDirectory.exists()) {
-      for (var entity in await buildDirectory.list().toList()) {
+      var size = 0;
+
+      var fileCount = 0;
+
+      var childrens = await buildDirectory.list(recursive: true).toList();
+
+      for (var entity in childrens) {
+        fileCount++;
+
+        var stat = await entity.stat();
+
+        size += stat.size;
+
         futures.add(entity.delete(recursive: true));
       }
-    }
 
-    await Future.wait(futures);
+      await Future.wait(futures);
+
+      await buildDirectory.delete(recursive: true);
+
+      _logger.info('Cleared files: $fileCount');
+      _logger.info('Cleared size: ${size / 1024 / 1024}MB');
+    }
   }
 }

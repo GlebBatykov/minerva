@@ -1,9 +1,9 @@
 part of minerva_cli;
 
-class ConfigureDockerCommand extends CLICommand<void> {
+class ConfigureDockerCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  ConfigureDockerCommand(this.projectPath);
+  ConfigureDockerCLICommand(this.projectPath);
 
   @override
   Future<void> run() async {

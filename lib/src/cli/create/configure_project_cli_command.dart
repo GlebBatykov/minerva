@@ -1,13 +1,14 @@
 part of minerva_cli;
 
-class ConfigureProjectCommand extends CLICommand<void> {
+class ConfigureProjectCLICommand extends CLICommand<void> {
   final String projectName;
 
   final String projectPath;
 
   final String compileType;
 
-  ConfigureProjectCommand(this.projectName, this.projectPath, this.compileType);
+  ConfigureProjectCLICommand(
+      this.projectName, this.projectPath, this.compileType);
 
   @override
   Future<void> run() async {
@@ -29,13 +30,15 @@ class ConfigureProjectCommand extends CLICommand<void> {
     var appSetting = <String, dynamic>{};
 
     appSetting['debug'] = <String, dynamic>{
-      'compile-tyoe': compileType,
-      'entry-point': 'lib/startup.dart'
+      'compile-type': compileType,
+      'host': '127.0.0.1',
+      'port': 5000
     };
 
     appSetting['release'] = <String, dynamic>{
-      'compile-tyoe': compileType,
-      'entry-point': 'lib/startup.dart'
+      'compile-type': compileType,
+      'host': '0.0.0.0',
+      'port': 8080
     };
 
     var json = jsonEncode(appSetting);
@@ -68,7 +71,7 @@ dev_dependencies:
   }
 
   Future<void> _createExample() async {
-    var startupFile = File.fromUri(Uri.file('$projectPath/lib/startup.dart'));
+    var mainFile = File.fromUri(Uri.file('$projectPath/lib/main.dart'));
 
     var endpointBuilderFile =
         File.fromUri(Uri.file('$projectPath/lib/endpoints_builder.dart'));
@@ -77,7 +80,7 @@ dev_dependencies:
         File.fromUri(Uri.file('$projectPath/lib/server_builder.dart'));
 
     await Future.wait([
-      startupFile.create(),
+      mainFile.create(),
       endpointBuilderFile.create(),
       serverBuilderFile.create()
     ]);
@@ -104,25 +107,25 @@ void serverBuilder(ServerContext context) {
 }
 ''';
 
-    var startupContent = '''
+    var mainContent = '''
 import 'package:minerva/minerva.dart';
 
 import 'endpoints_builder.dart';
 import 'server_builder.dart';
 
-void main() async {
+void main(List<String> args) async {
   // Create server setting
-  var setting = ServerSetting('127.0.0.1', 5000, builder: serverBuilder);
+  var setting = MinervaSetting(endpointsBuilder: endpointsBuilder, serverBuilder: serverBuilder);
 
   // Bind server
-  await Minerva.bind(setting: setting, builder: endpointsBuilder);
+  await Minerva.bind(args: args, setting: setting);
 }
 ''';
 
     await Future.wait([
       endpointBuilderFile.writeAsString(endpointBuilderContent),
       serverBuilderFile.writeAsString(serverBuilderContent),
-      startupFile.writeAsString(startupContent)
+      mainFile.writeAsString(mainContent)
     ]);
   }
 

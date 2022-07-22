@@ -1,15 +1,15 @@
 part of minerva_cli;
 
 class Runner {
-  Future<void> run(List<String> arguments) async {
+  Future<void> run(List<String> args) async {
     var runner = CommandRunner('minerva', 'Server side framework for Dart.');
 
-    runner.addCommand(Create());
-    runner.addCommand(Run());
-    runner.addCommand(Build());
-    runner.addCommand(Clear());
+    runner.addCommand(CreateCommand());
+    runner.addCommand(RunCommand());
+    runner.addCommand(BuildCommand());
+    runner.addCommand(ClearCommand());
 
-    await runner.run(arguments).catchError((error) {
+    await runner.run(args).catchError((error) {
       if (error is UsageException) {
         print('${error.message}\n\n${error.usage}');
       }

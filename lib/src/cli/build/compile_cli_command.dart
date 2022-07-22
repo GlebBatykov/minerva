@@ -1,17 +1,15 @@
 part of minerva_cli;
 
-class CompileCommand extends CLICommand<void> {
+class CompileCLICommand extends CLICommand<void> {
   final String projectPath;
-
-  final String entryPointPath;
 
   final String mode;
 
-  CompileCommand(this.projectPath, this.entryPointPath, this.mode);
+  CompileCLICommand(this.projectPath, this.mode);
 
   @override
   Future<void> run() async {
-    var entryPointFilePath = '$projectPath/$entryPointPath';
+    var entryPointFilePath = '$projectPath/lib/main.dart';
 
     var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
 

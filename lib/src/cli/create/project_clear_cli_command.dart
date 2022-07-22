@@ -1,9 +1,9 @@
 part of minerva_cli;
 
-class ProjectClearCommand extends CLICommand<void> {
+class ProjectClearCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  ProjectClearCommand(this.projectPath);
+  ProjectClearCLICommand(this.projectPath);
 
   @override
   Future<void> run() async {
