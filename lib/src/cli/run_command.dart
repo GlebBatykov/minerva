@@ -49,11 +49,7 @@ class RunCommand extends Command {
     if (compileType == 'AOT') {
       try {
         await _buildAOT();
-      } catch (object, stackTrace) {
-        print(object);
-
-        print(stackTrace);
-
+      } catch (_) {
         usageException(
             'Incorrect project build. Use the "minerva clear" command to clear the build.');
       }
@@ -65,8 +61,8 @@ class RunCommand extends Command {
           await Process.start('dart', ['$directoryPath/lib/main.dart']);
     }
 
-    appProcess.stdout.pipe(stdout);
-    appProcess.stderr.pipe(stdout);
+    appProcess.stdout.listen((event) => stdout.add(event));
+    appProcess.stderr.listen((event) => stdout.add(event));
 
     await appProcess.exitCode;
   }
@@ -87,12 +83,12 @@ class RunCommand extends Command {
       var buildProcess = await Process.start(
           'minerva', ['build', '-d', directoryPath, '-m', mode]);
 
-      buildProcess.stdout.pipe(stdout);
-      buildProcess.stderr.pipe(stdout);
+      buildProcess.stdout.listen((event) => stdout.add(event));
+      buildProcess.stderr.listen((event) => stdout.add(event));
 
       await buildProcess.exitCode;
 
-      print('');
+      stdout.writeln();
     }
   }
 
