@@ -38,6 +38,7 @@ class CompileCLICommand extends CLICommand<void> {
     ]);
 
     process.stdout.pipe(stdout);
+    process.stderr.pipe(stdout);
 
     await process.exitCode;
   }
