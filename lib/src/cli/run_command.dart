@@ -44,7 +44,7 @@ class RunCommand extends Command {
 
     var compileType = setting['compile-type'] ?? 'AOT';
 
-    late Process applicationProcess;
+    late Process appProcess;
 
     if (compileType == 'AOT') {
       try {
@@ -54,16 +54,17 @@ class RunCommand extends Command {
             'Incorrect project build. Use the "minerva clear" command to clear the build.');
       }
 
-      applicationProcess =
+      appProcess =
           await Process.start('$directoryPath/build/$mode/bin/main', []);
     } else {
-      applicationProcess =
+      appProcess =
           await Process.start('dart', ['$directoryPath/lib/main.dart']);
     }
 
-    applicationProcess.stdout.listen((event) => stdout.add(event));
+    appProcess.stdout.pipe(stdout);
+    appProcess.stderr.pipe(stderr);
 
-    await applicationProcess.exitCode;
+    await appProcess.exitCode;
   }
 
   Future<void> _buildAOT() async {
@@ -76,7 +77,9 @@ class RunCommand extends Command {
     var detailsFile =
         File.fromUri(Uri.file('$directoryPath/build/$mode/details.json'));
 
-    if (await _isNeedBuild(detailsFile)) {
+    var isNeedBuild = await _isNeedBuild(detailsFile);
+
+    if (isNeedBuild) {
       var buildProcess = await Process.start(
           'minerva', ['build', '-d', directoryPath, '-m', mode]);
 
@@ -107,8 +110,8 @@ class RunCommand extends Command {
     var libDirectory = Directory.fromUri(Uri.directory('$directoryPath/lib'));
 
     var dartFiles = (await libDirectory.list(recursive: true).toList())
-        .where((element) => element is File && element.fileExtension == 'dart')
-        .cast<File>();
+        .whereType<File>()
+        .where((element) => element.fileExtension == 'dart');
 
     var fileLogs = (details['fileLogs'] as List).cast<Map<String, dynamic>>();
 

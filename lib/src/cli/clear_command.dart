@@ -12,8 +12,6 @@ class ClearCommand extends Command {
     -d  --directory points to the project directory.
   ''';
 
-  final Logger _logger = MinervaLogger();
-
   ClearCommand() {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
@@ -34,6 +32,8 @@ class ClearCommand extends Command {
 
       var childrens = await buildDirectory.list(recursive: true).toList();
 
+      childrens = childrens.whereType<File>().toList();
+
       for (var entity in childrens) {
         fileCount++;
 
@@ -41,15 +41,15 @@ class ClearCommand extends Command {
 
         size += stat.size;
 
-        futures.add(entity.delete(recursive: true));
+        futures.add(entity.delete());
       }
 
       await Future.wait(futures);
 
       await buildDirectory.delete(recursive: true);
 
-      _logger.info('Cleared files: $fileCount');
-      _logger.info('Cleared size: ${size / 1024 / 1024}MB');
+      print('Cleared files: $fileCount');
+      print('Cleared size: $size byte');
     }
   }
 }

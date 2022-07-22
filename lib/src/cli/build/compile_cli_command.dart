@@ -37,7 +37,7 @@ class CompileCLICommand extends CLICommand<void> {
       '$compileDirectoryPath/main'
     ]);
 
-    await process.stdout.pipe(stdout);
+    process.stdout.pipe(stdout);
 
     await process.exitCode;
   }
