@@ -57,7 +57,7 @@ class CompileCLICommand extends CLICommand<void> {
         var modificationTime = entityStat.modified;
 
         fileLogs.add({
-          'path': entity.path,
+          'path': entity.absolute.path,
           'modificationTime': modificationTime.toString()
         });
       }

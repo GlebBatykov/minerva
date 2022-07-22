@@ -49,7 +49,11 @@ class RunCommand extends Command {
     if (compileType == 'AOT') {
       try {
         await _buildAOT();
-      } catch (_) {
+      } catch (object, stackTrace) {
+        print(object);
+
+        print(stackTrace);
+
         usageException(
             'Incorrect project build. Use the "minerva clear" command to clear the build.');
       }
@@ -62,7 +66,7 @@ class RunCommand extends Command {
     }
 
     appProcess.stdout.pipe(stdout);
-    appProcess.stderr.pipe(stderr);
+    appProcess.stderr.pipe(stdout);
 
     await appProcess.exitCode;
   }
@@ -83,7 +87,8 @@ class RunCommand extends Command {
       var buildProcess = await Process.start(
           'minerva', ['build', '-d', directoryPath, '-m', mode]);
 
-      buildProcess.stdout.listen((event) => stdout.add(event));
+      buildProcess.stdout.pipe(stdout);
+      buildProcess.stderr.pipe(stdout);
 
       await buildProcess.exitCode;
 
@@ -98,12 +103,16 @@ class RunCommand extends Command {
       return true;
     }
 
+    print(1);
+
     var details =
         jsonDecode(await detailsFile.readAsString()) as Map<String, dynamic>;
 
     if (!details.containsKey('fileLogs')) {
       return true;
     }
+
+    print(2);
 
     var directoryPath = argResults!['directory'];
 
@@ -113,13 +122,22 @@ class RunCommand extends Command {
         .whereType<File>()
         .where((element) => element.fileExtension == 'dart');
 
+    print('LibDirectoryPath: ${libDirectory.path}');
+
     var fileLogs = (details['fileLogs'] as List).cast<Map<String, dynamic>>();
 
     if (dartFiles.length < fileLogs.length) {
       return true;
     }
 
+    print(3);
+
     for (var fileLog in fileLogs) {
+      print(dartFiles.first.path);
+      print(fileLog['path']);
+
+      print(Directory.current.path);
+
       var files = dartFiles.where((element) => element.path == fileLog['path']);
 
       if (files.isEmpty) {
@@ -128,13 +146,22 @@ class RunCommand extends Command {
 
       var file = files.first;
 
+      print('s');
+
       var fileStat = await file.stat();
+
+      print('d');
 
       if (fileStat.modified
           .isAfter(DateTime.parse(fileLog['modificationTime']))) {
+        print(fileLog);
+        print(5);
+
         return true;
       }
     }
+
+    print(4);
 
     return false;
   }
