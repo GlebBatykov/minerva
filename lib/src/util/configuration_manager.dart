@@ -23,6 +23,26 @@ class ConfigurationManager {
     await appSetting.setValues(_data);
   }
 
+  void add(String key, dynamic value) {
+    _data[key] = value;
+  }
+
+  void addAll(Map<String, dynamic> other) {
+    _data.addAll(other);
+  }
+
+  void remove(String key) {
+    _data.remove(key);
+  }
+
+  void clear() {
+    _data.clear();
+  }
+
+  T get<T>(String key) {
+    return _data[key] as T;
+  }
+
   void operator []=(String key, dynamic value) {
     _data[key] = value;
   }
