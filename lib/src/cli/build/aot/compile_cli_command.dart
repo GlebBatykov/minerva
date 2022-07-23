@@ -1,6 +1,6 @@
 part of minerva_cli;
 
-class CompileCLICommand extends CLICommand<void> {
+class CompileCLICommand extends CLICommand<List<FileLog>> {
   final String projectPath;
 
   final String mode;
@@ -8,7 +8,7 @@ class CompileCLICommand extends CLICommand<void> {
   CompileCLICommand(this.projectPath, this.mode);
 
   @override
-  Future<void> run() async {
+  Future<List<FileLog>> run() async {
     var entryPointFilePath = '$projectPath/lib/main.dart';
 
     var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
@@ -16,7 +16,7 @@ class CompileCLICommand extends CLICommand<void> {
     if (await entryPointFile.exists()) {
       await _compile(entryPointFilePath);
 
-      await _createDetails();
+      return await _createFileLogs();
     } else {
       throw CLICommandException(
           message: 'Entry point file not exist by path: $entryPointFilePath.');
@@ -43,13 +43,10 @@ class CompileCLICommand extends CLICommand<void> {
     await process.exitCode;
   }
 
-  Future<void> _createDetails() async {
-    var detailsFile =
-        File.fromUri(Uri.file('$projectPath/build/$mode/details.json'));
-
+  Future<List<FileLog>> _createFileLogs() async {
     var libDirectory = Directory.fromUri(Uri.directory('$projectPath/lib'));
 
-    var fileLogs = <Map<String, dynamic>>[];
+    var fileLogs = <FileLog>[];
 
     for (var entity in await libDirectory.list(recursive: true).toList()) {
       if (entity is File && entity.fileExtension == 'dart') {
@@ -57,20 +54,10 @@ class CompileCLICommand extends CLICommand<void> {
 
         var modificationTime = entityStat.modified;
 
-        fileLogs.add({
-          'path': entity.absolute.path,
-          'modificationTime': modificationTime.toString()
-        });
+        fileLogs.add(FileLog(entity.absolute.path, modificationTime));
       }
     }
 
-    var details = <String, dynamic>{
-      'compile-type': 'AOT',
-      'fileLogs': fileLogs
-    };
-
-    var json = jsonEncode(details);
-
-    await detailsFile.writeAsString(json);
+    return fileLogs;
   }
 }

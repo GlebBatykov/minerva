@@ -52,11 +52,9 @@ class RunCommand extends Command {
     late Process appProcess;
 
     if (compileType == 'AOT') {
-      appProcess =
-          await Process.start('$_directoryPath/build/$_mode/bin/main', []);
+      appProcess = await _runAOT();
     } else {
-      appProcess = await Process.start(
-          'dart', ['$_directoryPath/build/$_mode/lib/main.dart']);
+      appProcess = await _runJIT();
     }
 
     appProcess.stdout.listen((event) => stdout.add(event));
@@ -75,5 +73,29 @@ class RunCommand extends Command {
     await buildProcess.exitCode;
 
     stdout.writeln();
+  }
+
+  Future<Process> _runAOT() async {
+    var entryPointFilePath = '$_directoryPath/build/$_mode/bin/main';
+
+    var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
+
+    if (await entryPointFile.exists()) {
+      return await Process.start(entryPointFilePath, []);
+    } else {
+      usageException('Entry point not found by path: $entryPointFilePath.');
+    }
+  }
+
+  Future<Process> _runJIT() async {
+    var entryPointFilePath = '$_directoryPath/build/$_mode/lib/main.dart';
+
+    var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
+
+    if (await entryPointFile.exists()) {
+      return await Process.start('dart', [entryPointFilePath]);
+    } else {
+      usageException('Entry point not found by path: $entryPointFilePath.');
+    }
   }
 }

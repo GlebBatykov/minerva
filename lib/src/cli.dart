@@ -15,17 +15,25 @@ part 'cli/exception/cli_command_exception.dart';
 part 'cli/runner.dart';
 
 part 'cli/create/create_command.dart';
-part 'cli/run_command.dart';
-part 'cli/build/build_command.dart';
-part 'cli/clear_command.dart';
-
-part 'cli/cli_command.dart';
-part 'cli/cli_pipeline.dart';
-
 part 'cli/create/configure_docker_cli_command.dart';
 part 'cli/create/project_clear_cli_command.dart';
 part 'cli/create/project_create_cli_command.dart';
 part 'cli/create/configure_project_cli_command.dart';
 
+part 'cli/run_command.dart';
+
+part 'cli/clear/clear_command.dart';
+part 'cli/clear/clear_directory_cli_command.dart';
+
+part 'cli/cli_command.dart';
+part 'cli/cli_pipeline.dart';
+
+part 'cli/build/build_command.dart';
+part 'cli/build/create_build_app_setting_cli_command.dart';
 part 'cli/build/aot/compile_cli_command.dart';
 part 'cli/build/jit/transfer_files_cli_command.dart';
+part 'cli/build/jit/copy_pubspec_file_cli_command.dart';
+part 'cli/build/file_log.dart';
+
+part 'cli/docker/docker_command.dart';
+part 'cli/docker/create_docker_file_cli_command.dart';
