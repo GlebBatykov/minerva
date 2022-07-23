@@ -219,12 +219,11 @@ class BuildCommand extends Command {
       return true;
     }
 
-    if (!details.containsKey('fileLogs')) {
+    if (!details.containsKey('files')) {
       return true;
     }
 
-    var fileLogs =
-        (details['fileLogs'] as List).map((e) => FileLog.fromJson(e));
+    var fileLogs = (details['files'] as List).map((e) => FileLog.fromJson(e));
 
     for (var fileLog in fileLogs) {
       var file = File.fromUri(Uri.file(fileLog.path));
@@ -259,7 +258,7 @@ class BuildCommand extends Command {
 
     var details = <String, dynamic>{
       'compile-type': _compileType,
-      'fileLogs': fileLogs.map((e) => e.toJson()).toList()
+      'files': fileLogs.map((e) => e.toJson()).toList()
     };
 
     var json = jsonEncode(details);
