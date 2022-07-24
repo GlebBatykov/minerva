@@ -9,7 +9,19 @@ class AppSetting {
 
   late final Map<String, dynamic> _data;
 
-  Map<String, dynamic> get data => Map.unmodifiable(_data);
+  String? get host => _data['host'];
+
+  int? get port {
+    var port = _data['port'];
+
+    if (port == null) {
+      return null;
+    } else {
+      return int.parse(port);
+    }
+  }
+
+  Map<String, dynamic>? get values => _data['values'];
 
   AppSetting._();
 
@@ -50,8 +62,12 @@ class AppSetting {
 
     var json = jsonEncode(_data);
 
+    await _save(json);
+  }
+
+  Future<void> _save(String data) async {
     if (await _file!.exists()) {
-      await _file!.writeAsString(json);
+      await _file!.writeAsString(data);
     } else {
       throw AppSettingException(
           message: 'The setting.json file not exist by path: $_path.');

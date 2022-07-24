@@ -29,13 +29,11 @@ class Minerva {
   static Future<ServerAddress> _getAddress() async {
     var appSetting = await AppSetting.instance;
 
-    var data = appSetting.data;
-
-    if (data.containsKey('host') && data.containsKey('port')) {
+    if (appSetting.host != null && appSetting.port != null) {
       try {
-        var port = data['port'];
+        var port = appSetting.port;
 
-        return ServerAddress(data['host'], port);
+        return ServerAddress(appSetting.host!, port!);
       } catch (_) {
         throw MinervaBindException(
             message:

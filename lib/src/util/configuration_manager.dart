@@ -8,12 +8,8 @@ class ConfigurationManager {
 
     var appSetting = await AppSetting.instance;
 
-    var data = appSetting.data;
-
-    if (data.containsKey('values')) {
-      var values = data['values'] as Map<String, dynamic>;
-
-      _data.addAll(values);
+    if (appSetting.values != null) {
+      _data.addAll(appSetting.values!);
     }
   }
 
