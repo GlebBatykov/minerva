@@ -95,6 +95,8 @@ class RunCommand extends Command {
     if (await entryPointFile.exists()) {
       await GetDependenciesCLICommand(_directoryPath).run();
 
+      stdout.writeln();
+
       return await Process.start('dart', [entryPointFilePath]);
     } else {
       usageException('Entry point not found by path: $entryPointFilePath.');
