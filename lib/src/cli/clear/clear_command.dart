@@ -26,6 +26,10 @@ class ClearCommand extends Command {
 
     var buildDirectoryPath = '$_directoryPath/build';
 
+    print('Cleaning the build...');
+
     await ClearDirectoryCLICommand(buildDirectoryPath).run();
+
+    print('The build cleanup is complete...');
   }
 }

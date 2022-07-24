@@ -52,10 +52,13 @@ class CreateCommand extends Command {
 
     var compileType = argResults!['compile-type'];
 
+    var dockerCompileType = argResults!['docker-compile-type'];
+
     var pipeline = CLIPipeline([
       ProjectClearCLICommand(projectPath),
       ConfigureProjectCLICommand(projectName, projectPath, compileType),
-      ConfigureDockerCLICommand(projectPath)
+      CreateDockerIgnoreCLICommand(projectPath),
+      CreateDockerFileCLICommand(projectPath, dockerCompileType)
     ]);
 
     await pipeline.run();

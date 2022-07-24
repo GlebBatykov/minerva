@@ -14,6 +14,8 @@ class CreateBuildAppSettingCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
+    print('Creating appsetting.json file in the build...');
+
     var buildAppSettingFile =
         File.fromUri(Uri.file('$projectPath/build/$mode/appsetting.json'));
 
@@ -27,6 +29,22 @@ class CreateBuildAppSettingCLICommand extends CLICommand<void> {
     buildAppSetting['host'] = buildSetting['host'];
     buildAppSetting['port'] = buildSetting['port'];
 
+    if (buildSetting.containsKey('values')) {
+      var buildValues = buildSetting['values'];
+
+      if (buildAppSetting.containsKey('values')) {
+        var values = (buildAppSetting['values'] as Map<String, dynamic>);
+
+        values.addAll(buildValues);
+
+        buildAppSetting['values'] = values;
+      } else {
+        buildAppSetting['values'] = buildValues;
+      }
+    }
+
     await buildAppSettingFile.writeAsString(jsonEncode(buildAppSetting));
+
+    print('Creating appsetting.the json file in the build is completed...');
   }
 }

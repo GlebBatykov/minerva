@@ -65,11 +65,7 @@ class BuildCommand extends Command {
       await _clearBuildDirectory();
     }
 
-    if (_compileType == 'AOT') {
-      await _buildAOT(appSetting, currentBuildSetting);
-    } else {
-      await _buildJIT(appSetting, currentBuildSetting);
-    }
+    await _build(appSetting, currentBuildSetting, _compileType);
   }
 
   Future<bool> _isNeedClearBuildDirectory(String compileType) async {
@@ -108,18 +104,16 @@ class BuildCommand extends Command {
         Directory.fromUri(Uri.directory('$_directoryPath/build/$_mode'));
 
     if (await buildDirectory.exists()) {
-      print('The build folder is being cleared...');
+      print('The $_mode build folder is being cleared...');
 
       await ClearDirectoryCLICommand(buildDirectoryPath).run();
 
-      print('The build folder has been cleared...');
+      print('The $_mode build folder has been cleared...');
     }
   }
 
-  Future<void> _buildAOT(Map<String, dynamic> appSetting,
-      Map<String, dynamic> buildSetting) async {
-    print('Build AOT...');
-
+  Future<void> _build(Map<String, dynamic> appSetting,
+      Map<String, dynamic> buildSetting, String compileType) async {
     try {
       var detailsFile =
           File.fromUri(Uri.file('$_directoryPath/build/$_mode/details.json'));
@@ -127,13 +121,15 @@ class BuildCommand extends Command {
       var isNeedBuild = await _isNeedBuild(detailsFile);
 
       if (isNeedBuild) {
+        print('Build...');
+
         await _clearBuildDirectory();
 
         var fileLogs = <FileLog>[];
 
         var futures = <Future>[];
 
-        futures.add(CompileCLICommand(_directoryPath, _mode)
+        futures.add(CompileCLICommand(_directoryPath, _mode, compileType)
             .run()
             .then((value) => fileLogs.addAll(value)));
 
@@ -155,52 +151,6 @@ class BuildCommand extends Command {
       usageException(object.message);
     } catch (object) {
       usageException('$object');
-    }
-  }
-
-  Future<void> _buildJIT(Map<String, dynamic> appSetting,
-      Map<String, dynamic> buildSetting) async {
-    print('Build JIT...');
-
-    try {
-      var detailsFile =
-          File.fromUri(Uri.file('$_directoryPath/build/$_mode/details.json'));
-
-      var isNeedBuild = await _isNeedBuild(detailsFile);
-
-      if (isNeedBuild) {
-        await _clearBuildDirectory();
-
-        var fileLogs = <FileLog>[];
-
-        var futures = <Future>[];
-
-        futures.add(CopyPubSpecFileCLICommand(_directoryPath, _mode)
-            .run()
-            .then((value) => fileLogs.add(value)));
-
-        futures.add(TransferFilesCLICommand(_directoryPath, _mode)
-            .run()
-            .then((value) => fileLogs.addAll(value)));
-
-        futures.add(CreateBuildAppSettingCLICommand(
-                _directoryPath, _mode, appSetting, buildSetting)
-            .run());
-
-        await Future.wait(futures);
-
-        var appSettingFileLog = await _getAppSettingFileLog();
-
-        fileLogs.add(appSettingFileLog);
-
-        await _createDetails(fileLogs);
-      } else {
-        print('Rebuild is not needed.');
-      }
-    } on CLICommandException catch (object) {
-      usageException(object.message);
-    } catch (object) {
-      usageException(object.toString());
     }
   }
 

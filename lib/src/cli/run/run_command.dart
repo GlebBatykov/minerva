@@ -88,11 +88,13 @@ class RunCommand extends Command {
   }
 
   Future<Process> _runJIT() async {
-    var entryPointFilePath = '$_directoryPath/build/$_mode/lib/main.dart';
+    var entryPointFilePath = '$_directoryPath/build/$_mode/bin/main.dill';
 
     var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
 
     if (await entryPointFile.exists()) {
+      await GetDependenciesCLICommand(_directoryPath).run();
+
       return await Process.start('dart', [entryPointFilePath]);
     } else {
       usageException('Entry point not found by path: $entryPointFilePath.');
