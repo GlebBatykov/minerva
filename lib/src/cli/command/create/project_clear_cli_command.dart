@@ -22,6 +22,9 @@ class ProjectClearCLICommand extends CLICommand<void> {
     futures.add(Directory.fromUri(Uri.directory('$projectPath/bin'))
         .delete(recursive: true));
 
+    futures
+        .add(Directory.fromUri(Uri.directory('$projectPath/assets')).create());
+
     futures.add(File.fromUri(Uri.file('$projectPath/.gitignore')).delete());
 
     futures.add(File.fromUri(Uri.file('$projectPath/pubspec.yaml')).delete());

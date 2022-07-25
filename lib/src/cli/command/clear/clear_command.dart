@@ -30,6 +30,14 @@ class ClearCommand extends Command {
 
     await ClearDirectoryCLICommand(buildDirectoryPath).run();
 
+    var testAppSettingFilePath = '$_directoryPath/test/test_app_setting.g.dart';
+
+    var testAppSettingFile = File.fromUri(Uri.file(testAppSettingFilePath));
+
+    if (await testAppSettingFile.exists()) {
+      await testAppSettingFile.delete();
+    }
+
     print('The build cleanup is complete...');
   }
 }

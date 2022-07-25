@@ -11,7 +11,8 @@ class CreateCommand extends Command {
   String get usage => '''
     -n,   --name                  required parameter specifying the name of the project.
     -d,   --directory             parameter indicating the directory in which the directory with the project will be created.
-    -c,   --compile-type          specifies compile type of project. Possible values: AOT (default), JIT.
+    -d,   --debug-compile-type    specifies compile type of debug build of project. Possible values: AOT, JIT (default).
+    -r,   --release-compile-type  specifies compile type of release build of project. Possible values: AOT (default), JIT.
     -o,   --docker-compile-type   specifies the compilation type to be used in the docker container. Possible values: AOT (default), JIT.
   ''';
 
@@ -19,8 +20,10 @@ class CreateCommand extends Command {
     argParser.addOption('name', abbr: 'n');
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
-    argParser.addOption('compile-type',
-        abbr: 'c', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
+    argParser.addOption('debug-compile-type',
+        abbr: 'c', defaultsTo: 'JIT', allowed: ['AOT', 'JIT']);
+    argParser.addOption('release-compile-type',
+        abbr: 'r', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
     argParser.addOption('docker-compile-type',
         abbr: 'o', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
   }
@@ -50,13 +53,16 @@ class CreateCommand extends Command {
 
     var projectPath = '$directoryPath/$projectName';
 
-    var compileType = argResults!['compile-type'];
+    var debugCompileType = argResults!['debug-compile-type'];
+
+    var releaseCompileType = argResults!['release-compile-type'];
 
     var dockerCompileType = argResults!['docker-compile-type'];
 
     var pipeline = CLIPipeline([
       ProjectClearCLICommand(projectPath),
-      ConfigureProjectCLICommand(projectName, projectPath, compileType),
+      ConfigureProjectCLICommand(
+          projectName, projectPath, debugCompileType, releaseCompileType),
       CreateDockerIgnoreCLICommand(projectPath),
       CreateDockerFileCLICommand(projectPath, dockerCompileType)
     ]);

@@ -9,6 +9,8 @@ class Runner {
     runner.addCommand(BuildCommand());
     runner.addCommand(ClearCommand());
     runner.addCommand(DockerCommand());
+    runner.addCommand(TestCommand());
+    runner.addCommand(DebugCommand());
 
     await runner.run(args).catchError((error) {
       if (error is UsageException) {

@@ -21,6 +21,8 @@ class BuildCommand extends Command {
 
   late File _appSettingFile;
 
+  late Map<String, dynamic> _appSetting;
+
   BuildCommand() {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
@@ -35,27 +37,20 @@ class BuildCommand extends Command {
 
     _mode = argResults!['mode'];
 
-    _appSettingFile = File.fromUri(Uri.file('$_directoryPath/appsetting.json'));
+    late AppSettingParseResult appSettingParseResult;
 
-    if (!await _appSettingFile.exists()) {
-      usageException('Current directory not exist appsetting.json file.');
+    try {
+      appSettingParseResult = await AppSettingParcer().parse(_directoryPath);
+    } on AppSettingParserException catch (object) {
+      usageException(object.message);
     }
 
-    var appSetting = jsonDecode(await _appSettingFile.readAsString())
-        as Map<String, dynamic>;
+    _appSetting = appSettingParseResult.data;
 
-    var currentBuildSetting = appSetting[_mode] as Map<String, dynamic>?;
+    _appSettingFile = appSettingParseResult.file;
 
-    if (currentBuildSetting == null) {
-      usageException(
-          'Setting for $_mode mode is not exist in appsetting.json file.');
-    }
-
-    if (!currentBuildSetting.containsKey('host') ||
-        !currentBuildSetting.containsKey('port')) {
-      usageException(
-          'Setting for $_mode mode not contains host and port values.');
-    }
+    var currentBuildSetting =
+        BuildSettingParser().parseCurrent(_appSetting, _mode);
 
     _compileType = currentBuildSetting['compile-type'] ?? 'AOT';
 
@@ -65,7 +60,7 @@ class BuildCommand extends Command {
       await _clearBuildDirectory();
     }
 
-    await _build(appSetting, currentBuildSetting, _compileType);
+    await _build(currentBuildSetting, _compileType);
   }
 
   Future<bool> _isNeedClearBuildDirectory(String compileType) async {
@@ -112,7 +107,7 @@ class BuildCommand extends Command {
     }
   }
 
-  Future<void> _build(Map<String, dynamic> appSetting,
+  Future<void> _build(
       Map<String, dynamic> buildSetting, String compileType) async {
     try {
       var detailsFile =
@@ -129,13 +124,19 @@ class BuildCommand extends Command {
 
         var futures = <Future>[];
 
+        var buildAppSetting = _createBuildAppSetting(_appSetting, buildSetting);
+
         futures.add(CompileCLICommand(_directoryPath, _mode, compileType)
             .run()
             .then((value) => fileLogs.addAll(value)));
 
         futures.add(CreateBuildAppSettingCLICommand(
-                _directoryPath, _mode, appSetting, buildSetting)
+                _directoryPath, _mode, buildAppSetting)
             .run());
+
+        futures.add(
+            GenerateTestAppSettingCLICommand(_directoryPath, buildAppSetting)
+                .run());
 
         await Future.wait(futures);
 
@@ -214,5 +215,32 @@ class BuildCommand extends Command {
     var json = jsonEncode(details);
 
     await detailsFile.writeAsString(json);
+  }
+
+  Map<String, dynamic> _createBuildAppSetting(
+      Map<String, dynamic> appSetting, Map<String, dynamic> buildSetting) {
+    var buildAppSetting = appSetting;
+
+    buildAppSetting.remove('debug');
+    buildAppSetting.remove('release');
+
+    buildAppSetting['host'] = buildSetting['host'];
+    buildAppSetting['port'] = buildSetting['port'];
+
+    if (buildSetting.containsKey('values')) {
+      var buildValues = buildSetting['values'];
+
+      if (buildAppSetting.containsKey('values')) {
+        var values = (buildAppSetting['values'] as Map<String, dynamic>);
+
+        values.addAll(buildValues);
+
+        buildAppSetting['values'] = values;
+      } else {
+        buildAppSetting['values'] = buildValues;
+      }
+    }
+
+    return buildAppSetting;
   }
 }
