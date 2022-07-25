@@ -27,11 +27,23 @@ class StaticFilesMiddleware extends Middleware {
     if (requestPath.startsWith(path)) {
       var filePath = requestPath.substring(path.length, requestPath.length);
 
-      var file = File.fromUri(Uri.file('$_directoryPath/$filePath'));
+      var file = File.fromUri(Uri.file('$_directoryPath$filePath'));
 
       print(filePath);
 
       print(file.path);
+
+      if (await file.exists()) {
+        var bytes = await file.readAsBytes();
+
+        var headers = MinervaHttpHeaders();
+
+        headers['Content-Type'] = mime(basename(filePath)) ?? 'text/html';
+
+        return Result(statusCode: 200, body: bytes, headers: headers);
+      } else {
+        return NotFoundResult();
+      }
     }
 
     if (next != null) {
