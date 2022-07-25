@@ -3,7 +3,7 @@ part of minerva_server;
 class MinervaSetting {
   final SecurityContext? securityContext;
 
-  final List<Middleware> middlewares;
+  final MiddlewaresBuilder middlewaresBuilder;
 
   final EndpointsBuilder endpointsBuilder;
 
@@ -17,7 +17,7 @@ class MinervaSetting {
 
   MinervaSetting(
       {this.securityContext,
-      this.middlewares = const [ErrorMiddleware(), EndpointMiddleware()],
+      required this.middlewaresBuilder,
       required this.endpointsBuilder,
       this.serverBuilder,
       this.logger,

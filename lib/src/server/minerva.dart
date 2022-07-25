@@ -2,6 +2,8 @@ part of minerva_server;
 
 typedef EndpointsBuilder = FutureOr<void> Function(Endpoints endpoints);
 
+typedef MiddlewaresBuilder = FutureOr<List<Middleware>> Function();
+
 class Minerva {
   final Servers _servers = Servers();
 
@@ -17,8 +19,10 @@ class Minerva {
 
     var address = await _getAddress();
 
-    var serverSetting = ServerSetting(address, setting.securityContext,
-        setting.middlewares, setting.serverBuilder);
+    var middlwares = await setting.middlewaresBuilder();
+
+    var serverSetting = ServerSetting(
+        address, setting.securityContext, middlwares, setting.serverBuilder);
 
     await minerva._initialize(setting.instance, serverSetting,
         setting.endpointsBuilder, setting.agents ?? []);
