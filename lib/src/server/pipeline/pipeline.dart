@@ -9,6 +9,11 @@ class Pipeline {
     _initialize();
   }
 
+  Future<void> initialize(ServerContext context) async {
+    await Future.wait(_middlewares
+        .map((e) => Future(() async => await e.initialize(context))));
+  }
+
   void _initialize() {
     if (_middlewares.isNotEmpty) {
       _first = _createPipelineNode(0);
