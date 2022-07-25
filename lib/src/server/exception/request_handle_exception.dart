@@ -5,7 +5,7 @@ class RequestHandleException extends MinervaException {
 
   final StackTrace stackTrace;
 
-  RequestHandleException(this.error, this.stackTrace, {String? message})
+  RequestHandleException(this.error, this.stackTrace, {required String message})
       : super(message);
 
   @override

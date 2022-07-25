@@ -1,5 +1,5 @@
 part of minerva_server;
 
 class ServerStoreException extends MinervaException {
-  ServerStoreException({String? message}) : super(message);
+  ServerStoreException({required String message}) : super(message);
 }
