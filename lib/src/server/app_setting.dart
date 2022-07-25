@@ -14,11 +14,7 @@ class AppSetting {
   int? get port {
     var port = _data['port'];
 
-    if (port == null) {
-      return null;
-    } else {
-      return int.parse(port);
-    }
+    return port;
   }
 
   Map<String, dynamic>? get values => _data['values'];
