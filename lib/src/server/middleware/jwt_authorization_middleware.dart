@@ -6,12 +6,12 @@ typedef TokenVerifyCallback = FutureOr<bool> Function(
 typedef GetRolesCallback = FutureOr<Role> Function(
     ServerContext context, String token);
 
-class AuthMiddleware extends Middleware {
+class JWTAuthorizationMiddleware extends Middleware {
   final TokenVerifyCallback _tokenVerify;
 
   final GetRolesCallback? _getRole;
 
-  const AuthMiddleware(
+  const JWTAuthorizationMiddleware(
       {required TokenVerifyCallback tokenVerify, GetRolesCallback? getRole})
       : _tokenVerify = tokenVerify,
         _getRole = getRole;

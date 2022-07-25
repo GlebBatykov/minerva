@@ -17,8 +17,10 @@ class ErrorMiddleware extends Middleware {
           try {
             return handler!.call(context.context, context.request, object);
           } catch (object, stackTrace) {
-            return InternalServerErrorResult(
-                MiddlewareHandleException(object, stackTrace));
+            return InternalServerErrorResult(MiddlewareHandleException(
+                object, stackTrace,
+                message:
+                    'An error occurred while processing an error in the assigned error handler.'));
           }
         }
       }

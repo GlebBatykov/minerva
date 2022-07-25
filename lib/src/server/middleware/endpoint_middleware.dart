@@ -30,13 +30,16 @@ class EndpointMiddleware extends Middleware {
             return result;
           } catch (object, stackTrace) {
             if (endpoint.errorHandler == null) {
-              throw EndpointHandleException(object, stackTrace, request);
+              throw EndpointHandleException(object, stackTrace, request,
+                  message: 'An error occurred when processing the endpoint.');
             } else {
               try {
                 return endpoint.errorHandler!
                     .call(context.context, request, object);
               } catch (object, stackTrace) {
-                throw EndpointHandleException(object, stackTrace, request);
+                throw EndpointHandleException(object, stackTrace, request,
+                    message:
+                        'An error occurred in the endpoint error handler.');
               }
             }
           }
