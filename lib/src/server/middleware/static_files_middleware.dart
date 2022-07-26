@@ -12,10 +12,7 @@ class StaticFilesMiddleware extends Middleware {
   }
 
   void _initialize() {
-    var scriptPath = Uri.directory(Platform.script.path);
-
-    _directoryPath =
-        '/${scriptPath.pathSegments.getRange(0, scriptPath.pathSegments.length - 3).join('/')}$directory';
+    _directoryPath = '/${Project.projectPath}$directory';
   }
 
   @override
@@ -29,10 +26,6 @@ class StaticFilesMiddleware extends Middleware {
 
       var file = File.fromUri(Uri.file('$_directoryPath$filePath'));
 
-      print(filePath);
-
-      print(file.path);
-
       if (await file.exists()) {
         var body = await file.readAsBytes();
 
@@ -40,9 +33,8 @@ class StaticFilesMiddleware extends Middleware {
 
         var mimeType = mime(basename(filePath));
 
-        print(mimeType);
-
         headers['Content-Type'] = mimeType ?? 'text/html';
+        headers['Content-Length'] = body.length;
 
         return Result(statusCode: 200, body: body, headers: headers);
       } else {
