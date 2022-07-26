@@ -101,6 +101,10 @@ class Server {
         headers.contentLength = minervaHeaders.contentLength!;
       }
 
+      if (minervaHeaders.contentType != null) {
+        headers.contentType = minervaHeaders.contentType;
+      }
+
       if (minervaHeaders.host != null) {
         headers.host = minervaHeaders.host!;
       }

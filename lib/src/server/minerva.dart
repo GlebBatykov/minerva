@@ -57,9 +57,11 @@ class Minerva {
 
     await _servers.initialize(instance, setting, builder, _logger, connectors);
 
-    var address = setting.address;
+    var host = setting.address.host;
 
-    _logger.info('Server starting in http://${address.host}:${address.port}.');
+    var port = setting.address.port;
+
+    _logger.info('Server starting in http://$host:$port.');
   }
 
   Future<void> pause() async {
