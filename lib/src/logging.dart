@@ -7,6 +7,7 @@ import 'package:minerva/src/server.dart';
 
 part 'logging/logger.dart';
 part 'logging/log_level.dart';
+part 'logging/log_pipeline.dart';
 
 part 'logging/minerva_logger/minerva_logger.dart';
 part 'logging/minerva_logger/log.dart';
