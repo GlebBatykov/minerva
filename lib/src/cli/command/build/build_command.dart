@@ -134,6 +134,10 @@ class BuildCommand extends Command {
                 _directoryPath, _mode, buildAppSetting)
             .run());
 
+        futures.add(CloneAssetsCLICommand(_directoryPath, _mode, _appSetting)
+            .run()
+            .then((value) => fileLogs.addAll(value)));
+
         futures.add(
             GenerateTestAppSettingCLICommand(_directoryPath, buildAppSetting)
                 .run());

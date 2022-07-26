@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:minerva/src/core.dart';
 import 'package:path/path.dart';
 
 import 'core.dart';
@@ -47,6 +46,7 @@ part 'cli/command/build/create_build_app_setting_cli_command.dart';
 part 'cli/command/build/compile_cli_command.dart';
 part 'cli/command/build/file_log.dart';
 part 'cli/command/build/generate_test_app_setting_cli_command.dart';
+part 'cli/command/build/clone_assets_cli_command.dart';
 
 part 'cli/command/docker/docker_command.dart';
 part 'cli/command/docker/create_docker_file_cli_command.dart';
