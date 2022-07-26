@@ -5,6 +5,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:mime_type/mime_type.dart';
+import 'package:path/path.dart';
+
 import 'auth.dart';
 import 'isolate.dart';
 import 'routing.dart';
