@@ -90,13 +90,7 @@ class Server {
 
     response.statusCode = minervaResponse.statusCode;
 
-    if (minervaResponse.body != null) {
-      if (minervaResponse.body is Uint8List) {
-        response.add(minervaResponse.body);
-      } else {
-        response.write(minervaResponse.body);
-      }
-    }
+    _writeBody(response, minervaResponse.body);
 
     await response.close();
   }
@@ -126,6 +120,16 @@ class Server {
 
       for (var entry in minervaHeaders.headers.entries) {
         headers.add(entry.key, entry.value);
+      }
+    }
+  }
+
+  void _writeBody(HttpResponse response, dynamic body) {
+    if (body != null) {
+      if (body is Uint8List) {
+        response.add(body);
+      } else {
+        response.write(body);
       }
     }
   }
