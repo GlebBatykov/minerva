@@ -5,9 +5,12 @@ class StaticFilesMiddleware extends Middleware {
 
   final String path;
 
+  final String? root;
+
   late final String _directoryPath;
 
-  StaticFilesMiddleware({required this.directory, required this.path}) {
+  StaticFilesMiddleware(
+      {required this.directory, required this.path, this.root}) {
     _initialize();
   }
 
@@ -24,26 +27,48 @@ class StaticFilesMiddleware extends Middleware {
     if (requestPath.startsWith(path)) {
       var filePath = requestPath.substring(path.length, requestPath.length);
 
-      var file = File.fromUri(Uri.file('$_directoryPath$filePath'));
-
-      if (await file.exists()) {
-        var body = await file.readAsBytes();
-
-        var headers = MinervaHttpHeaders();
-
-        var mimeType = mime(basename(filePath));
-
-        headers['Content-Type'] = mimeType ?? 'text/html';
-        headers['Content-Length'] = body.length;
-
-        return Result(statusCode: 200, body: body, headers: headers);
+      if (filePath != '/' && filePath.isNotEmpty) {
+        return _handleFile(filePath);
       } else {
-        return NotFoundResult();
+        if (root != null) {
+          return _handleFile(root!);
+        } else {
+          return NotFoundResult();
+        }
       }
     }
 
     if (next != null) {
       return await next.handle(context);
+    } else {
+      return NotFoundResult();
+    }
+  }
+
+  Future<Result> _handleFile(String filePath) async {
+    print(filePath);
+
+    if (filePath.isNotEmpty && filePath[0] != '/') {
+      filePath = '/$filePath';
+    }
+
+    var file = File.fromUri(Uri.file('$_directoryPath$filePath'));
+
+    print(file.path);
+
+    if (await file.exists()) {
+      var bytes = await file.readAsBytes();
+
+      var mimeType = mime(basename(filePath)) ?? 'text/html';
+
+      var mimeSegments = mimeType.split('/');
+
+      var headers = MinervaHttpHeaders(
+          contentLength: bytes.length,
+          contentType: ContentType(mimeSegments.first, mimeSegments.last,
+              charset: 'utf-8'));
+
+      return Result(statusCode: 200, body: bytes, headers: headers);
     } else {
       return NotFoundResult();
     }

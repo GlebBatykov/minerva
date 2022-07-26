@@ -1,7 +1,10 @@
 part of minerva_server;
 
 class EndpointMiddleware extends Middleware {
-  const EndpointMiddleware();
+  final PathComparator _comparator;
+
+  EndpointMiddleware({bool parsePathParameters = false})
+      : _comparator = PathComparator(parsePathParameters);
 
   @override
   Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
@@ -15,8 +18,16 @@ class EndpointMiddleware extends Middleware {
       Endpoint? endpoint;
 
       for (var i = 0; i < endpoints.length; i++) {
-        if (endpoints[i].path == request.uri.path) {
+        var result = _comparator.compare(endpoints[i].path, request.uri.path);
+
+        if (result.isEqual) {
           endpoint = endpoints[i];
+
+          if (result.pathParameters != null) {
+            request.addPathParameters(result.pathParameters!);
+          }
+
+          break;
         }
       }
 
@@ -57,21 +68,27 @@ class EndpointMiddleware extends Middleware {
 
     var authOptions = endpoint.authOptions;
 
-    var role = request.role;
+    var authContext = request.authContext;
 
     if (authOptions != null) {
-      if ((authOptions.permissionLevel != null &&
-          (role != null &&
-              role.permissionLevel != null &&
-              authOptions.permissionLevel! <= role.permissionLevel!))) {
-        isHaveAccess = true;
-      }
+      var jwtOptions = authOptions.jwt;
 
-      if (!isHaveAccess &&
-          (authOptions.roles != null &&
-              role != null &&
-              authOptions.roles!.contains(role.name))) {
-        isHaveAccess = true;
+      var role = authContext.jwt.role;
+
+      if (jwtOptions != null) {
+        if ((jwtOptions.permissionLevel != null &&
+            (role != null &&
+                role.permissionLevel != null &&
+                jwtOptions.permissionLevel! <= role.permissionLevel!))) {
+          isHaveAccess = true;
+        }
+
+        if (!isHaveAccess &&
+            (jwtOptions.roles != null &&
+                role != null &&
+                jwtOptions.roles!.contains(role.name))) {
+          isHaveAccess = true;
+        }
       }
     } else {
       isHaveAccess = true;

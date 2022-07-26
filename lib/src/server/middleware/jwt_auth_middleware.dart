@@ -6,12 +6,12 @@ typedef TokenVerifyCallback = FutureOr<bool> Function(
 typedef GetRolesCallback = FutureOr<Role> Function(
     ServerContext context, String token);
 
-class JWTAuthorizationMiddleware extends Middleware {
+class JwtAuthMiddleware extends Middleware {
   final TokenVerifyCallback _tokenVerify;
 
   final GetRolesCallback? _getRole;
 
-  const JWTAuthorizationMiddleware(
+  const JwtAuthMiddleware(
       {required TokenVerifyCallback tokenVerify, GetRolesCallback? getRole})
       : _tokenVerify = tokenVerify,
         _getRole = getRole;
@@ -32,7 +32,7 @@ class JWTAuthorizationMiddleware extends Middleware {
           if (_getRole != null) {
             var role = await _getRole!.call(context.context, token);
 
-            context.request.setRole(role);
+            context.request.authContext.jwt.role = role;
           }
         } else {
           UnauthorizedResult();
