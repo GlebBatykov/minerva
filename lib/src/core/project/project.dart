@@ -10,8 +10,6 @@ abstract class Project {
       _projectPath = scriptPath.pathSegments
           .getRange(0, scriptPath.pathSegments.length - 3)
           .join('/');
-
-      print(_projectPath);
     }
 
     return _projectPath!;
