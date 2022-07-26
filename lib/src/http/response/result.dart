@@ -8,7 +8,8 @@ class Result {
   final MinervaHttpHeaders? headers;
 
   FutureOr<MinervaResponse> get response async {
-    return MinervaResponse(statusCode: statusCode, body: body);
+    return MinervaResponse(
+        statusCode: statusCode, body: body, headers: headers);
   }
 
   Result({required this.statusCode, this.body, this.headers});

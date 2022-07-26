@@ -5,7 +5,8 @@ class MinervaRequest {
 
   final AuthContext _authContext = AuthContext();
 
-  Role? get role => _role;
+  final Map<String, num> _pathParameters = {};
+
   AuthContext get authContext => _authContext;
 
   HttpSession get session => _request.session;
@@ -37,11 +38,22 @@ class MinervaRequest {
 
   String get protocolVersion => _request.protocolVersion;
 
+  Map<String, num> get pathParameters => Map.unmodifiable(_pathParameters);
+
   MinervaRequest(HttpRequest request) : _request = request;
 
+  void addPathParameter(String key, num value) {
+    _pathParameters[key] = value;
   }
 
-    _role = null;
+  void addPathParameters(Map<String, num> pathParameters) {
+    _pathParameters.addAll(pathParameters);
+  }
+
+  void removePathParameter(String key) {
+    _pathParameters.remove(key);
+  }
+
   void removePathParameters() {
     _pathParameters.clear();
   }

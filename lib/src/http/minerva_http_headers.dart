@@ -5,6 +5,8 @@ class MinervaHttpHeaders {
 
   final bool? persistentConnection;
 
+  final ContentType? contentType;
+
   final int? contentLength;
 
   final String? host;
@@ -13,22 +15,23 @@ class MinervaHttpHeaders {
 
   final Map<String, Object> _headers;
 
-  Map<String, String> get headers => Map.unmodifiable(_headers);
+  Map<String, Object> get headers => Map.unmodifiable(_headers);
 
   MinervaHttpHeaders(
       {this.chunkedTransferEncoding,
       this.persistentConnection,
+      this.contentType,
       this.contentLength,
       this.host,
       this.port,
-      Map<String, String>? headers})
+      Map<String, Object>? headers})
       : _headers = headers ?? {};
 
-  void addEntries(Iterable<MapEntry<String, String>> newEntries) {
+  void addEntries(Iterable<MapEntry<String, Object>> newEntries) {
     _headers.addEntries(newEntries);
   }
 
-  void addAll(Map<String, String> other) {
+  void addAll(Map<String, Object> other) {
     _headers.addAll(other);
   }
 
