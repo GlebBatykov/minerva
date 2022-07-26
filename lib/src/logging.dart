@@ -1,6 +1,9 @@
 library minerva_logging;
 
+import 'dart:async';
+
 import 'package:intl/intl.dart';
+import 'package:minerva/src/server.dart';
 
 part 'logging/logger.dart';
 part 'logging/log_level.dart';
