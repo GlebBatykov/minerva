@@ -11,7 +11,7 @@ class MinervaHttpHeaders {
 
   final int? port;
 
-  final Map<String, String> _headers;
+  final Map<String, Object> _headers;
 
   Map<String, String> get headers => Map.unmodifiable(_headers);
 
@@ -32,11 +32,11 @@ class MinervaHttpHeaders {
     _headers.addAll(other);
   }
 
-  void operator []=(String key, String value) {
+  void operator []=(String key, Object value) {
     _headers[key] = value;
   }
 
-  String? operator [](String key) {
+  Object? operator [](String key) {
     return _headers[key];
   }
 }
