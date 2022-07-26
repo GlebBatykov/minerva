@@ -91,7 +91,11 @@ class Server {
     response.statusCode = minervaResponse.statusCode;
 
     if (minervaResponse.body != null) {
-      response.write(minervaResponse.body);
+      if (minervaResponse.body is Uint8List) {
+        response.add(minervaResponse.body);
+      } else {
+        response.write(minervaResponse.body);
+      }
     }
 
     await response.close();
