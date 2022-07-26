@@ -1,9 +1,9 @@
 part of minerva_auth;
 
 class AuthOptions {
-  final List<String>? roles;
+  final JwtAuthOptions? jwt;
 
-  final int? permissionLevel;
+  final CookieAuthOptions? cookie;
 
-  AuthOptions({this.roles, this.permissionLevel});
+  AuthOptions({this.jwt, this.cookie});
 }

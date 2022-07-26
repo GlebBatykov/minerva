@@ -3,9 +3,10 @@ part of minerva_http;
 class MinervaRequest {
   final HttpRequest _request;
 
-  Role? _role;
+  final AuthContext _authContext = AuthContext();
 
   Role? get role => _role;
+  AuthContext get authContext => _authContext;
 
   HttpSession get session => _request.session;
 
@@ -38,11 +39,10 @@ class MinervaRequest {
 
   MinervaRequest(HttpRequest request) : _request = request;
 
-  void setRole(Role role) {
-    _role = role;
   }
 
-  void removeRole() {
     _role = null;
+  void removePathParameters() {
+    _pathParameters.clear();
   }
 }
