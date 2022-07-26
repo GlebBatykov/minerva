@@ -227,6 +227,7 @@ class BuildCommand extends Command {
 
     buildAppSetting.remove('debug');
     buildAppSetting.remove('release');
+    buildAppSetting.remove('assets');
 
     buildAppSetting['host'] = buildSetting['host'];
     buildAppSetting['port'] = buildSetting['port'];
