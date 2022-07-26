@@ -32,10 +32,7 @@ class AppSetting {
   }
 
   Future<void> _initialize() async {
-    var appSettingDirectory =
-        Directory.fromUri(Uri.directory(Platform.script.path)).parent.parent;
-
-    _path = '${appSettingDirectory.path}/appsetting.json';
+    _path = '/${Project.projectPath}/appsetting.json';
 
     _file = File.fromUri(Uri.file(_path));
 
