@@ -22,18 +22,24 @@ class RunCommand extends Command {
 
   @override
   Future<void> run() async {
-    var directoryPath =
-        Directory.fromUri(Uri.directory(argResults!['directory']))
-            .absolute
-            .path;
+    var directoryPath = Directory.fromUri(Uri.directory(
+            argResults!['directory'],
+            windows: Platform.isWindows))
+        .absolute
+        .path;
 
     var mode = argResults!['mode'];
 
-    var appProcess = await RunApplicationCLICommand(directoryPath, mode).run();
+    try {
+      var appProcess =
+          await RunApplicationCLICommand(directoryPath, mode).run();
 
-    appProcess.stdout.listen((event) => stdout.add(event));
-    appProcess.stderr.listen((event) => stdout.add(event));
+      appProcess.stdout.listen((event) => stdout.add(event));
+      appProcess.stderr.listen((event) => stdout.add(event));
 
-    await appProcess.exitCode;
+      await appProcess.exitCode;
+    } on CLICommandException catch (object) {
+      usageException(object.message);
+    }
   }
 }

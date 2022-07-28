@@ -21,7 +21,8 @@ class ClearCommand extends Command {
 
   @override
   Future<void> run() async {
-    _directoryPath = Directory.fromUri(Uri.directory(argResults!['directory']))
+    _directoryPath = Directory.fromUri(Uri.directory(argResults!['directory'],
+            windows: Platform.isWindows))
         .absolute
         .path;
 

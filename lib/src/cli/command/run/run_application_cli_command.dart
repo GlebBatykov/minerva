@@ -9,7 +9,8 @@ class RunApplicationCLICommand extends CLICommand<Process> {
 
   @override
   Future<Process> run() async {
-    var appSettingFile = File.fromUri(Uri.file('$projectPath/appsetting.json'));
+    var appSettingFile = File.fromUri(
+        Uri.file('$projectPath/appsetting.json', windows: Platform.isWindows));
 
     if (!await appSettingFile.exists()) {
       throw CLICommandException(
@@ -41,7 +42,8 @@ class RunApplicationCLICommand extends CLICommand<Process> {
 
   Future<void> _runBuild() async {
     var buildProcess = await Process.start(
-        'minerva', ['build', '-d', projectPath, '-m', mode]);
+        'minerva', ['build', '-d', projectPath, '-m', mode],
+        runInShell: true);
 
     buildProcess.stdout.listen((event) => stdout.add(event));
     buildProcess.stderr.listen((event) => stdout.add(event));
@@ -54,7 +56,8 @@ class RunApplicationCLICommand extends CLICommand<Process> {
   Future<Process> _runAOT() async {
     var entryPointFilePath = '$projectPath/build/$mode/bin/main';
 
-    var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
+    var entryPointFile =
+        File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
 
     if (await entryPointFile.exists()) {
       return await Process.start(entryPointFilePath, []);
@@ -67,7 +70,8 @@ class RunApplicationCLICommand extends CLICommand<Process> {
   Future<Process> _runJIT() async {
     var entryPointFilePath = '$projectPath/build/$mode/bin/main.dill';
 
-    var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
+    var entryPointFile =
+        File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
 
     if (await entryPointFile.exists()) {
       return await Process.start('dart', [entryPointFilePath]);
