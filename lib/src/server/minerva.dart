@@ -4,18 +4,24 @@ typedef EndpointsBuilder = FutureOr<void> Function(Endpoints endpoints);
 
 typedef MiddlewaresBuilder = FutureOr<List<Middleware>> Function();
 
+typedef LoggersBuilder = FutureOr<List<Logger>> Function();
+
+typedef AgentsBuilder = FutureOr<List<AgentData>> Function();
+
+typedef ApisBuilder = FutureOr<List<Api>> Function();
+
 class Minerva {
   final Servers _servers = Servers();
 
   final Agents _agents = Agents();
 
-  final Logger _logger;
+  final MinervaLogger _logger = MinervaLogger();
 
-  Minerva._(Logger logger) : _logger = logger;
+  Minerva._();
 
   static Future<Minerva> bind(
       {required List<String> args, required MinervaSetting setting}) async {
-    var minerva = Minerva._(setting.logger ?? MinervaLogger());
+    var minerva = Minerva._();
 
     var address = await _getAddress();
 
@@ -24,8 +30,15 @@ class Minerva {
     var serverSetting = ServerSetting(
         address, setting.securityContext, middlwares, setting.serverBuilder);
 
-    await minerva._initialize(setting.instance, serverSetting,
-        setting.endpointsBuilder, setting.agents ?? []);
+    var agentsData = await setting.agentsBuilder?.call();
+
+    await minerva._initialize(
+        setting.instance,
+        serverSetting,
+        setting.loggersBuilder,
+        setting.apisBuilder,
+        setting.endpointsBuilder,
+        agentsData ?? []);
 
     return minerva;
   }
@@ -49,13 +62,23 @@ class Minerva {
     }
   }
 
-  Future<void> _initialize(int instance, ServerSetting setting,
-      EndpointsBuilder builder, List<AgentData> agentsData) async {
+  Future<void> _initialize(
+      int instance,
+      ServerSetting setting,
+      LoggersBuilder loggersBuilder,
+      ApisBuilder? apisBuilder,
+      EndpointsBuilder? endpointsBuilder,
+      List<AgentData> agentsData) async {
+    var loggers = await loggersBuilder();
+
+    var logPipeline = LogPipeline(loggers);
+
     await _agents.initialize(agentsData);
 
     var connectors = AgentConnectors(_agents.connectors);
 
-    await _servers.initialize(instance, setting, builder, _logger, connectors);
+    await _servers.initialize(instance, setting, apisBuilder, endpointsBuilder,
+        logPipeline, connectors);
 
     var host = setting.address.host;
 

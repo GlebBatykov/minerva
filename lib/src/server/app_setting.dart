@@ -34,7 +34,7 @@ class AppSetting {
   Future<void> _initialize() async {
     _path = '/${Project.projectPath}/appsetting.json';
 
-    _file = File.fromUri(Uri.file(_path));
+    _file = File.fromUri(Uri.parse(_path));
 
     if (!await _file!.exists()) {
       throw AppSettingException(

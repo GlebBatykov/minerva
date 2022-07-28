@@ -5,10 +5,12 @@ abstract class Project {
 
   static String get projectPath {
     if (_projectPath == null) {
-      var scriptPath = Uri.directory(Platform.script.path);
+      var executablePath = Uri.parse(Platform.script.path);
 
-      _projectPath = scriptPath.pathSegments
-          .getRange(0, scriptPath.pathSegments.length - 3)
+      _projectPath = executablePath.pathSegments
+          .where((element) => element.isNotEmpty)
+          .toList()
+          .getRange(0, executablePath.pathSegments.length - 3)
           .join('/');
     }
 

@@ -1,7 +1,7 @@
 part of minerva_logging;
 
 abstract class Logger {
-  FutureOr<void> initialize(ServerContext context) {}
+  FutureOr<void> initialize() {}
 
   void info(dynamic object);
 

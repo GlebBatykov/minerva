@@ -16,8 +16,12 @@ export 'src/server.dart'
         MiddlewareContext,
         PipelineNode;
 
-export 'src/routing.dart' show Endpoints, Endpoint;
+export 'src/routing.dart' show Endpoints, Endpoint, Api;
 
 export 'src/http.dart';
 
 export 'src/auth.dart';
+
+export 'src/logging.dart' show Logger;
+
+export 'src/logging.dart' show Logger, MinervaLogger;

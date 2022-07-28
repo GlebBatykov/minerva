@@ -5,22 +5,26 @@ class ServerTaskHandler extends IsolateTaskHandler {
 
   final Endpoints _endpoints;
 
-  final Logger _logger;
+  final List<Api> _apis;
+
+  final LogPipeline _logPipeline;
 
   final AgentConnectors _connectors;
 
   late final Server _server;
 
-  ServerTaskHandler(ServerSetting setting, Endpoints endpoints, Logger logger,
-      AgentConnectors connectors)
+  ServerTaskHandler(ServerSetting setting, Endpoints endpoints, List<Api> apis,
+      LogPipeline logPipeline, AgentConnectors connectors)
       : _setting = setting,
         _endpoints = endpoints,
-        _logger = logger,
+        _apis = apis,
+        _logPipeline = logPipeline,
         _connectors = connectors;
 
   @override
   Future<void> onStart(IsolateContext context) async {
-    _server = await Server.bind(_setting, _endpoints, _logger, _connectors);
+    _server = await Server.bind(
+        _setting, _endpoints, _apis, _logPipeline, _connectors);
   }
 
   @override

@@ -15,6 +15,8 @@ class Server {
 
   final Endpoints _endpoints;
 
+  final List<Api> _apis;
+
   final Pipeline _pipeline;
 
   late final ServerContext _context;
@@ -25,27 +27,34 @@ class Server {
       ServerBuilder? builder,
       SecurityContext? securityContext,
       Endpoints endpoints,
+      List<Api> apis,
       List<Middleware> middlewares)
       : _address = address,
         _port = port,
         _builder = builder,
         _securityContext = securityContext,
         _endpoints = endpoints,
+        _apis = apis,
         _pipeline = Pipeline(middlewares);
 
-  static Future<Server> bind(ServerSetting setting, Endpoints endpoints,
-      Logger logger, AgentConnectors connectors) async {
+  static Future<Server> bind(
+      ServerSetting setting,
+      Endpoints endpoints,
+      List<Api> apis,
+      LogPipeline logPipeline,
+      AgentConnectors connectors) async {
     var address = setting.address;
 
     var server = Server._(address.host, address.port, setting.builder,
-        setting.securityContext, endpoints, setting.middlewares);
+        setting.securityContext, endpoints, apis, setting.middlewares);
 
-    await server._initialize(logger, connectors);
+    await server._initialize(logPipeline, connectors);
 
     return server;
   }
 
-  Future<void> _initialize(Logger logger, AgentConnectors connectors) async {
+  Future<void> _initialize(
+      LogPipeline logPipeline, AgentConnectors connectors) async {
     if (_securityContext == null) {
       _server = await HttpServer.bind(_address, _port, shared: true);
     } else {
@@ -53,7 +62,15 @@ class Server {
           shared: true);
     }
 
-    _context = ServerContext(logger, connectors);
+    await logPipeline.initialize();
+
+    _context = ServerContext(logPipeline, connectors);
+
+    for (var api in _apis) {
+      await api.initialize(_context);
+    }
+
+    await _pipeline.initialize(_context);
 
     await _builder?.call(_context);
 

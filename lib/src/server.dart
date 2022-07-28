@@ -55,4 +55,4 @@ part 'server/middleware/jwt_auth_middleware.dart';
 part 'server/middleware/error_middleware.dart';
 part 'server/middleware/static_files_middleware.dart';
 
-part 'server/middleware/endpoint/endpoint_middleware.dart';
+part 'server/middleware/endpoint_middleware.dart';

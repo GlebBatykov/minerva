@@ -5,9 +5,9 @@ class ServerContext {
 
   final ConfigurationManager configuration = ConfigurationManager();
 
-  final Logger logger;
+  final LogPipeline logPipeline;
 
   final AgentConnectors connectors;
 
-  ServerContext(this.logger, this.connectors);
+  ServerContext(this.logPipeline, this.connectors);
 }
