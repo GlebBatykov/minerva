@@ -8,7 +8,7 @@ export 'src/server.dart'
         MinervaSetting,
         Agent,
         AgentData,
-        JWTAuthorizationMiddleware,
+        JwtAuthMiddleware,
         StaticFilesMiddleware,
         EndpointMiddleware,
         Middleware,
