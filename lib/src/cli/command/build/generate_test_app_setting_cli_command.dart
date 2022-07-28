@@ -20,14 +20,6 @@ class GenerateTestAppSettingCLICommand extends CLICommand<void> {
 
     var port = buildAppSetting['port'];
 
-    late dynamic values;
-
-    if (buildAppSetting.containsKey('values')) {
-      values = jsonEncode(buildAppSetting['values']).replaceAll('"', '\'');
-    } else {
-      values = <String, dynamic>{};
-    }
-
     await testAppSettingFile.writeAsString('''
 // Generated automatically by Minerva. Do not edit with your hands.
 
@@ -35,8 +27,6 @@ abstract class TestAppSetting {
   static const String host = '$host';
 
   static const int port = $port;
-
-  static const Map<String, dynamic> values = $values;
 }
 ''');
   }

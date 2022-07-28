@@ -30,6 +30,8 @@ class ConfigureAppSettingCLICommand extends CLICommand<void> {
       'port': 8080
     };
 
+    appSetting['assets'] = <String>['/assets'];
+
     var json = jsonEncode(appSetting);
 
     await appSettingFile.writeAsString(json);

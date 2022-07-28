@@ -44,19 +44,31 @@ class RebuildCLICommand extends CLICommand<void> {
       var buildAppSetting =
           BuildAppSettingBuilder().build(appSetting, buildSetting);
 
-      if (await buildAppSettingFile.exists()) {
-        await buildAppSettingFile.delete();
-      }
+      var futures = <Future>[];
 
-      await buildAppSettingFile.create(recursive: true);
+      futures.add(_createAppSetting(buildAppSettingFile, buildAppSetting));
 
-      await buildAppSettingFile.writeAsString(jsonEncode(buildAppSetting));
+      futures.add(
+          GenerateTestAppSettingCLICommand(projectPath, buildAppSetting).run());
 
-      fileLogs.removeWhere((element) => element.type == FileLogType.appsetting);
-
-      fileLogs.add(await FileLogCreater(projectPath)
-          .createAppSettingLog(buildAppSettingFile));
+      await Future.wait(futures);
     }
+  }
+
+  Future<void> _createAppSetting(
+      File buildAppSettingFile, Map<String, dynamic> buildAppSetting) async {
+    if (await buildAppSettingFile.exists()) {
+      await buildAppSettingFile.delete();
+    }
+
+    await buildAppSettingFile.create(recursive: true);
+
+    await buildAppSettingFile.writeAsString(jsonEncode(buildAppSetting));
+
+    fileLogs.removeWhere((element) => element.type == FileLogType.appsetting);
+
+    fileLogs.add(await FileLogCreater(projectPath)
+        .createAppSettingLog(buildAppSettingFile));
   }
 
   Future<bool> _isNeedRecreateAppSetting(File buildAppSettingFile) async {

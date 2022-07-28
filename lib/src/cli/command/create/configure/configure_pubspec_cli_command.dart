@@ -29,6 +29,7 @@ dependencies:
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
+  dio: ^4.0.6
 ''');
   }
 }
