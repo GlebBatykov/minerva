@@ -16,10 +16,12 @@ part 'cli/exception/build_setting_parser_exception.dart';
 part 'cli/runner.dart';
 part 'cli/command/get_dependencies_cli_command.dart';
 
-part 'cli/app_setting_parser/app_setting_parser.dart';
-part 'cli/app_setting_parser/app_setting_parse_result.dart';
+part 'cli/util/app_setting/app_setting_parser/app_setting_parser.dart';
+part 'cli/util/app_setting/app_setting_parser/app_setting_parse_result.dart';
+part 'cli/util/app_setting/build_app_setting_builder.dart';
+part 'cli/util/app_setting/app_setting_assets_parser.dart';
 
-part 'cli/build_setting_parser/build_setting_parser.dart';
+part 'cli/util/build_setting_parser.dart';
 
 part 'cli/command/create/create_command.dart';
 part 'cli/command/create/create_docker_ignore_cli_command.dart';
@@ -44,9 +46,12 @@ part 'cli/cli_pipeline.dart';
 part 'cli/command/build/build_command.dart';
 part 'cli/command/build/create_build_app_setting_cli_command.dart';
 part 'cli/command/build/compile_cli_command.dart';
-part 'cli/command/build/file_log.dart';
+part 'cli/command/build/details/file_log.dart';
+part 'cli/command/build/details/file_log_type.dart';
 part 'cli/command/build/generate_test_app_setting_cli_command.dart';
 part 'cli/command/build/clone_assets_cli_command.dart';
+part 'cli/command/build/rebuild_cli_command.dart';
+part 'cli/command/build/build_cli_command.dart';
 
 part 'cli/command/docker/docker_command.dart';
 part 'cli/command/docker/create_docker_file_cli_command.dart';
