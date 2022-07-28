@@ -20,7 +20,6 @@ class ConfigureAppSettingCLICommand extends CLICommand<void> {
 
     appSetting['debug'] = <String, dynamic>{
       'compile-type': debugCompileType,
-      if (debugCompileType == 'JIT') 'run-aguments': '--observe',
       'host': '127.0.0.1',
       'port': 5000,
     };
