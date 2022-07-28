@@ -16,12 +16,11 @@ class MinervaSetting {
   final int instance;
 
   MinervaSetting(
-      {this.securityContext,
+      {this.instance = 1,
+      this.securityContext,
       required this.middlewaresBuilder,
       required this.endpointsBuilder,
       this.serverBuilder,
       this.logger,
-      this.agents,
-      int? instance})
-      : instance = instance ?? Platform.numberOfProcessors;
+      this.agents});
 }
