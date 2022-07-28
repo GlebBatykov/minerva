@@ -33,6 +33,14 @@ part 'server/servers.dart';
 part 'server/server_setting.dart';
 part 'server/server_address.dart';
 
+part 'server/builder/minerva_agents_builder.dart';
+part 'server/builder/minerva_apis_builder.dart';
+part 'server/builder/minerva_endpoints_builder.dart';
+part 'server/builder/minerva_loggers_builder.dart';
+part 'server/builder/minerva_middlewares_builder.dart';
+part 'server/builder/minerva_server_builder.dart';
+part 'server/builder/minerva_setting_builder.dart';
+
 part 'server/app_setting.dart';
 
 part 'server/task_handler/server_task_handler.dart';
@@ -46,9 +54,8 @@ part 'server/agent/agent_data.dart';
 part 'server/agent/agent_connector.dart';
 part 'server/agent/agent_connectors.dart';
 
-part 'server/pipeline/pipeline.dart';
-part 'server/pipeline/pipeline_node.dart';
-
+part 'server/middleware/pipeline/pipeline.dart';
+part 'server/middleware/pipeline/pipeline_node.dart';
 part 'server/middleware/middleware.dart';
 part 'server/middleware/middleware_context.dart';
 part 'server/middleware/jwt_auth_middleware.dart';

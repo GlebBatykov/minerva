@@ -1,8 +1,13 @@
 export 'src/server.dart'
     show
         Minerva,
-        EndpointsBuilder,
-        ServerBuilder,
+        MinervaEndpointsBuilder,
+        MinervaLoggersBuilder,
+        MinervaApisBuilder,
+        MinervaAgentsBuilder,
+        MinervaMiddlewaresBuilder,
+        MinervaServerBuilder,
+        MinervaSettingBuilder,
         ServerStore,
         ServerContext,
         MinervaSetting,

@@ -1,7 +1,5 @@
 part of minerva_server;
 
-typedef ServerBuilder = FutureOr<void> Function(ServerContext context);
-
 class Server {
   final dynamic _address;
 
@@ -9,7 +7,7 @@ class Server {
 
   final SecurityContext? _securityContext;
 
-  final ServerBuilder? _builder;
+  final MinervaServerBuilder? _builder;
 
   late final HttpServer _server;
 
@@ -24,7 +22,7 @@ class Server {
   Server._(
       dynamic address,
       int port,
-      ServerBuilder? builder,
+      MinervaServerBuilder? builder,
       SecurityContext? securityContext,
       Endpoints endpoints,
       List<Api> apis,
@@ -72,7 +70,7 @@ class Server {
 
     await _pipeline.initialize(_context);
 
-    await _builder?.call(_context);
+    await _builder?.build(_context);
 
     _server.listen(_handleHttpRequest);
   }

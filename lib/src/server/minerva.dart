@@ -1,15 +1,5 @@
 part of minerva_server;
 
-typedef EndpointsBuilder = FutureOr<void> Function(Endpoints endpoints);
-
-typedef MiddlewaresBuilder = FutureOr<List<Middleware>> Function();
-
-typedef LoggersBuilder = FutureOr<List<Logger>> Function();
-
-typedef AgentsBuilder = FutureOr<List<AgentData>> Function();
-
-typedef ApisBuilder = FutureOr<List<Api>> Function();
-
 class Minerva {
   final Servers _servers = Servers();
 
@@ -25,12 +15,12 @@ class Minerva {
 
     var address = await _getAddress();
 
-    var middlwares = await setting.middlewaresBuilder();
+    var middlwares = await setting.middlewaresBuilder.build();
 
     var serverSetting = ServerSetting(
         address, setting.securityContext, middlwares, setting.serverBuilder);
 
-    var agentsData = await setting.agentsBuilder?.call();
+    var agentsData = await setting.agentsBuilder?.build();
 
     await minerva._initialize(
         setting.instance,
@@ -65,11 +55,11 @@ class Minerva {
   Future<void> _initialize(
       int instance,
       ServerSetting setting,
-      LoggersBuilder loggersBuilder,
-      ApisBuilder? apisBuilder,
-      EndpointsBuilder? endpointsBuilder,
+      MinervaLoggersBuilder loggersBuilder,
+      MinervaApisBuilder? apisBuilder,
+      MinervaEndpointsBuilder? endpointsBuilder,
       List<AgentData> agentsData) async {
-    var loggers = await loggersBuilder();
+    var loggers = await loggersBuilder.build();
 
     var logPipeline = LogPipeline(loggers);
 

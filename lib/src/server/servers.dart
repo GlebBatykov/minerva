@@ -6,13 +6,13 @@ class Servers {
   Future<void> initialize(
       int instance,
       ServerSetting setting,
-      ApisBuilder? apisBuilder,
-      EndpointsBuilder? endpointsBuilder,
+      MinervaApisBuilder? apisBuilder,
+      MinervaEndpointsBuilder? endpointsBuilder,
       LogPipeline logPipeline,
       AgentConnectors connectors) async {
     var endpoints = Endpoints();
 
-    var apis = await apisBuilder?.call();
+    var apis = await apisBuilder?.build();
 
     if (apis != null) {
       for (var api in apis) {
@@ -20,7 +20,7 @@ class Servers {
       }
     }
 
-    await endpointsBuilder?.call(endpoints);
+    await endpointsBuilder?.build(endpoints);
 
     _supervisors
         .addAll(List.generate(instance, (index) => IsolateSupervisor()));

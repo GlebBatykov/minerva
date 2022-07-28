@@ -5,17 +5,17 @@ class MinervaSetting {
 
   final SecurityContext? securityContext;
 
-  final MiddlewaresBuilder middlewaresBuilder;
+  final MinervaMiddlewaresBuilder middlewaresBuilder;
 
-  final EndpointsBuilder? endpointsBuilder;
+  final MinervaEndpointsBuilder? endpointsBuilder;
 
-  final ApisBuilder? apisBuilder;
+  final MinervaApisBuilder? apisBuilder;
 
-  final ServerBuilder? serverBuilder;
+  final MinervaServerBuilder? serverBuilder;
 
-  final LoggersBuilder loggersBuilder;
+  final MinervaLoggersBuilder loggersBuilder;
 
-  final AgentsBuilder? agentsBuilder;
+  final MinervaAgentsBuilder? agentsBuilder;
 
   MinervaSetting(
       {this.instance = 1,
