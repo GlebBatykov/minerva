@@ -15,20 +15,11 @@ class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
   Future<List<FileLog>> run() async {
     var fileLogs = <FileLog>[];
 
-    List<String>? assets;
+    late List<String> assets;
 
     try {
-      if (appSetting.containsKey('assets')) {
-        assets = (appSetting['assets'] as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
-      }
-    } catch (object) {
-      throw CLICommandException(
-          message: 'Incorrect asset format in the appsetting.json file.');
-    }
-
-    if (assets == null) {
+      assets = AppSettingAssetsParser().parse(appSetting);
+    } catch (_) {
       return fileLogs;
     }
 
@@ -45,11 +36,6 @@ class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
 
   Future<void> _setFiles(List<String> assets) async {
     for (var asset in assets) {
-      if (asset.isEmpty) {
-        throw CLICommandException(
-            message: 'The asset path should not be empty.');
-      }
-
       if (asset[0] == '/') {
         var directoryPath = '$projectPath$asset';
 
@@ -93,7 +79,7 @@ class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
     for (var file in _files) {
       var stat = await file.stat();
 
-      fileLogs.add(FileLog(file.path, stat.modified));
+      fileLogs.add(FileLog(FileLogType.asset, file.path, stat.modified));
     }
 
     return fileLogs;
