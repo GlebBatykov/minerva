@@ -23,9 +23,7 @@ class BuildCommand extends Command {
 
   late Map<String, dynamic> _appSetting;
 
-  late Map<String, dynamic> _detailsFile;
-
-  Map<String, dynamic> _details = {};
+  final Map<String, dynamic> _details = {};
 
   BuildCommand() {
     argParser.addOption('directory',
@@ -36,8 +34,9 @@ class BuildCommand extends Command {
 
   @override
   Future<void> run() async {
-    _directoryPath =
-        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
+    _directoryPath = Directory.fromUri(Uri.directory(argResults!['directory']))
+        .absolute
+        .path;
 
     _mode = argResults!['mode'];
 
@@ -56,7 +55,7 @@ class BuildCommand extends Command {
     var currentBuildSetting =
         BuildSettingParser().parseCurrent(_appSetting, _mode);
 
-    _compileType = currentBuildSetting['compile-type'] ?? 'AOT';
+    _compileType = currentBuildSetting['compile-type'] ?? 'JIT';
 
     var isNeedScratchBuild = await _isNeedBuildFromScratch(_compileType);
 
@@ -70,8 +69,9 @@ class BuildCommand extends Command {
   }
 
   Future<bool> _isNeedBuildFromScratch(String compileType) async {
-    var detailsFile =
-        File.fromUri(Uri.file('$_directoryPath/build/$_mode/details.json'));
+    var detailsFile = File.fromUri(Uri.file(
+        '$_directoryPath/build/$_mode/details.json',
+        windows: Platform.isWindows));
 
     var detailsFileExists = await detailsFile.exists();
 
@@ -98,8 +98,9 @@ class BuildCommand extends Command {
   Future<void> _clearBuild() async {
     var buildDirectoryPath = '$_directoryPath/build/$_mode';
 
-    var buildDirectory =
-        Directory.fromUri(Uri.directory('$_directoryPath/build/$_mode'));
+    var buildDirectory = Directory.fromUri(Uri.directory(
+        '$_directoryPath/build/$_mode',
+        windows: Platform.isWindows));
 
     if (await buildDirectory.exists()) {
       print('The $_mode build folder is being cleared...');
@@ -128,8 +129,8 @@ class BuildCommand extends Command {
       var fileLogs =
           (_details['files'] as List).map((e) => FileLog.fromJson(e)).toList();
 
-      await RebuildCLICommand(_directoryPath, _mode, _appSettingFile,
-              _appSetting, buildSetting, fileLogs)
+      await RebuildCLICommand(_directoryPath, _mode, _compileType,
+              _appSettingFile, _appSetting, buildSetting, fileLogs)
           .run();
     } on CLICommandException catch (object) {
       usageException(object.message);

@@ -15,7 +15,8 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
 
     var entryPointFilePath = '$projectPath/lib/main.dart';
 
-    var entryPointFile = File.fromUri(Uri.file(entryPointFilePath));
+    var entryPointFile =
+        File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
 
     if (await entryPointFile.exists()) {
       await GetDependenciesCLICommand(projectPath).run();
@@ -34,7 +35,8 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   Future<void> _compile(String entryPointFilePath) async {
     var compileDirectoryPath = '$projectPath/build/$mode/bin';
 
-    await Directory.fromUri(Uri.directory(compileDirectoryPath))
+    await Directory.fromUri(
+            Uri.directory(compileDirectoryPath, windows: Platform.isWindows))
         .create(recursive: true);
 
     late Process process;
@@ -76,20 +78,11 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   }
 
   Future<List<FileLog>> _createFileLogs() async {
-    var libDirectory = Directory.fromUri(Uri.directory('$projectPath/lib'));
+    var libDirectory = Directory.fromUri(
+        Uri.directory('$projectPath/lib', windows: Platform.isWindows));
 
-    var fileLogs = <FileLog>[];
-
-    for (var entity in await libDirectory.list(recursive: true).toList()) {
-      if (entity is File && entity.fileExtension == 'dart') {
-        var entityStat = await entity.stat();
-
-        var modificationTime = entityStat.modified;
-
-        fileLogs.add(FileLog(
-            FileLogType.source, entity.absolute.path, modificationTime));
-      }
-    }
+    var fileLogs =
+        await FileLogCreater(projectPath).createSourceLogs(libDirectory);
 
     return fileLogs;
   }

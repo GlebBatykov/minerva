@@ -33,7 +33,9 @@ class CreateCommand extends Command {
     var projectName = argResults!['name'];
 
     var directoryPath =
-        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
+        Directory.fromUri(Uri.directory(argResults!['directory']))
+            .absolute
+            .path;
 
     if (projectName == null) {
       usageException('Project name must be specified.');

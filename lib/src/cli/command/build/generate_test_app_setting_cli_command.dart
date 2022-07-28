@@ -11,7 +11,8 @@ class GenerateTestAppSettingCLICommand extends CLICommand<void> {
   Future<void> run() async {
     var testAppSettingPath = '$projectPath/test/test_app_setting.g.dart';
 
-    var testAppSettingFile = File.fromUri(Uri.file(testAppSettingPath));
+    var testAppSettingFile =
+        File.fromUri(Uri.file(testAppSettingPath, windows: Platform.isWindows));
 
     await testAppSettingFile.create(recursive: true);
 

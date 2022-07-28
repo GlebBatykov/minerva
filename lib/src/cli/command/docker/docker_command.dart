@@ -23,7 +23,9 @@ class DockerCommand extends Command {
   @override
   Future<void> run() async {
     var directoryPath =
-        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
+        Directory.fromUri(Uri.directory(argResults!['directory']))
+            .absolute
+            .path;
 
     var compileType = argResults!['compile-type'];
 

@@ -21,8 +21,9 @@ class ClearCommand extends Command {
 
   @override
   Future<void> run() async {
-    _directoryPath =
-        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
+    _directoryPath = Directory.fromUri(Uri.directory(argResults!['directory']))
+        .absolute
+        .path;
 
     var buildDirectoryPath = '$_directoryPath/build';
 

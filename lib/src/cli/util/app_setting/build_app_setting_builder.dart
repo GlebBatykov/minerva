@@ -3,7 +3,7 @@ part of minerva_cli;
 class BuildAppSettingBuilder {
   Map<String, dynamic> build(
       Map<String, dynamic> appSetting, Map<String, dynamic> buildSetting) {
-    var buildAppSetting = appSetting;
+    var buildAppSetting = Map<String, dynamic>.from(appSetting);
 
     buildAppSetting.remove('debug');
     buildAppSetting.remove('release');

@@ -42,22 +42,12 @@ class BuildCLICommand extends CLICommand<void> {
 
     await Future.wait(futures);
 
-    var appSettingFileLog = await _getAppSettingFileLog();
+    var appSettingFileLog =
+        await FileLogCreater(projectPath).createAppSettingLog(appSettingFile);
 
     fileLogs.add(appSettingFileLog);
 
     await _createDetails(fileLogs);
-  }
-
-  Future<FileLog> _getAppSettingFileLog() async {
-    var appSettingFileStat = await appSettingFile.stat();
-
-    var modificationTime = appSettingFileStat.modified;
-
-    var fileLog = FileLog(
-        FileLogType.appsetting, appSettingFile.absolute.path, modificationTime);
-
-    return fileLog;
   }
 
   Future<void> _createDetails(List<FileLog> fileLogs) async {

@@ -5,6 +5,8 @@ class RebuildCLICommand extends CLICommand<void> {
 
   final String mode;
 
+  final String compileType;
+
   final File appSettingFile;
 
   final Map<String, dynamic> appSetting;
@@ -15,21 +17,20 @@ class RebuildCLICommand extends CLICommand<void> {
 
   late String _buildDirectory;
 
-  final List<FileLog> _fileLogs = [];
-
-  RebuildCLICommand(this.projectPath, this.mode, this.appSettingFile,
-      this.appSetting, this.buildSetting, this.fileLogs);
+  RebuildCLICommand(this.projectPath, this.mode, this.compileType,
+      this.appSettingFile, this.appSetting, this.buildSetting, this.fileLogs);
 
   @override
   Future<void> run() async {
     var futures = <Future>[
       _recreateAppSetting(),
       _recloneAssets(),
-      _recompile(),
-      _recreateDetails()
+      _recompile()
     ];
 
     await Future.wait(futures);
+
+    await _recreateDetails(fileLogs);
   }
 
   Future<void> _recreateAppSetting() async {
@@ -49,8 +50,12 @@ class RebuildCLICommand extends CLICommand<void> {
 
       await buildAppSettingFile.create(recursive: true);
 
-      await CreateBuildAppSettingCLICommand(projectPath, mode, buildAppSetting)
-          .run();
+      await buildAppSettingFile.writeAsString(jsonEncode(buildAppSetting));
+
+      fileLogs.removeWhere((element) => element.type == FileLogType.appsetting);
+
+      fileLogs.add(await FileLogCreater(projectPath)
+          .createAppSettingLog(buildAppSettingFile));
     }
   }
 
@@ -75,6 +80,10 @@ class RebuildCLICommand extends CLICommand<void> {
 
     var buildAssetsPaths = _getBuildAssetsPaths();
 
+    var buildAssetsFiles = buildAssetsPaths
+        .map((e) => File.fromUri(Uri.file(e, windows: Platform.isWindows)))
+        .toList();
+
     late List<String> assets;
 
     try {
@@ -83,65 +92,147 @@ class RebuildCLICommand extends CLICommand<void> {
       assets = [];
     }
 
+    var assetsFiles = await AssetsFilesParser(projectPath).parse(assets);
+
     if (assets.isNotEmpty) {
-      await _removeUnnecessaryBuildAssets(buildAssetsPaths, assets);
+      await _removeUnnecessaryBuildAssets(buildAssetsFiles, assetsFiles);
     } else {
-      await _clearBuildAssets(buildAssetsPaths);
+      await _clearBuildAssets(buildAssetsFiles);
     }
+
+    await _cloneAssets(assetsFiles);
   }
 
   List<String> _getBuildAssetsPaths() {
     return fileLogs
         .where((element) => element.type == FileLogType.asset)
-        .map((e) => e.path)
+        .map((e) => absolute(_buildDirectory, e.path))
         .toList();
   }
 
-  Future<List<String>> _getAssets() async {
-    
-  }
-
   Future<void> _removeUnnecessaryBuildAssets(
-      List<String> buildAssetsPaths, List<String> assets) async {
-    for (var buildAssetPath in buildAssetsPaths) {
-      var buildAssetFile = File.fromUri(Uri.file(buildAssetPath));
-
+      List<File> buildAssetsFiles, List<File> assetsFiles) async {
+    for (var buildAssetFile in buildAssetsFiles) {
       if (await buildAssetFile.exists()) {
-        var buildAsset = buildAssetPath.substring(_buildDirectory.length);
+        var buildAssetRelativePath =
+            relative(buildAssetFile.path, from: _buildDirectory);
 
-        if (assets.contains(buildAsset)) {
-          var assetFilePath = '$projectPath/$buildAsset';
+        var filtred = assetsFiles.where((element) =>
+            relative(element.path, from: projectPath) ==
+            buildAssetRelativePath);
 
-          var assetFile = File.fromUri(Uri.file(assetFilePath));
+        if (filtred.isEmpty) {
+          _deleteFile(buildAssetFile);
 
-          if (assetFile)
-        } else {
-          await buildAssetFile.delete(recursive: true);
+          fileLogs.removeWhere((element) =>
+              element.path ==
+              relative(buildAssetFile.path, from: _buildDirectory));
         }
       }
     }
   }
 
-  Future<void> _clearBuildAssets(List<String> assetsPaths) async {
-    for (var assetPath in assetsPaths) {
-      var file = File.fromUri(Uri.file(assetPath));
+  Future<bool> _isOutdated(File buildAssetFile, File assetFile) async {
+    var buildAssetFileStat = await buildAssetFile.stat();
 
-      if (await file.exists()) {
-        await file.delete(recursive: true);
+    var assetFileStat = await assetFile.stat();
+
+    return assetFileStat.modified.isAfter(buildAssetFileStat.modified);
+  }
+
+  Future<void> _clearBuildAssets(List<File> assetsFiles) async {
+    for (var assetFile in assetsFiles) {
+      await _deleteFile(assetFile);
+    }
+  }
+
+  Future<void> _deleteFile(File file) async {
+    if (await file.exists()) {
+      await file.delete(recursive: true);
+    }
+  }
+
+  Future<void> _cloneAssets(List<File> files) async {
+    for (var file in files) {
+      var relativePath =
+          file.path.substring(projectPath.length, file.path.length);
+
+      var buildFilePath = '$projectPath/build/$mode$relativePath';
+
+      var buildFile =
+          File.fromUri(Uri.file(buildFilePath, windows: Platform.isWindows));
+
+      if (!await buildFile.exists()) {
+        await _writeFile(buildFile, file);
+      } else if (await _isOutdated(buildFile, file)) {
+        await _writeFile(buildFile, file);
       }
     }
   }
 
-  Future<void> _recompile() async {
-    var buildSourcePaths = _getBuildSourcePaths();
+  Future<void> _writeFile(File buildFile, File file) async {
+    fileLogs.removeWhere((element) =>
+        element.path == relative(buildFile.path, from: _buildDirectory));
+
+    await buildFile.writeAsBytes(await file.readAsBytes());
+
+    var fileLog = await FileLogCreater(projectPath).createAssetLog(file);
+
+    fileLogs.add(fileLog);
   }
 
-  List<String> _getBuildSourcePaths() {
+  Future<void> _recompile() async {
+    var sourceFilesLogs = _getSourceLogs();
+
+    var isNeedRecompile = await _isNeedRecompile(sourceFilesLogs);
+
+    if (isNeedRecompile) {
+      var rebuildSourceFileLog =
+          await CompileCLICommand(projectPath, mode, compileType).run();
+
+      fileLogs.removeWhere((element) => element.type == FileLogType.source);
+
+      fileLogs.addAll(rebuildSourceFileLog);
+    }
+  }
+
+  Future<bool> _isNeedRecompile(List<FileLog> sourceFilesLogs) async {
+    for (var sourceLog in sourceFilesLogs) {
+      var sourceFile = File.fromUri(Uri.file(
+          absolute(projectPath, sourceLog.path),
+          windows: Platform.isWindows));
+
+      if (!await sourceFile.exists()) {
+        return true;
+      }
+
+      var sourceFileStat = await sourceFile.stat();
+
+      if (sourceFileStat.modified.isAfter(sourceLog.modificationTime)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  List<FileLog> _getSourceLogs() {
     return fileLogs
         .where((element) => element.type == FileLogType.source)
-        .map((e) => e.path)
         .toList();
   }
 
-  Future<void> _recreateDetails() async {}
+  Future<void> _recreateDetails(List<FileLog> fileLogs) async {
+    var detailsFile =
+        File.fromUri(Uri.file('$projectPath/build/$mode/details.json'));
+
+    var details = <String, dynamic>{
+      'compile-type': compileType,
+      'files': fileLogs.map((e) => e.toJson()).toList()
+    };
+
+    var json = jsonEncode(details);
+
+    await detailsFile.writeAsString(json);
+  }
 }

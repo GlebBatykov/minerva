@@ -1,15 +1,19 @@
 part of minerva_cli;
 
 class CreateDockerFileCLICommand extends CLICommand<void> {
-  final String directoryPath;
+  final String projectPath;
 
   final String compileType;
 
-  CreateDockerFileCLICommand(this.directoryPath, this.compileType);
+  late final List<String> _assets;
+
+  CreateDockerFileCLICommand(this.projectPath, this.compileType);
 
   @override
   Future<void> run() async {
-    var filePath = '$directoryPath/Dockerfile';
+    await _parseAssets();
+
+    var filePath = '$projectPath/Dockerfile';
 
     var dockerFile = File.fromUri(Uri.file(filePath));
 
@@ -19,6 +23,24 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
       await _writeAOTFile(dockerFile);
     } else {
       await _writeJTIFile(dockerFile);
+    }
+  }
+
+  Future<void> _parseAssets() async {
+    late AppSettingParseResult appSettingParseResult;
+
+    try {
+      appSettingParseResult = await AppSettingParcer().parse(projectPath);
+    } on AppSettingParserException catch (object) {
+      throw CLICommandException(message: object.message);
+    }
+
+    var appSetting = appSettingParseResult.data;
+
+    try {
+      _assets = AppSettingAssetsParser().parse(appSetting);
+    } on CLICommandException catch (_) {
+      rethrow;
     }
   }
 
@@ -50,6 +72,8 @@ COPY --from=build /runtime /
 
 COPY --from=build /app/build/release/bin /app
 COPY --from=build /app/build/release/appsetting.json /app
+
+${_generateCopyAssets(_assets)}
 
 # Start server.
 EXPOSE 8080
@@ -85,9 +109,31 @@ COPY --from=build /usr/lib/dart/bin/dart /usr/lib/dart/bin/dart
 COPY --from=build /app/build/release/bin /app
 COPY --from=build /app/build/release/appsetting.json /app
 
+${_generateCopyAssets(_assets)}
+
 # Start server.
 EXPOSE 8080
 CMD ["dart", "app/bin/main.dill"]
 ''');
+  }
+
+  String _generateCopyAssets(List<String> assets) {
+    var value = '';
+
+    for (var i = 0; i < assets.length; i++) {
+      var asset = assets[i];
+
+      if (asset.startsWith('/')) {
+        value += 'COPY --from=build /app/build/release$asset /app';
+      } else {
+        value += 'COPY --from=build /app/build/release/$asset /app';
+      }
+
+      if (i < assets.length - 1) {
+        value += '\n';
+      }
+    }
+
+    return value;
   }
 }

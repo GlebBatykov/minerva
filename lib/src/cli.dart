@@ -19,7 +19,9 @@ part 'cli/command/get_dependencies_cli_command.dart';
 part 'cli/util/app_setting/app_setting_parser/app_setting_parser.dart';
 part 'cli/util/app_setting/app_setting_parser/app_setting_parse_result.dart';
 part 'cli/util/app_setting/build_app_setting_builder.dart';
-part 'cli/util/app_setting/app_setting_assets_parser.dart';
+part 'cli/util/app_setting/asset/app_setting_assets_parser.dart';
+part 'cli/util/app_setting/asset/assets_files_parser.dart';
+part 'cli/util/app_setting/asset/file_log_creater.dart';
 
 part 'cli/util/build_setting_parser.dart';
 

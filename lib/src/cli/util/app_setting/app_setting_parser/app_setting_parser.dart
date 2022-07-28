@@ -2,7 +2,8 @@ part of minerva_cli;
 
 class AppSettingParcer {
   Future<AppSettingParseResult> parse(String projectPath) async {
-    var file = File.fromUri(Uri.file('$projectPath/appsetting.json'));
+    var file = File.fromUri(
+        Uri.file('$projectPath/appsetting.json', windows: Platform.isWindows));
 
     if (!await file.exists()) {
       throw AppSettingParserException(
