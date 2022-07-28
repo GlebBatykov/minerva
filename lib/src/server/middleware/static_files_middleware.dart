@@ -46,15 +46,11 @@ class StaticFilesMiddleware extends Middleware {
   }
 
   Future<Result> _handleFile(String filePath) async {
-    print(filePath);
-
     if (filePath.isNotEmpty && filePath[0] != '/') {
       filePath = '/$filePath';
     }
 
     var file = File.fromUri(Uri.file('$_directoryPath$filePath'));
-
-    print(file.path);
 
     if (await file.exists()) {
       var bytes = await file.readAsBytes();
