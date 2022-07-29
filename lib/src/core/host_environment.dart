@@ -1,19 +1,19 @@
 part of minerva_core;
 
-abstract class Project {
-  static String? _projectPath;
+abstract class HostEnvironment {
+  static String? _contentRootPath;
 
-  static String get projectPath {
-    if (_projectPath == null) {
+  static String get contentRootPath {
+    if (_contentRootPath == null) {
       var executablePath = Uri.parse(Platform.script.path);
 
-      _projectPath = executablePath.pathSegments
+      _contentRootPath = executablePath.pathSegments
           .where((element) => element.isNotEmpty)
           .toList()
           .getRange(0, executablePath.pathSegments.length - 3)
           .join('/');
     }
 
-    return _projectPath!;
+    return _contentRootPath!;
   }
 }

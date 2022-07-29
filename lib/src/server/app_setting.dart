@@ -32,7 +32,7 @@ class AppSetting {
   }
 
   Future<void> _initialize() async {
-    _path = '/${Project.projectPath}/appsetting.json';
+    _path = '/${HostEnvironment.contentRootPath}/appsetting.json';
 
     _file = File.fromUri(Uri.parse(_path));
 

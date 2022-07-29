@@ -18,7 +18,7 @@ class StaticFilesMiddleware extends Middleware {
   }
 
   void _initialize() {
-    _directoryPath = '/${Project.projectPath}$_directory';
+    _directoryPath = '/${HostEnvironment.contentRootPath}$_directory';
   }
 
   @override
