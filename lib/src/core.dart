@@ -9,3 +9,5 @@ part 'core/minerva_exception.dart';
 part 'core/extension/file_extension.dart';
 
 part 'core/host_environment.dart';
+
+part 'core/file_path_parser.dart';
