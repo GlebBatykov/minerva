@@ -1,2 +1,1 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+Minerva is a Dart framework for creating a REST API. It is in the process of development and testing. Documentation will be written soon.
