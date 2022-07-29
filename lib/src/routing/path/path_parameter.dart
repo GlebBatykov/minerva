@@ -1,13 +1,11 @@
 part of minerva_routing;
 
-class PathParameter {
+class PathParameter extends PathSegment {
   final PathParameterType type;
-
-  final String name;
 
   final RegExp? regExp;
 
-  PathParameter(this.type, this.name, [this.regExp]);
+  PathParameter(this.type, super.value, [this.regExp]);
 
   factory PathParameter.parse(String segment) {
     late PathParameterType type;

@@ -9,7 +9,7 @@ typedef EndpointErrorHandler = FutureOr<dynamic> Function(
 class Endpoint {
   final HttpMethod method;
 
-  final String path;
+  final MinervaPath path;
 
   final EndpointHandler handler;
 
@@ -17,6 +17,7 @@ class Endpoint {
 
   final AuthOptions? authOptions;
 
-  Endpoint(this.method, this.path, this.handler, this.errorHandler,
-      this.authOptions);
+  Endpoint(this.method, String path, this.handler, this.errorHandler,
+      this.authOptions)
+      : path = MinervaPath.parse(path);
 }

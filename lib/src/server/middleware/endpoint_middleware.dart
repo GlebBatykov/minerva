@@ -1,10 +1,7 @@
 part of minerva_server;
 
 class EndpointMiddleware extends Middleware {
-  final PathComparator _comparator;
-
-  EndpointMiddleware({bool parsePathParameters = false})
-      : _comparator = PathComparator(parsePathParameters);
+  final PathComparator _comparator = PathComparator();
 
   @override
   Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
@@ -18,7 +15,7 @@ class EndpointMiddleware extends Middleware {
       Endpoint? endpoint;
 
       for (var i = 0; i < endpoints.length; i++) {
-        var result = _comparator.compare(endpoints[i].path, request.uri.path);
+        var result = _comparator.compare(endpoints[i], request.uri.path);
 
         if (result.isEqual) {
           endpoint = endpoints[i];

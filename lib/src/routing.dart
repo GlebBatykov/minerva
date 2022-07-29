@@ -12,6 +12,8 @@ part 'routing/endpoints.dart';
 part 'routing/web_socket_endpoint.dart';
 part 'routing/api.dart';
 
+part 'routing/path/minerva_path.dart';
+part 'routing/path/path_segment.dart';
 part 'routing/path/path_comparator.dart';
 part 'routing/path/path_compare_result.dart';
 part 'routing/path/path_parameter.dart';

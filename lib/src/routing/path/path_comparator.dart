@@ -1,21 +1,15 @@
 part of minerva_routing;
 
 class PathComparator {
-  final bool parsePathParameters;
-
-  PathComparator(this.parsePathParameters);
-
-  PathCompareResult compare(String endpoint, String path) {
-    if (parsePathParameters && endpoint.contains(':')) {
+  PathCompareResult compare(Endpoint endpoint, String path) {
+    if (endpoint.path.containsPathParameters) {
       var pathParameters = <String, num>{};
 
       var pathSegments = path.split('/');
 
-      var endpointSegments = endpoint.split('/');
-
       pathSegments.removeWhere((element) => element.isEmpty);
 
-      endpointSegments.removeWhere((element) => element.isEmpty);
+      var endpointSegments = endpoint.path.segments;
 
       if (pathSegments.length != endpointSegments.length) {
         return PathCompareResult(false);
@@ -26,26 +20,24 @@ class PathComparator {
 
         var pathSegment = pathSegments[i];
 
-        if (_isParameter(endpointSegment)) {
-          var parameter = PathParameter.parse(endpointSegment);
-
-          if (_isMatch(parameter, pathSegment)) {
+        if (endpointSegment is PathParameter) {
+          if (_isMatch(endpointSegment, pathSegment)) {
             late num value;
 
-            if (parameter.type == PathParameterType.int) {
+            if (endpointSegment.type == PathParameterType.int) {
               value = int.parse(pathSegment);
-            } else if (parameter.type == PathParameterType.double) {
+            } else if (endpointSegment.type == PathParameterType.double) {
               value = double.parse(pathSegment);
             } else {
               value = num.parse(pathSegment);
             }
 
-            pathParameters[parameter.name] = value;
+            pathParameters[endpointSegment.value] = value;
           } else {
             return PathCompareResult(false);
           }
         } else {
-          if (pathSegment != endpointSegment) {
+          if (pathSegment != endpointSegment.value) {
             return PathCompareResult(false);
           }
         }
@@ -54,11 +46,7 @@ class PathComparator {
       return PathCompareResult(true, pathParameters);
     }
 
-    return PathCompareResult(endpoint == path);
-  }
-
-  bool _isParameter(String segment) {
-    return segment.contains(':');
+    return PathCompareResult(endpoint.path.path == path);
   }
 
   bool _isMatch(PathParameter parameter, String segment) {
