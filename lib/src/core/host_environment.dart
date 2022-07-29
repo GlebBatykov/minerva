@@ -12,6 +12,8 @@ abstract class HostEnvironment {
           .toList()
           .getRange(0, executablePath.pathSegments.length - 3)
           .join('/');
+
+      _contentRootPath = '/$contentRootPath';
     }
 
     return _contentRootPath!;
