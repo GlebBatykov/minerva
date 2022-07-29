@@ -10,6 +10,10 @@ class MinervaPath {
   MinervaPath(this.path, this.segments, this.containsPathParameters);
 
   factory MinervaPath.parse(String path) {
+    if (!path.startsWith('/')) {
+      path = '/$path';
+    }
+
     var containsPathParameters = false;
 
     var segments = <PathSegment>[];

@@ -69,7 +69,7 @@ class FileResult extends Result {
 
 class FilePathResult extends FileResult {
   FilePathResult(String path, {super.name, super.headers})
-      : super(File.fromUri(Uri(path: path)));
+      : super(File.fromUri(Uri.file(FilePathParser.parse(path))));
 }
 
 class FileContentResult extends Result {
@@ -87,5 +87,5 @@ class FileContentResult extends Result {
 
 class FilePathContentResult extends FileContentResult {
   FilePathContentResult(String path, {super.headers})
-      : super(File.fromUri(Uri(path: path)));
+      : super(File.fromUri(Uri.file(FilePathParser.parse(path))));
 }

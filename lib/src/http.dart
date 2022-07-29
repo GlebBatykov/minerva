@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'core.dart';
 import 'auth.dart';
 
 part 'http/minerva_request.dart';
