@@ -14,6 +14,7 @@ export 'src/server.dart'
         Agent,
         AgentData,
         JwtAuthMiddleware,
+        CookieAuthMiddleware,
         StaticFilesMiddleware,
         EndpointMiddleware,
         Middleware,
@@ -25,7 +26,7 @@ export 'src/routing.dart' show Endpoints, Endpoint, Api;
 
 export 'src/http.dart';
 
-export 'src/auth.dart';
+export 'src/auth.dart' show AuthOptions, JwtAuthOptions, CookieAuthOptions;
 
 export 'src/logging.dart' show Logger;
 

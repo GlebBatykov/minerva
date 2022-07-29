@@ -58,7 +58,8 @@ part 'server/middleware/pipeline/pipeline.dart';
 part 'server/middleware/pipeline/pipeline_node.dart';
 part 'server/middleware/middleware.dart';
 part 'server/middleware/middleware_context.dart';
-part 'server/middleware/jwt_auth_middleware.dart';
+part 'server/middleware/auth/jwt_auth_middleware.dart';
+part 'server/middleware/auth/cookie_auth_middleware.dart';
 part 'server/middleware/error_middleware.dart';
 part 'server/middleware/static_files_middleware.dart';
 

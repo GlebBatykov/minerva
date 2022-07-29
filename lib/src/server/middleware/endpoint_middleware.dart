@@ -73,23 +73,51 @@ class EndpointMiddleware extends Middleware {
     if (authOptions != null) {
       var jwtOptions = authOptions.jwt;
 
-      var role = authContext.jwt.role;
+      var cookieOptions = authOptions.cookie;
 
-      if (jwtOptions != null) {
-        if ((jwtOptions.permissionLevel != null &&
-            (role != null &&
-                role.permissionLevel != null &&
-                jwtOptions.permissionLevel! <= role.permissionLevel!))) {
-          isHaveAccess = true;
-        }
+      if (jwtOptions == null && cookieOptions == null) {
+        isHaveAccess = true;
+      } else if (jwtOptions != null) {
+        var role = authContext.jwt.role;
 
-        if (!isHaveAccess &&
-            (jwtOptions.roles != null &&
-                role != null &&
-                jwtOptions.roles!.contains(role.name))) {
-          isHaveAccess = true;
-        }
+        isHaveAccess = _isJwtHaveAccess(jwtOptions, role);
+      } else if (cookieOptions != null) {
+        var isAuthorized = request.authContext.cookie.isAuthorized;
+
+        isHaveAccess = _isCookieHaveAccess(cookieOptions, isAuthorized);
       }
+    } else {
+      isHaveAccess = true;
+    }
+
+    return isHaveAccess;
+  }
+
+  bool _isJwtHaveAccess(JwtAuthOptions options, Role? role) {
+    var isHaveAccess = false;
+
+    if ((options.permissionLevel != null &&
+        (role != null &&
+            role.permissionLevel != null &&
+            options.permissionLevel! <= role.permissionLevel!))) {
+      isHaveAccess = true;
+    }
+
+    if (!isHaveAccess &&
+        (options.roles != null &&
+            role != null &&
+            options.roles!.contains(role.name))) {
+      isHaveAccess = true;
+    }
+
+    return isHaveAccess;
+  }
+
+  bool _isCookieHaveAccess(CookieAuthOptions options, bool isAuthorized) {
+    var isHaveAccess = false;
+
+    if (options.isAuthorized) {
+      isHaveAccess = isAuthorized;
     } else {
       isHaveAccess = true;
     }
