@@ -7,11 +7,13 @@ abstract class HostEnvironment {
     if (_contentRootPath == null) {
       var executablePath = Uri.parse(Platform.script.path);
 
-      _contentRootPath = executablePath.pathSegments
-          .where((element) => element.isNotEmpty)
-          .toList()
-          .getRange(0, executablePath.pathSegments.length - 3)
-          .join('/');
+      var segments = executablePath.pathSegments;
+
+      segments = segments.where((element) => element.isNotEmpty).toList();
+
+      segments = segments.getRange(0, segments.length - 2).toList();
+
+      _contentRootPath = segments.join('/');
 
       _contentRootPath = '/$contentRootPath';
     }
