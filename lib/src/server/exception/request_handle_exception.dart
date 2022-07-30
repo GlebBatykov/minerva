@@ -10,6 +10,6 @@ class RequestHandleException extends MinervaException {
 
   @override
   String toString() {
-    return '${error.runtimeType}\n$stackTrace';
+    return '${error.runtimeType}: $message\n$stackTrace';
   }
 }

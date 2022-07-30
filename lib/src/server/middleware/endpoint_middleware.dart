@@ -12,21 +12,7 @@ class EndpointMiddleware extends Middleware {
         .toList();
 
     if (endpoints.isNotEmpty) {
-      Endpoint? endpoint;
-
-      for (var i = 0; i < endpoints.length; i++) {
-        var result = _comparator.compare(endpoints[i], request.uri.path);
-
-        if (result.isEqual) {
-          endpoint = endpoints[i];
-
-          if (result.pathParameters != null) {
-            request.addPathParameters(result.pathParameters!);
-          }
-
-          break;
-        }
-      }
+      var endpoint = _getEndpoint(endpoints, request);
 
       if (endpoint != null) {
         if (!_isHaveAccess(request, endpoint)) {
@@ -57,6 +43,35 @@ class EndpointMiddleware extends Middleware {
       }
     } else {
       return NotFoundResult();
+    }
+  }
+
+  Endpoint? _getEndpoint(List<Endpoint> endpoints, MinervaRequest request) {
+    List<Endpoint> matchedEndpoints = [];
+
+    for (var i = 0; i < endpoints.length; i++) {
+      var result = _comparator.compare(endpoints[i], request.uri.path);
+
+      if (result.isEqual) {
+        matchedEndpoints.add(endpoints[i]);
+
+        if (matchedEndpoints.length > 1) {
+          throw MiddlewareHandleException(
+              MatchedMultipleEndpointsException(), StackTrace.current,
+              message:
+                  'An error occurred while searching for the endpoint. The request matched multiple endpoints.');
+        } else {
+          if (result.pathParameters != null) {
+            request.addPathParameters(result.pathParameters!);
+          }
+        }
+      }
+    }
+
+    if (matchedEndpoints.isEmpty) {
+      return null;
+    } else {
+      return matchedEndpoints.first;
     }
   }
 

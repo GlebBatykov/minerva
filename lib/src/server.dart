@@ -23,6 +23,7 @@ part 'server/exception/endpoint_handle_exception.dart';
 part 'server/exception/middleware_handle_exception.dart';
 part 'server/exception/app_setting_exception.dart';
 part 'server/exception/minerva_bind_exception.dart';
+part 'server/exception/matched_multiple_endpoints_exception.dart';
 
 part 'server/minerva.dart';
 part 'server/server.dart';

@@ -28,8 +28,8 @@ class UnauthorizedResult extends Result {
 }
 
 class InternalServerErrorResult extends Result {
-  InternalServerErrorResult(Object object, {super.headers})
-      : super(statusCode: 500, body: object);
+  InternalServerErrorResult({super.body, super.headers})
+      : super(statusCode: 500);
 }
 
 class JsonResult extends Result {
