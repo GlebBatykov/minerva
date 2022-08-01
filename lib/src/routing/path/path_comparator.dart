@@ -59,7 +59,7 @@ class PathComparator {
     if (parameter.type == PathParameterType.int) {
       return int.tryParse(segment) != null;
     } else if (parameter.type == PathParameterType.double) {
-      return double.tryParse(segment) != null;
+      return int.tryParse(segment) == null && double.tryParse(segment) != null;
     } else {
       return num.tryParse(segment) != null;
     }
