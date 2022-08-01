@@ -130,8 +130,17 @@ class BuildCommand extends Command {
       var fileLogs =
           (_details['files'] as List).map((e) => FileLog.fromJson(e)).toList();
 
-      await RebuildCLICommand(_directoryPath, _mode, _compileType,
-              _appSettingFile, _appSetting, buildSetting, fileLogs)
+      var buildCompileType = _details['compile-type'] as String;
+
+      await RebuildCLICommand(
+              _directoryPath,
+              _mode,
+              _compileType,
+              _appSettingFile,
+              _appSetting,
+              buildSetting,
+              buildCompileType,
+              fileLogs)
           .run();
     } on CLICommandException catch (object) {
       usageException(object.message);

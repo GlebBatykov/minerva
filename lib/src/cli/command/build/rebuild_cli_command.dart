@@ -13,12 +13,21 @@ class RebuildCLICommand extends CLICommand<void> {
 
   final Map<String, dynamic> buildSetting;
 
+  final String buildCompileType;
+
   final List<FileLog> fileLogs;
 
   late String _buildDirectory;
 
-  RebuildCLICommand(this.projectPath, this.mode, this.compileType,
-      this.appSettingFile, this.appSetting, this.buildSetting, this.fileLogs);
+  RebuildCLICommand(
+      this.projectPath,
+      this.mode,
+      this.compileType,
+      this.appSettingFile,
+      this.appSetting,
+      this.buildSetting,
+      this.buildCompileType,
+      this.fileLogs);
 
   @override
   Future<void> run() async {
@@ -205,10 +214,16 @@ class RebuildCLICommand extends CLICommand<void> {
       fileLogs.removeWhere((element) => element.type == FileLogType.source);
 
       fileLogs.addAll(rebuildSourceFileLog);
+    } else {
+      print('Recompile is not needed...');
     }
   }
 
   Future<bool> _isNeedRecompile(List<FileLog> sourceFilesLogs) async {
+    if (compileType != buildCompileType) {
+      return true;
+    }
+
     for (var sourceLog in sourceFilesLogs) {
       var sourceFile = File.fromUri(Uri.file(
           absolute(projectPath, sourceLog.path),

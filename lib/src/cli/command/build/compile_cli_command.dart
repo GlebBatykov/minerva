@@ -35,9 +35,14 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   Future<void> _compile(String entryPointFilePath) async {
     var compileDirectoryPath = '$projectPath/build/$mode/bin';
 
-    await Directory.fromUri(
-            Uri.directory(compileDirectoryPath, windows: Platform.isWindows))
-        .create(recursive: true);
+    var compileDirectory = Directory.fromUri(
+        Uri.directory(compileDirectoryPath, windows: Platform.isWindows));
+
+    if (await compileDirectory.exists()) {
+      await compileDirectory.delete(recursive: true);
+    }
+
+    await compileDirectory.create(recursive: true);
 
     late Process process;
 
