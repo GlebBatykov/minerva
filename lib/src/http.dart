@@ -12,3 +12,4 @@ part 'http/response/minerva_response.dart';
 part 'http/response/result.dart';
 part 'http/http_method.dart';
 part 'http/minerva_http_headers.dart';
+part 'http/request_body.dart';

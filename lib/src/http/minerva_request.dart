@@ -7,6 +7,8 @@ class MinervaRequest {
 
   final Map<String, num> _pathParameters = {};
 
+  final RequestBody _body;
+
   AuthContext get authContext => _authContext;
 
   HttpSession get session => _request.session;
@@ -17,10 +19,7 @@ class MinervaRequest {
 
   HttpHeaders get headers => _request.headers;
 
-  Future<String> get body => utf8.decodeStream(_request);
-
-  Future<Map<String, dynamic>> get json =>
-      body.then(((value) => jsonDecode(value)));
+  RequestBody get body => _body;
 
   Future<int> get length => _request.length;
 
@@ -40,7 +39,9 @@ class MinervaRequest {
 
   Map<String, num> get pathParameters => Map.unmodifiable(_pathParameters);
 
-  MinervaRequest(HttpRequest request) : _request = request;
+  MinervaRequest(HttpRequest request)
+      : _request = request,
+        _body = RequestBody(request.asBroadcastStream());
 
   void addPathParameter(String key, num value) {
     _pathParameters[key] = value;
