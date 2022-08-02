@@ -25,7 +25,7 @@ class CreateExampleCLICommand extends CLICommand<void> {
         File.fromUri(Uri.file('$projectPath/lib/builder/setting_builder.dart'));
 
     var middlewaresBuilderFile = File.fromUri(
-        Uri.file('$projectPath/lib/builder/middleware_builder.dart'));
+        Uri.file('$projectPath/lib/builder/middlewares_builder.dart'));
 
     await Future.wait([
       mainFile.create(recursive: true),
