@@ -22,14 +22,17 @@ class TestCommand extends Command {
 
   @override
   Future<void> run() async {
-    var directoryPath =
-        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
+    var directoryPath = Directory.fromUri(Uri.directory(
+            argResults!['directory'],
+            windows: Platform.isWindows))
+        .absolute
+        .path;
 
     var mode = argResults!['mode'];
 
     var appProcess = await RunApplicationCLICommand(directoryPath, mode).run();
 
-    var testProcess = await Process.start('dart', ['test']);
+    var testProcess = await Process.start('dart', ['test'], runInShell: true);
 
     testProcess.stdout.listen((event) => stdout.add(event));
     testProcess.stderr.listen((event) => stdout.add(event));

@@ -138,7 +138,7 @@ class SettingBuilder extends MinervaSettingBuilder {
   MinervaSetting build() {
     //
     return MinervaSetting(
-        instance: 12,
+        instance: Platform.numberOfProcessors,
         loggersBuilder: LoggersBuilder(),
         endpointsBuilder: EndpointsBuilder(),
         serverBuilder: ServerBuilder(),

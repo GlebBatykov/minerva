@@ -224,6 +224,22 @@ class RebuildCLICommand extends CLICommand<void> {
       return true;
     }
 
+    late String executableFilePath;
+
+    if (compileType == 'AOT') {
+      executableFilePath = Platform.isWindows
+          ? '$projectPath/build/$mode/bin/main.exe'
+          : '$projectPath/build/$mode/bin/main';
+    } else {
+      executableFilePath = '$projectPath/build/$mode/bin/main.dill';
+    }
+
+    var executableFile = File.fromUri(Uri.file(executableFilePath));
+
+    if (!await executableFile.exists()) {
+      return true;
+    }
+
     for (var sourceLog in sourceFilesLogs) {
       var sourceFile = File.fromUri(Uri.file(
           absolute(projectPath, sourceLog.path),

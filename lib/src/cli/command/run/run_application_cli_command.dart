@@ -54,7 +54,9 @@ class RunApplicationCLICommand extends CLICommand<Process> {
   }
 
   Future<Process> _runAOT() async {
-    var entryPointFilePath = '$projectPath/build/$mode/bin/main';
+    var entryPointFilePath = Platform.isWindows
+        ? '$projectPath/build/$mode/bin/main.exe'
+        : '$projectPath/build/$mode/bin/main';
 
     var entryPointFile =
         File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));

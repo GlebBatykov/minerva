@@ -67,7 +67,9 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
       'exe',
       entryPointFilePath,
       '-o',
-      '$compileDirectoryPath/main'
+      Platform.isWindows
+          ? '$compileDirectoryPath/main.exe'
+          : '$compileDirectoryPath/main'
     ]);
   }
 
