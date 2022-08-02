@@ -1,4 +1,4 @@
-part of minerva_server;
+part of minerva_middleware;
 
 class RouterMiddleware extends Middleware {
   late final List<Route> _routes;

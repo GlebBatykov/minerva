@@ -1,4 +1,4 @@
-part of minerva_server;
+part of minerva_middleware;
 
 class RouteData {
   final HttpMethod method;

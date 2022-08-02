@@ -1,4 +1,4 @@
-part of minerva_server;
+part of minerva_middleware;
 
 class EndpointMiddleware extends Middleware {
   final PathComparator _comparator = PathComparator();

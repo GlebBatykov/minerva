@@ -1,4 +1,4 @@
-part of minerva_server;
+part of minerva_middleware;
 
 typedef TokenVerifyCallback = FutureOr<bool> Function(
     ServerContext context, String token);

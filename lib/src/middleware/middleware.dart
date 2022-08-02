@@ -1,4 +1,4 @@
-part of minerva_server;
+part of minerva_middleware;
 
 abstract class Middleware {
   const Middleware();

@@ -1,4 +1,4 @@
-part of minerva_server;
+part of minerva_middleware;
 
 typedef CookieIsAuthorizedCallback = FutureOr<bool> Function(
     ServerContext context, List<Cookie> cookies);

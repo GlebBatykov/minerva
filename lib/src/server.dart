@@ -6,10 +6,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
-import 'package:mime_type/mime_type.dart';
-import 'package:path/path.dart';
-
-import 'auth.dart';
 import 'isolate.dart';
 import 'routing.dart';
 import 'http.dart';
@@ -56,17 +52,3 @@ part 'server/agent/agents.dart';
 part 'server/agent/agent_data.dart';
 part 'server/agent/agent_connector.dart';
 part 'server/agent/agent_connectors.dart';
-
-part 'server/middleware/pipeline/pipeline.dart';
-part 'server/middleware/pipeline/pipeline_node.dart';
-part 'server/middleware/middleware.dart';
-part 'server/middleware/middleware_context.dart';
-part 'server/middleware/auth/jwt_auth_middleware.dart';
-part 'server/middleware/auth/cookie_auth_middleware.dart';
-part 'server/middleware/error_middleware.dart';
-part 'server/middleware/static_files_middleware.dart';
-part 'server/middleware/router/router_middleware.dart';
-part 'server/middleware/router/route_data.dart';
-part 'server/middleware/router/route.dart';
-
-part 'server/middleware/endpoint_middleware.dart';
