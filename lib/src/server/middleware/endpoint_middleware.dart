@@ -8,7 +8,7 @@ class EndpointMiddleware extends Middleware {
     var request = context.request;
 
     var endpoints = context.endpoints
-        .where((element) => element.method.value == context.request.method)
+        .where((element) => element.method.value == request.method)
         .toList();
 
     if (endpoints.isNotEmpty) {

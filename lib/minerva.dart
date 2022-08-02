@@ -16,6 +16,8 @@ export 'src/server.dart'
         JwtAuthMiddleware,
         CookieAuthMiddleware,
         StaticFilesMiddleware,
+        RouterMiddleware,
+        RouteData,
         EndpointMiddleware,
         Middleware,
         ErrorMiddleware,
