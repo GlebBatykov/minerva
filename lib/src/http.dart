@@ -2,6 +2,7 @@ library minerva_http;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:io';
 
 import 'core.dart';
