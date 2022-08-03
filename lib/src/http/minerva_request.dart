@@ -41,7 +41,7 @@ class MinervaRequest {
 
   MinervaRequest(HttpRequest request)
       : _request = request,
-        _body = RequestBody(request.asBroadcastStream());
+        _body = RequestBody(request.asBroadcastStream(), request.headers);
 
   void addPathParameter(String key, num value) {
     _pathParameters[key] = value;

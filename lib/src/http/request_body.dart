@@ -3,13 +3,17 @@ part of minerva_http;
 class RequestBody {
   final Stream<Uint8List> _dataStream;
 
+  final HttpHeaders _headers;
+
   List<Uint8List>? _data;
 
   String? _text;
 
   Map<String, dynamic>? _json;
 
-  RequestBody(Stream<Uint8List> dataStream) : _dataStream = dataStream;
+  RequestBody(Stream<Uint8List> dataStream, HttpHeaders headers)
+      : _dataStream = dataStream,
+        _headers = headers;
 
   Future<List<Uint8List>> get data async {
     _data ??= await _dataStream.toList();
@@ -28,5 +32,9 @@ class RequestBody {
         jsonDecode(await utf8.decodeStream(Stream.fromIterable(await data)));
 
     return _json!;
+  }
+
+  Future<FormData> asForm() async {
+    return FormData.parse(await data, _headers);
   }
 }

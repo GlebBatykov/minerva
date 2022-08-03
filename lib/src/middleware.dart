@@ -3,7 +3,7 @@ library minerva_middleware;
 import 'dart:async';
 import 'dart:io';
 
-import 'package:mime_type/mime_type.dart';
+import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 
 import 'auth.dart';

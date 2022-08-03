@@ -58,7 +58,7 @@ class StaticFilesMiddleware extends Middleware {
     if (await file.exists()) {
       var bytes = await file.readAsBytes();
 
-      var mimeType = mime(basename(filePath)) ?? 'text/html';
+      var mimeType = lookupMimeType((basename(filePath))) ?? 'text/html';
 
       var mimeSegments = mimeType.split('/');
 
