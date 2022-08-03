@@ -89,3 +89,11 @@ class FilePathContentResult extends FileContentResult {
   FilePathContentResult(String path, {super.headers})
       : super(File.fromUri(Uri.file(FilePathParser.parse(path))));
 }
+
+class RedirectionResult extends Result {
+  RedirectionResult(String location)
+      : super(
+            statusCode: 301,
+            headers: MinervaHttpHeaders(
+                headers: {HttpHeaders.locationHeader: location}));
+}

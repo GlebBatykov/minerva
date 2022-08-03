@@ -12,17 +12,7 @@ export 'src/server.dart'
         ServerContext,
         MinervaSetting,
         Agent,
-        AgentData,
-        JwtAuthMiddleware,
-        CookieAuthMiddleware,
-        StaticFilesMiddleware,
-        RouterMiddleware,
-        RouteData,
-        EndpointMiddleware,
-        Middleware,
-        ErrorMiddleware,
-        MiddlewareContext,
-        PipelineNode;
+        AgentData;
 
 export 'src/routing.dart' show Endpoints, Endpoint, Api;
 
@@ -31,8 +21,19 @@ export 'src/http.dart';
 export 'src/auth.dart'
     show AuthOptions, JwtAuthOptions, CookieAuthOptions, Role;
 
-export 'src/logging.dart' show Logger;
-
 export 'src/logging.dart' show Logger, MinervaLogger;
 
 export 'src/core.dart' show HostEnvironment;
+
+export 'src/middleware.dart'
+    show
+        JwtAuthMiddleware,
+        CookieAuthMiddleware,
+        StaticFilesMiddleware,
+        RedirectionMiddleware,
+        RedirectionData,
+        EndpointMiddleware,
+        Middleware,
+        ErrorMiddleware,
+        MiddlewareContext,
+        PipelineNode;

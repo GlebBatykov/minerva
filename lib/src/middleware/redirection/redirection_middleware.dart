@@ -30,12 +30,7 @@ class RedirectionMiddleware extends Middleware {
         if (!_accessValidator.isHaveAccess(request, authOptions)) {
           return UnauthorizedResult();
         } else {
-          var headers = <String, Object>{
-            HttpHeaders.locationHeader: redirection.location
-          };
-
-          return Result(
-              statusCode: 301, headers: MinervaHttpHeaders(headers: headers));
+          return RedirectionResult(redirection.location);
         }
       }
     }
