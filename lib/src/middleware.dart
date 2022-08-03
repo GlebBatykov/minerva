@@ -21,10 +21,11 @@ part 'middleware/auth/jwt_auth_middleware.dart';
 part 'middleware/auth/cookie_auth_middleware.dart';
 part 'middleware/error_middleware.dart';
 part 'middleware/static_files_middleware.dart';
+part 'middleware/endpoint_middleware.dart';
+
 part 'middleware/redirection/redirection_middleware.dart';
 part 'middleware/redirection/redirection_data.dart';
 part 'middleware/redirection/redirection.dart';
-
-part 'middleware/endpoint_middleware.dart';
+part 'middleware/redirection/redirection_location.dart';
 
 part 'middleware/auth_access_validator.dart';

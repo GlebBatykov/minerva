@@ -51,7 +51,7 @@ class EndpointMiddleware extends Middleware {
   }
 
   Endpoint? _getEndpoint(List<Endpoint> endpoints, MinervaRequest request) {
-    List<Endpoint> matchedEndpoints = [];
+    var matchedEndpoints = <Endpoint>[];
 
     for (var i = 0; i < endpoints.length; i++) {
       var result = _comparator.compare(endpoints[i].path, request.uri.path);

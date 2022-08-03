@@ -32,6 +32,7 @@ export 'src/middleware.dart'
         StaticFilesMiddleware,
         RedirectionMiddleware,
         RedirectionData,
+        RedirectionLocation,
         EndpointMiddleware,
         Middleware,
         ErrorMiddleware,

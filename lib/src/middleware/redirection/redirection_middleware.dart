@@ -7,11 +7,11 @@ class RedirectionMiddleware extends Middleware {
 
   late final List<Redirection> _redirections;
 
-  RedirectionMiddleware({required List<RedirectionData> redirections}) {
-    _redirections = redirections
-        .map((e) => Redirection(e.method, e.path, e.location, e.authOptions))
-        .toList();
-  }
+  RedirectionMiddleware({required List<RedirectionData> redirections})
+      : _redirections = redirections
+            .map((e) => Redirection(e.method, MinervaPath.parse(e.path),
+                RedirectionLocation(e.location), e.authOptions))
+            .toList();
 
   @override
   Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
@@ -30,7 +30,9 @@ class RedirectionMiddleware extends Middleware {
         if (!_accessValidator.isHaveAccess(request, authOptions)) {
           return UnauthorizedResult();
         } else {
-          return RedirectionResult(redirection.location);
+          var location = _getLocation(redirection);
+
+          return RedirectionResult(location);
         }
       }
     }
@@ -44,7 +46,7 @@ class RedirectionMiddleware extends Middleware {
 
   Redirection? _getRedirection(
       List<Redirection> redirections, MinervaRequest request) {
-    List<Redirection> matchedRedirection = [];
+    var matchedRedirection = <Redirection>[];
 
     for (var i = 0; i < redirections.length; i++) {
       var result = _comparator.compare(redirections[i].path, request.uri.path);
@@ -59,7 +61,7 @@ class RedirectionMiddleware extends Middleware {
                   'An error occurred while searching for the redirection. The request matched multiple redirections.');
         } else {
           if (result.pathParameters != null) {
-            request.addPathParameters(result.pathParameters!);
+            redirections[i].addPathParameters(result.pathParameters!);
           }
         }
       }
@@ -70,19 +72,16 @@ class RedirectionMiddleware extends Middleware {
     } else {
       return matchedRedirection.first;
     }
+  }
 
-    // var routes =
-    //     redirections.where((element) => element.path.path == request.uri.path);
+  String _getLocation(Redirection redirection) {
+    var location = redirection.location.toString();
 
-    // if (routes.isEmpty) {
-    //   return null;
-    // } else if (routes.length == 1) {
-    //   return routes.first;
-    // } else {
-    //   throw MiddlewareHandleException(
-    //       MatchedMultipleRoutesException(), StackTrace.current,
-    //       message:
-    //           'An error occurred while searching for the route. The request matched multiple endpoints.');
-    // }
+    for (var parameter in redirection.pathParameters.entries) {
+      location =
+          location.replaceAll(':${parameter.key}', parameter.value.toString());
+    }
+
+    return location;
   }
 }

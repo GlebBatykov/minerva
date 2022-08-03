@@ -9,5 +9,9 @@ class RedirectionData {
 
   final AuthOptions? authOptions;
 
-  RedirectionData(this.method, this.path, this.location, {this.authOptions});
+  RedirectionData(
+      {required this.method,
+      required this.path,
+      required this.location,
+      this.authOptions});
 }
