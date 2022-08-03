@@ -1,15 +1,15 @@
 part of minerva_routing;
 
 class PathComparator {
-  PathCompareResult compare(Endpoint endpoint, String path) {
-    if (endpoint.path.containsPathParameters) {
+  PathCompareResult compare(MinervaPath minervaPath, String path) {
+    if (minervaPath.containsPathParameters) {
       var pathParameters = <String, num>{};
 
       var pathSegments = path.split('/');
 
       pathSegments.removeWhere((element) => element.isEmpty);
 
-      var endpointSegments = endpoint.path.segments;
+      var endpointSegments = minervaPath.segments;
 
       if (pathSegments.length != endpointSegments.length) {
         return PathCompareResult(false);
@@ -46,7 +46,7 @@ class PathComparator {
       return PathCompareResult(true, pathParameters);
     }
 
-    return PathCompareResult(endpoint.path.path == path);
+    return PathCompareResult(minervaPath.path == path);
   }
 
   bool _isMatch(PathParameter parameter, String segment) {

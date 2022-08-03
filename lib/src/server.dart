@@ -7,6 +7,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'isolate.dart';
+import 'middleware.dart';
 import 'routing.dart';
 import 'http.dart';
 import 'core.dart';

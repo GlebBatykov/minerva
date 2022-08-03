@@ -1,6 +1,8 @@
 part of minerva_middleware;
 
 class EndpointMiddleware extends Middleware {
+  final AuthAccessValidator _accessValidator = AuthAccessValidator();
+
   final PathComparator _comparator = PathComparator();
 
   @override
@@ -15,7 +17,9 @@ class EndpointMiddleware extends Middleware {
       var endpoint = _getEndpoint(endpoints, request);
 
       if (endpoint != null) {
-        if (!_isHaveAccess(request, endpoint)) {
+        var authOptions = endpoint.authOptions;
+
+        if (!_accessValidator.isHaveAccess(request, authOptions)) {
           return UnauthorizedResult();
         } else {
           try {
@@ -50,7 +54,7 @@ class EndpointMiddleware extends Middleware {
     List<Endpoint> matchedEndpoints = [];
 
     for (var i = 0; i < endpoints.length; i++) {
-      var result = _comparator.compare(endpoints[i], request.uri.path);
+      var result = _comparator.compare(endpoints[i].path, request.uri.path);
 
       if (result.isEqual) {
         matchedEndpoints.add(endpoints[i]);
@@ -73,67 +77,5 @@ class EndpointMiddleware extends Middleware {
     } else {
       return matchedEndpoints.first;
     }
-  }
-
-  bool _isHaveAccess(MinervaRequest request, Endpoint endpoint) {
-    bool isHaveAccess = false;
-
-    var authOptions = endpoint.authOptions;
-
-    var authContext = request.authContext;
-
-    if (authOptions != null) {
-      var jwtOptions = authOptions.jwt;
-
-      var cookieOptions = authOptions.cookie;
-
-      if (jwtOptions == null && cookieOptions == null) {
-        isHaveAccess = true;
-      } else if (jwtOptions != null) {
-        var role = authContext.jwt.role;
-
-        isHaveAccess = _isJwtHaveAccess(jwtOptions, role);
-      } else if (cookieOptions != null) {
-        var isAuthorized = request.authContext.cookie.isAuthorized;
-
-        isHaveAccess = _isCookieHaveAccess(cookieOptions, isAuthorized);
-      }
-    } else {
-      isHaveAccess = true;
-    }
-
-    return isHaveAccess;
-  }
-
-  bool _isJwtHaveAccess(JwtAuthOptions options, Role? role) {
-    var isHaveAccess = false;
-
-    if ((options.permissionLevel != null &&
-        (role != null &&
-            role.permissionLevel != null &&
-            options.permissionLevel! <= role.permissionLevel!))) {
-      isHaveAccess = true;
-    }
-
-    if (!isHaveAccess &&
-        (options.roles != null &&
-            role != null &&
-            options.roles!.contains(role.name))) {
-      isHaveAccess = true;
-    }
-
-    return isHaveAccess;
-  }
-
-  bool _isCookieHaveAccess(CookieAuthOptions options, bool isAuthorized) {
-    var isHaveAccess = false;
-
-    if (options.isAuthorized) {
-      isHaveAccess = isAuthorized;
-    } else {
-      isHaveAccess = true;
-    }
-
-    return isHaveAccess;
   }
 }
