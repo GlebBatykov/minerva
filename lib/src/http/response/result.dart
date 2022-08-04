@@ -56,9 +56,15 @@ class FileResult extends Result {
 
     var header = 'attachment';
 
+    late String fileName;
+
     if (name != null) {
-      header += '; filename="$name"';
+      fileName = name!;
+    } else {
+      fileName = basename(file.absolute.path);
     }
+
+    header += '; filename="$fileName"';
 
     headers['Content-Disposition'] = header;
 
