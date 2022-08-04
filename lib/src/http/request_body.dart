@@ -11,6 +11,8 @@ class RequestBody {
 
   Map<String, dynamic>? _json;
 
+  FormData? _formData;
+
   RequestBody(Stream<Uint8List> dataStream, HttpHeaders headers)
       : _dataStream = dataStream,
         _headers = headers;
@@ -35,6 +37,8 @@ class RequestBody {
   }
 
   Future<FormData> asForm() async {
-    return FormData.parse(await data, _headers);
+    _formData ??= await FormData.parse(await data, _headers);
+
+    return _formData!;
   }
 }
