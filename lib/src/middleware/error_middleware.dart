@@ -18,7 +18,8 @@ class ErrorMiddleware extends Middleware {
   }
 
   @override
-  Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
+  Future<dynamic> handle(
+      MiddlewareContext context, MiddlewarePipelineNode? next) async {
     if (next != null) {
       try {
         return await next.handle(context);
@@ -31,9 +32,7 @@ class ErrorMiddleware extends Middleware {
           try {
             return handler!.call(context.context, context.request, object);
           } catch (object, stackTrace) {
-            var exception = MiddlewareHandleException(object, stackTrace,
-                message:
-                    'An error occurred while processing an error in the assigned error handler.');
+            var exception = RequestHandleException(object, stackTrace);
 
             _logPipeline.error(exception);
 

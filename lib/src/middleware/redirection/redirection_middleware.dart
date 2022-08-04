@@ -14,7 +14,8 @@ class RedirectionMiddleware extends Middleware {
             .toList();
 
   @override
-  Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
+  Future<dynamic> handle(
+      MiddlewareContext context, MiddlewarePipelineNode? next) async {
     var request = context.request;
 
     var redirections = _redirections
@@ -56,7 +57,6 @@ class RedirectionMiddleware extends Middleware {
 
         if (matchedRedirection.length > 1) {
           throw MiddlewareHandleException(
-              MatchedMultipleEndpointsException(), StackTrace.current,
               message:
                   'An error occurred while searching for the redirection. The request matched multiple redirections.');
         } else {

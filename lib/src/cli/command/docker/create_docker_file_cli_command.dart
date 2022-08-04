@@ -32,7 +32,7 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
     try {
       appSettingParseResult = await AppSettingParcer().parse(projectPath);
     } on AppSettingParserException catch (object) {
-      throw CLICommandException(message: object.message);
+      throw CLICommandException(message: object.message!);
     }
 
     var appSetting = appSettingParseResult.data;

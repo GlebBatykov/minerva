@@ -6,7 +6,8 @@ class EndpointMiddleware extends Middleware {
   final PathComparator _comparator = PathComparator();
 
   @override
-  Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
+  Future<dynamic> handle(
+      MiddlewareContext context, MiddlewarePipelineNode? next) async {
     var request = context.request;
 
     var endpoints = context.endpoints
@@ -28,16 +29,13 @@ class EndpointMiddleware extends Middleware {
             return result;
           } catch (object, stackTrace) {
             if (endpoint.errorHandler == null) {
-              throw EndpointHandleException(object, stackTrace, request,
-                  message: 'An error occurred when processing the endpoint.');
+              throw EndpointHandleException(object, stackTrace, request);
             } else {
               try {
                 return endpoint.errorHandler!
                     .call(context.context, request, object);
               } catch (object, stackTrace) {
-                throw EndpointHandleException(object, stackTrace, request,
-                    message:
-                        'An error occurred in the endpoint error handler.');
+                throw EndpointHandleException(object, stackTrace, request);
               }
             }
           }
@@ -61,7 +59,6 @@ class EndpointMiddleware extends Middleware {
 
         if (matchedEndpoints.length > 1) {
           throw MiddlewareHandleException(
-              MatchedMultipleEndpointsException(), StackTrace.current,
               message:
                   'An error occurred while searching for the endpoint. The request matched multiple endpoints.');
         } else {

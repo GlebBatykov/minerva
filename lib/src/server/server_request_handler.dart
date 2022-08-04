@@ -5,10 +5,10 @@ class ServerRequestHandler {
 
   final ServerContext _context;
 
-  final Pipeline _pipeline;
+  final MiddlewarePipeline _pipeline;
 
   ServerRequestHandler(
-      Endpoints endpoints, ServerContext context, Pipeline pipeline)
+      Endpoints endpoints, ServerContext context, MiddlewarePipeline pipeline)
       : _endpoints = endpoints,
         _context = context,
         _pipeline = pipeline;

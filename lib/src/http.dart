@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'dart:io';
 
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 import 'core.dart';
 import 'auth.dart';

@@ -13,8 +13,14 @@ import 'logging.dart';
 import 'routing.dart';
 import 'server.dart';
 
-part 'middleware/pipeline/pipeline.dart';
-part 'middleware/pipeline/pipeline_node.dart';
+part 'middleware/exception/endpoint_handle_exception.dart';
+part 'middleware/exception/matched_multiple_endpoints_exception.dart';
+part 'middleware/exception/matched_multiple_routes_exception.dart';
+part 'middleware/exception/middleware_handle_exception.dart';
+part 'middleware/exception/request_handle_exception.dart';
+
+part 'middleware/pipeline/middleware_pipeline.dart';
+part 'middleware/pipeline/middleware_pipeline_node.dart';
 part 'middleware/middleware.dart';
 part 'middleware/middleware_context.dart';
 part 'middleware/auth/jwt_auth_middleware.dart';

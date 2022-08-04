@@ -1,12 +1,16 @@
 part of minerva_core;
 
 abstract class MinervaException implements Exception {
-  final String message;
+  final String? message;
 
-  MinervaException(this.message);
+  MinervaException([this.message]);
 
   @override
   String toString() {
-    return '$runtimeType: $message';
+    if (message != null) {
+      return '$runtimeType: $message';
+    } else {
+      return super.toString();
+    }
   }
 }

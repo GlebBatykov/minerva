@@ -15,7 +15,7 @@ class Server {
 
   final List<Api> _apis;
 
-  final Pipeline _pipeline;
+  final MiddlewarePipeline _pipeline;
 
   late final ServerContext _context;
 
@@ -35,7 +35,7 @@ class Server {
         _securityContext = securityContext,
         _endpoints = endpoints,
         _apis = apis,
-        _pipeline = Pipeline(middlewares);
+        _pipeline = MiddlewarePipeline(middlewares);
 
   static Future<Server> bind(
       ServerSetting setting,

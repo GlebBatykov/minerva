@@ -10,7 +10,8 @@ class CookieAuthMiddleware extends Middleware {
       : _cookieIsAuthorized = cookieIsAuthorized;
 
   @override
-  Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
+  Future<dynamic> handle(
+      MiddlewareContext context, MiddlewarePipelineNode? next) async {
     var isAuthorized =
         await _cookieIsAuthorized(context.context, context.request.cookies);
 

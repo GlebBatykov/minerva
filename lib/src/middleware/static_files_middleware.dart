@@ -22,7 +22,8 @@ class StaticFilesMiddleware extends Middleware {
   }
 
   @override
-  Future<dynamic> handle(MiddlewareContext context, PipelineNode? next) async {
+  Future<dynamic> handle(
+      MiddlewareContext context, MiddlewarePipelineNode? next) async {
     var request = context.request;
 
     var requestPath = request.uri.path;

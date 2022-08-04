@@ -1,11 +1,12 @@
 part of minerva_middleware;
 
-class Pipeline {
+class MiddlewarePipeline {
   final List<Middleware> _middlewares;
 
-  late final PipelineNode? _first;
+  late final MiddlewarePipelineNode? _first;
 
-  Pipeline(List<Middleware> middlewares) : _middlewares = middlewares {
+  MiddlewarePipeline(List<Middleware> middlewares)
+      : _middlewares = middlewares {
     _initialize();
   }
 
@@ -20,9 +21,10 @@ class Pipeline {
     }
   }
 
-  PipelineNode? _createPipelineNode(int index) {
+  MiddlewarePipelineNode? _createPipelineNode(int index) {
     if (index < _middlewares.length) {
-      return PipelineNode(_middlewares[index], _createPipelineNode(index + 1));
+      return MiddlewarePipelineNode(
+          _middlewares[index], _createPipelineNode(index + 1));
     } else {
       return null;
     }

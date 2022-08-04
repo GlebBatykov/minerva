@@ -5,7 +5,8 @@ abstract class Middleware {
 
   FutureOr<void> initialize(ServerContext context) {}
 
-  FutureOr<dynamic> handle(MiddlewareContext context, PipelineNode? next);
+  FutureOr<dynamic> handle(
+      MiddlewareContext context, MiddlewarePipelineNode? next);
 
   FutureOr<void> dispose(ServerContext context) {}
 }

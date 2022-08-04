@@ -39,7 +39,7 @@ class RunCommand extends Command {
 
       await appProcess.exitCode;
     } on CLICommandException catch (object) {
-      usageException(object.message);
+      usageException(object.message!);
     }
   }
 }

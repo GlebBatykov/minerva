@@ -59,7 +59,7 @@ class DebugCommand extends Command {
     try {
       appSettingParseResult = await AppSettingParcer().parse(_directoryPath);
     } on AppSettingParserException catch (object) {
-      usageException(object.message);
+      usageException(object.message!);
     }
 
     var appSetting = appSettingParseResult.data;
@@ -70,7 +70,7 @@ class DebugCommand extends Command {
       currentBuildSetting =
           BuildSettingParser().parseCurrent(appSetting, _mode);
     } on BuildSettingParserException catch (object) {
-      usageException(object.message);
+      usageException(object.message!);
     }
 
     var compileType = currentBuildSetting['compile-type'] as String?;

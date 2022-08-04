@@ -37,6 +37,6 @@ export 'src/middleware.dart'
         Middleware,
         ErrorMiddleware,
         MiddlewareContext,
-        PipelineNode;
+        MiddlewarePipelineNode;
 
 export 'src/util.dart';

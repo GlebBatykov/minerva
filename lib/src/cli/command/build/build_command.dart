@@ -46,7 +46,7 @@ class BuildCommand extends Command {
     try {
       appSettingParseResult = await AppSettingParcer().parse(_directoryPath);
     } on AppSettingParserException catch (object) {
-      usageException(object.message);
+      usageException(object.message!);
     }
 
     _appSetting = appSettingParseResult.data;
@@ -119,7 +119,7 @@ class BuildCommand extends Command {
               _appSetting, buildSetting)
           .run();
     } on CLICommandException catch (object) {
-      usageException(object.message);
+      usageException(object.message!);
     } catch (object) {
       usageException(object.toString());
     }
@@ -143,7 +143,7 @@ class BuildCommand extends Command {
               fileLogs)
           .run();
     } on CLICommandException catch (object) {
-      usageException(object.message);
+      usageException(object.message!);
     } catch (object) {
       usageException(object.toString());
     }

@@ -1,11 +1,11 @@
 part of minerva_middleware;
 
-class PipelineNode {
+class MiddlewarePipelineNode {
   final Middleware _current;
 
-  final PipelineNode? _next;
+  final MiddlewarePipelineNode? _next;
 
-  PipelineNode(Middleware current, PipelineNode? next)
+  MiddlewarePipelineNode(Middleware current, MiddlewarePipelineNode? next)
       : _current = current,
         _next = next;
 
