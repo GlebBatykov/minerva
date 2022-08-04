@@ -14,7 +14,11 @@ class CookieAuthMiddleware extends Middleware {
     var isAuthorized =
         await _cookieIsAuthorized(context.context, context.request.cookies);
 
-    context.request.authContext.cookie.isAuthorized = isAuthorized;
+    if (isAuthorized) {
+      var cookieContext = CookieAuthContext();
+
+      context.request.authContext.cookie = cookieContext;
+    }
 
     if (next != null) {
       return await next.handle(context);

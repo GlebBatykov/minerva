@@ -1,7 +1,9 @@
 part of minerva_auth;
 
 class JwtAuthContext {
+  final String token;
+
   Role? role;
 
-  int? permissionLevel;
+  JwtAuthContext({required this.token, this.role});
 }

@@ -129,7 +129,7 @@ import 'package:minerva/minerva.dart';
 
 import 'apis_builder.dart';
 import 'endpoints_builder.dart';
-import 'middleware_builder.dart';
+import 'middlewares_builder.dart';
 import 'server_builder.dart';
 import 'loggers_builder.dart';
 
@@ -138,7 +138,7 @@ class SettingBuilder extends MinervaSettingBuilder {
   MinervaSetting build() {
     //
     return MinervaSetting(
-        instance: Platform.numberOfProcessors,
+        instance: 1,
         loggersBuilder: LoggersBuilder(),
         endpointsBuilder: EndpointsBuilder(),
         serverBuilder: ServerBuilder(),

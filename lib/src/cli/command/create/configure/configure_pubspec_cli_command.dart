@@ -25,6 +25,7 @@ environment:
 dependencies:
   minerva:
     git: https://github.com/GlebBatykov/minerva.git
+  get_it: ^7.2.0
 
 dev_dependencies:
   lints: ^2.0.0

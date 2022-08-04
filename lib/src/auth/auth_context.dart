@@ -1,7 +1,7 @@
 part of minerva_auth;
 
 class AuthContext {
-  final JwtAuthContext jwt = JwtAuthContext();
+  JwtAuthContext? jwt;
 
-  final CookieAuthContext cookie = CookieAuthContext();
+  CookieAuthContext? cookie;
 }

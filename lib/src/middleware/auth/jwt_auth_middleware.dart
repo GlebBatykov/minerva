@@ -29,11 +29,15 @@ class JwtAuthMiddleware extends Middleware {
         var isVerified = await _tokenVerify(context.context, token);
 
         if (isVerified) {
+          var jwtContext = JwtAuthContext(token: token);
+
           if (_getRole != null) {
             var role = await _getRole!.call(context.context, token);
 
-            context.request.authContext.jwt.role = role;
+            jwtContext.role = role;
           }
+
+          context.request.authContext.jwt = jwtContext;
         } else {
           UnauthorizedResult();
         }

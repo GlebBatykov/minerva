@@ -11,16 +11,16 @@ class AuthAccessValidator {
 
       var cookieOptions = authOptions.cookie;
 
+      var jwtContext = authContext.jwt;
+
+      var cookieContext = authContext.cookie;
+
       if (jwtOptions == null && cookieOptions == null) {
         isHaveAccess = true;
-      } else if (jwtOptions != null) {
-        var role = authContext.jwt.role;
-
-        isHaveAccess = _isJwtHaveAccess(jwtOptions, role);
-      } else if (cookieOptions != null) {
-        var isAuthorized = request.authContext.cookie.isAuthorized;
-
-        isHaveAccess = _isCookieHaveAccess(cookieOptions, isAuthorized);
+      } else if (jwtOptions != null && jwtContext != null) {
+        isHaveAccess = _isJwtHaveAccess(jwtOptions, jwtContext);
+      } else if (cookieOptions != null && cookieContext != null) {
+        isHaveAccess = true;
       }
     } else {
       isHaveAccess = true;
@@ -29,8 +29,10 @@ class AuthAccessValidator {
     return isHaveAccess;
   }
 
-  bool _isJwtHaveAccess(JwtAuthOptions options, Role? role) {
+  bool _isJwtHaveAccess(JwtAuthOptions options, JwtAuthContext context) {
     var isHaveAccess = false;
+
+    var role = context.role;
 
     if ((options.permissionLevel != null &&
         (role != null &&
@@ -46,15 +48,9 @@ class AuthAccessValidator {
       isHaveAccess = true;
     }
 
-    return isHaveAccess;
-  }
-
-  bool _isCookieHaveAccess(CookieAuthOptions options, bool isAuthorized) {
-    var isHaveAccess = false;
-
-    if (options.isAuthorized) {
-      isHaveAccess = isAuthorized;
-    } else {
+    if (!isHaveAccess &&
+        options.roles == null &&
+        options.permissionLevel == null) {
       isHaveAccess = true;
     }
 
