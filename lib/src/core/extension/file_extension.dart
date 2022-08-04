@@ -1,7 +1,26 @@
 part of minerva_core;
 
 extension FileExtension on File {
-  String get fileExtension => basename(this.absolute.path).split('.').last;
+  String get fileExtension {
+    var segments = basename(this.absolute.path).split('.');
+
+    return segments.last;
+  }
+
+  /// File name without extension.
+  String get fileName {
+    var name = basename(this.absolute.path);
+
+    var segments = basename(this.absolute.path).split('.');
+
+    if (name.count('.') > 1) {
+      segments.removeLast();
+
+      return segments.join('.');
+    } else {
+      return segments.first;
+    }
+  }
 
   String? pathStartingFrom(String segment) {
     var segments = path.split('/');

@@ -4,9 +4,11 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
-part 'core/minerva_exception.dart';
+part 'core/exception/minerva_exception.dart';
+part 'core/exception/string_exception.dart';
 
 part 'core/extension/file_extension.dart';
+part 'core/extension/string_extension.dart';
 
 part 'core/host_environment.dart';
 
