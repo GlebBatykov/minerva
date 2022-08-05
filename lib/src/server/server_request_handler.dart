@@ -33,6 +33,8 @@ class ServerRequestHandler {
 
     if (result is Result) {
       minervaResponse = await result.response;
+    } else if (result is Map<String, dynamic>) {
+      minervaResponse = await JsonResult(result).response;
     } else {
       minervaResponse = await OkResult(body: result).response;
     }
