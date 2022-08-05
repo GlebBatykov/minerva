@@ -17,7 +17,9 @@ class Endpoint {
 
   final AuthOptions? authOptions;
 
+  final Filter? filter;
+
   Endpoint(this.method, String path, this.handler, this.errorHandler,
-      this.authOptions)
+      this.authOptions, this.filter)
       : path = MinervaPath.parse(path);
 }

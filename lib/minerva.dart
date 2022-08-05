@@ -14,7 +14,23 @@ export 'src/server.dart'
         Agent,
         AgentData;
 
-export 'src/routing.dart' show Endpoints, Endpoint, Api;
+export 'src/routing.dart'
+    show
+        Endpoints,
+        Endpoint,
+        Api,
+        Filter,
+        ContentTypeFilter,
+        QueryParametersFilter,
+        QueryParameter,
+        QueryParameterType,
+        JsonFilter,
+        JsonField,
+        JsonFieldType,
+        BodyFilter,
+        FormField,
+        FormFilter,
+        FormFieldType;
 
 export 'src/http.dart';
 

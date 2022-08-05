@@ -5,6 +5,8 @@ class EndpointMiddleware extends Middleware {
 
   final PathComparator _comparator = PathComparator();
 
+  final FilterMatcher _filterMatcher = FilterMatcher();
+
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
@@ -15,7 +17,7 @@ class EndpointMiddleware extends Middleware {
         .toList();
 
     if (endpoints.isNotEmpty) {
-      var endpoint = _getEndpoint(endpoints, request);
+      var endpoint = await _getEndpoint(endpoints, request);
 
       if (endpoint != null) {
         var authOptions = endpoint.authOptions;
@@ -48,24 +50,38 @@ class EndpointMiddleware extends Middleware {
     }
   }
 
-  Endpoint? _getEndpoint(List<Endpoint> endpoints, MinervaRequest request) {
+  Future<Endpoint?> _getEndpoint(
+      List<Endpoint> endpoints, MinervaRequest request) async {
     var matchedEndpoints = <Endpoint>[];
 
     for (var i = 0; i < endpoints.length; i++) {
-      var result = _comparator.compare(endpoints[i].path, request.uri.path);
+      var endpoint = endpoints[i];
 
-      if (result.isEqual) {
-        matchedEndpoints.add(endpoints[i]);
+      var result = _comparator.compare(endpoint.path, request.uri.path);
 
-        if (matchedEndpoints.length > 1) {
-          throw MiddlewareHandleException(
-              message:
-                  'An error occurred while searching for the endpoint. The request matched multiple endpoints.');
-        } else {
-          if (result.pathParameters != null) {
-            request.addPathParameters(result.pathParameters!);
-          }
+      if (!result.isEqual) {
+        continue;
+      }
+
+      if (endpoint.filter != null) {
+        var isFilterMatch =
+            await _filterMatcher.match(request, endpoint.filter!);
+
+        if (!isFilterMatch) {
+          continue;
         }
+      }
+
+      matchedEndpoints.add(endpoint);
+
+      if (matchedEndpoints.length > 1) {
+        throw MiddlewareHandleException(
+            message:
+                'An error occurred while searching for the endpoint. The request matched multiple endpoints.');
+      }
+
+      if (result.pathParameters != null) {
+        request.addPathParameters(result.pathParameters!);
       }
     }
 
