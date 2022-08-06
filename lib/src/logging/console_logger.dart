@@ -1,6 +1,6 @@
 part of minerva_logging;
 
-class MinervaLogger extends Logger {
+class ConsoleLogger extends Logger {
   final String _template;
 
   final List<LoggerMiddleware> _middlewares = [
@@ -10,7 +10,7 @@ class MinervaLogger extends Logger {
     MessageMiddleware()
   ];
 
-  MinervaLogger({String? template})
+  ConsoleLogger({String? template})
       : _template = template ?? '[&time] [&level] &message';
 
   @override

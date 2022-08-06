@@ -37,7 +37,7 @@ export 'src/http.dart';
 export 'src/auth.dart'
     show AuthOptions, JwtAuthOptions, CookieAuthOptions, Role;
 
-export 'src/logging.dart' show Logger, MinervaLogger;
+export 'src/logging.dart' show Logger, ConsoleLogger;
 
 export 'src/core.dart' show HostEnvironment;
 
