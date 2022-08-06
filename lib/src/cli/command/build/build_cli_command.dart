@@ -23,7 +23,7 @@ class BuildCLICommand extends CLICommand<void> {
     var futures = <Future>[];
 
     var buildAppSetting =
-        BuildAppSettingBuilder().build(appSetting, buildSetting);
+        BuildAppSettingBuilder(mode, appSetting, buildSetting).build();
 
     futures.add(CompileCLICommand(projectPath, mode, compileType)
         .run()

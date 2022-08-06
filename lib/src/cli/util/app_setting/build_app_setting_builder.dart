@@ -1,8 +1,15 @@
 part of minerva_cli;
 
 class BuildAppSettingBuilder {
-  Map<String, dynamic> build(
-      Map<String, dynamic> appSetting, Map<String, dynamic> buildSetting) {
+  final String mode;
+
+  final Map<String, dynamic> appSetting;
+
+  final Map<String, dynamic> buildSetting;
+
+  BuildAppSettingBuilder(this.mode, this.appSetting, this.buildSetting);
+
+  Map<String, dynamic> build() {
     var buildAppSetting = Map<String, dynamic>.from(appSetting);
 
     buildAppSetting.remove('debug');
@@ -11,6 +18,8 @@ class BuildAppSettingBuilder {
 
     buildAppSetting['host'] = buildSetting['host'];
     buildAppSetting['port'] = buildSetting['port'];
+
+    buildAppSetting['build-type'] = mode;
 
     if (buildSetting.containsKey('values')) {
       var buildValues = buildSetting['values'];

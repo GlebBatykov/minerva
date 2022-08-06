@@ -51,7 +51,7 @@ class RebuildCLICommand extends CLICommand<void> {
 
     if (isNeedRecreate) {
       var buildAppSetting =
-          BuildAppSettingBuilder().build(appSetting, buildSetting);
+          BuildAppSettingBuilder(mode, appSetting, buildSetting).build();
 
       var futures = <Future>[];
 
