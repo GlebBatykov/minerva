@@ -1,4 +1,4 @@
-part of minerva_server;
+part of minerva_core;
 
 class AppSetting {
   static AppSetting? _instance;
@@ -11,11 +11,9 @@ class AppSetting {
 
   String? get host => _data['host'];
 
-  int? get port {
-    var port = _data['port'];
+  int? get port => _data['port'];
 
-    return port;
-  }
+  String? get buildType => _data['build-type'];
 
   Map<String, dynamic>? get values => _data['values'];
 

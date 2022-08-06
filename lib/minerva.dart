@@ -39,7 +39,7 @@ export 'src/auth.dart'
 
 export 'src/logging.dart' show Logger, ConsoleLogger;
 
-export 'src/core.dart' show HostEnvironment;
+export 'src/core.dart' show HostEnvironment, BuildManager, BuildType;
 
 export 'src/middleware.dart'
     show

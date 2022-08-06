@@ -5,7 +5,7 @@ class Minerva {
 
   final Agents _agents = Agents();
 
-  final MinervaLogger _logger = MinervaLogger();
+  final ConsoleLogger _logger = ConsoleLogger();
 
   Minerva._();
 

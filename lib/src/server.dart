@@ -1,7 +1,6 @@
 library minerva_server;
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
@@ -15,7 +14,6 @@ import 'logging.dart';
 import 'util.dart';
 
 part 'server/exception/server_store_exception.dart';
-part 'server/exception/app_setting_exception.dart';
 part 'server/exception/minerva_bind_exception.dart';
 
 part 'server/minerva.dart';
@@ -35,8 +33,6 @@ part 'server/builder/minerva_loggers_builder.dart';
 part 'server/builder/minerva_middlewares_builder.dart';
 part 'server/builder/minerva_server_builder.dart';
 part 'server/builder/minerva_setting_builder.dart';
-
-part 'server/app_setting.dart';
 
 part 'server/task_handler/server_task_handler.dart';
 part 'server/task_handler/agent_taks_handler.dart';

@@ -1,5 +1,5 @@
 library minerva_util;
 
-import 'package:minerva/src/server.dart';
+import 'core.dart';
 
 part 'util/configuration_manager.dart';
