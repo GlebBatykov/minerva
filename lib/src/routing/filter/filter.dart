@@ -7,5 +7,5 @@ class Filter {
 
   final BodyFilter? body;
 
-  Filter({this.contentType, this.queryParameters, this.body});
+  const Filter({this.contentType, this.queryParameters, this.body});
 }

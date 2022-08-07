@@ -7,11 +7,11 @@ class FormField {
 
   final FormFieldType? type;
 
-  FormField(this.name, this.type);
+  const FormField(this.name, this.type);
 }
 
 class FormFilter extends BodyFilter {
   final List<FormField> fields;
 
-  FormFilter(this.fields);
+  const FormFilter(this.fields);
 }

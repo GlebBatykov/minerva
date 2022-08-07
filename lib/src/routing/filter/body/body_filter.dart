@@ -1,3 +1,5 @@
 part of minerva_routing;
 
-abstract class BodyFilter {}
+abstract class BodyFilter {
+  const BodyFilter();
+}

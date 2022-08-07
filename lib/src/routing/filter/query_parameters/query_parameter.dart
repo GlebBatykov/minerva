@@ -7,5 +7,5 @@ class QueryParameter {
 
   final QueryParameterType? type;
 
-  QueryParameter({required this.name, this.type});
+  const QueryParameter({required this.name, this.type});
 }

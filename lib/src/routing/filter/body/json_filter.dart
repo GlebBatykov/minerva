@@ -7,11 +7,11 @@ class JsonField {
 
   final JsonFieldType? type;
 
-  JsonField({required this.name, this.type});
+  const JsonField({required this.name, this.type});
 }
 
 class JsonFilter extends BodyFilter {
   final List<JsonField> fields;
 
-  JsonFilter(this.fields);
+  const JsonFilter(this.fields);
 }
