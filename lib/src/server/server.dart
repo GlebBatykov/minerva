@@ -64,7 +64,7 @@ class Server {
           shared: true);
     }
 
-    await logPipeline.initialize();
+    await logPipeline.initialize(connectors);
 
     _context = ServerContext(logPipeline, connectors);
 

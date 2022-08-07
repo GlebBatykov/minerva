@@ -10,32 +10,43 @@ class ConsoleLogger extends Logger {
     MessageMiddleware()
   ];
 
-  ConsoleLogger({String? template})
-      : _template = template ?? '[&time] [&level] &message';
+  ConsoleLogger({String template = '[&time] [&level] &message'})
+      : _template = template,
+        super('console');
 
   @override
   void info(dynamic object, {String? template}) {
-    _log(object, template ?? _template, LogLevel.info);
+    if (isLevelEnabled(LogLevel.info)) {
+      _log(object, template ?? _template, LogLevel.info);
+    }
   }
 
   @override
   void debug(dynamic object, {String? template}) {
-    _log(object, template ?? _template, LogLevel.debug);
+    if (isLevelEnabled(LogLevel.debug)) {
+      _log(object, template ?? _template, LogLevel.debug);
+    }
   }
 
   @override
   void warning(object, {String? template}) {
-    _log(object, template ?? _template, LogLevel.warning);
+    if (isLevelEnabled(LogLevel.warning)) {
+      _log(object, template ?? _template, LogLevel.warning);
+    }
   }
 
   @override
   void error(object, {String? template}) {
-    _log(object, template ?? _template, LogLevel.error);
+    if (isLevelEnabled(LogLevel.error)) {
+      _log(object, template ?? _template, LogLevel.error);
+    }
   }
 
   @override
   void critical(object, {String? template}) {
-    _log(object, template ?? _template, LogLevel.critical);
+    if (isLevelEnabled(LogLevel.critical)) {
+      _log(object, template ?? _template, LogLevel.critical);
+    }
   }
 
   void _log(dynamic object, String template, LogLevel level) {

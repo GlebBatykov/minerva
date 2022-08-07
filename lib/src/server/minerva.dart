@@ -11,9 +11,11 @@ class Minerva {
 
   static Future<Minerva> bind(
       {required List<String> args, required MinervaSetting setting}) async {
+    await AppSetting.instance.initialize();
+
     var minerva = Minerva._();
 
-    var address = await _getAddress();
+    var address = _getAddress();
 
     var middlwares = await setting.middlewaresBuilder.build();
 
@@ -33,14 +35,12 @@ class Minerva {
     return minerva;
   }
 
-  static Future<ServerAddress> _getAddress() async {
-    var appSetting = await AppSetting.instance;
-
-    if (appSetting.host != null && appSetting.port != null) {
+  static ServerAddress _getAddress() {
+    if (AppSetting.instance.host != null && AppSetting.instance.port != null) {
       try {
-        var port = appSetting.port;
+        var port = AppSetting.instance.port;
 
-        return ServerAddress(appSetting.host!, port!);
+        return ServerAddress(AppSetting.instance.host!, port!);
       } catch (_) {
         throw MinervaBindException(
             message:

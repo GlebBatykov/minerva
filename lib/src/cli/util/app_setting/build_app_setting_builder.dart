@@ -35,6 +35,10 @@ class BuildAppSettingBuilder {
       }
     }
 
+    if (buildSetting.containsKey('logging')) {
+      buildAppSetting['logging'] = buildSetting['logging'];
+    }
+
     return buildAppSetting;
   }
 }

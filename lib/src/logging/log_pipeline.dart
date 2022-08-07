@@ -5,39 +5,39 @@ class LogPipeline {
 
   LogPipeline(List<Logger> loggers) : _loggers = loggers;
 
-  Future<void> initialize() async {
+  Future<void> initialize(AgentConnectors connectors) async {
     for (var logger in _loggers) {
-      await logger.initialize();
+      await logger.initialize(connectors);
     }
   }
 
-  void info(dynamic object) {
+  Future<void> info(dynamic object) async {
     for (var logger in _loggers) {
-      logger.info(object);
+      await logger.info(object);
     }
   }
 
-  void debug(dynamic object) {
+  Future<void> debug(dynamic object) async {
     for (var logger in _loggers) {
-      logger.debug(object);
+      await logger.debug(object);
     }
   }
 
-  void warning(dynamic object) {
+  Future<void> warning(dynamic object) async {
     for (var logger in _loggers) {
-      logger.warning(object);
+      await logger.warning(object);
     }
   }
 
-  void error(dynamic object) {
+  Future<void> error(dynamic object) async {
     for (var logger in _loggers) {
-      logger.error(object);
+      await logger.error(object);
     }
   }
 
-  void critical(dynamic object) {
+  Future<void> critical(dynamic object) async {
     for (var logger in _loggers) {
-      logger.critical(object);
+      await logger.critical(object);
     }
   }
 

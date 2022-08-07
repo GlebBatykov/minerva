@@ -1,17 +1,27 @@
 part of minerva_logging;
 
 abstract class Logger {
-  FutureOr<void> initialize() {}
+  final String name;
 
-  void info(dynamic object);
+  final LoggingSetting _setting = LoggingSetting();
 
-  void debug(dynamic object);
+  Logger(this.name);
 
-  void warning(dynamic object);
+  FutureOr<void> initialize(AgentConnectors connectors) {}
 
-  void error(dynamic object);
+  bool isLevelEnabled(LogLevel level) {
+    return _setting.isLevelEnabled(name, level);
+  }
 
-  void critical(dynamic object);
+  FutureOr<void> info(dynamic object);
+
+  FutureOr<void> debug(dynamic object);
+
+  FutureOr<void> warning(dynamic object);
+
+  FutureOr<void> error(dynamic object);
+
+  FutureOr<void> critical(dynamic object);
 
   FutureOr<void> dispose(ServerContext context) {}
 }

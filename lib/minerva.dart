@@ -37,7 +37,13 @@ export 'src/http.dart';
 export 'src/auth.dart'
     show AuthOptions, JwtAuthOptions, CookieAuthOptions, Role;
 
-export 'src/logging.dart' show Logger, ConsoleLogger;
+export 'src/logging.dart'
+    show
+        Logger,
+        ConsoleLogger,
+        FileLogger,
+        FileLoggerAgent,
+        FileLoggerAgentData;
 
 export 'src/core.dart' show HostEnvironment, BuildManager, BuildType;
 

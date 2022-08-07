@@ -33,4 +33,16 @@ extension FileExtension on File {
 
     return null;
   }
+
+  Future<void> addLine(String line) async {
+    var content = await readAsString();
+
+    if (content.isNotEmpty) {
+      content = '$content\n$line';
+    } else {
+      content = line;
+    }
+
+    await writeAsString(content);
+  }
 }
