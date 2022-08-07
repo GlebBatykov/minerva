@@ -6,17 +6,13 @@ class ConfigurationManager {
   Future<void> load() async {
     _data.clear();
 
-    var appSetting = await AppSetting.instance;
-
-    if (appSetting.values != null) {
-      _data.addAll(appSetting.values!);
+    if (AppSetting.instance.values != null) {
+      _data.addAll(AppSetting.instance.values!);
     }
   }
 
   Future<void> save() async {
-    var appSetting = await AppSetting.instance;
-
-    await appSetting.setValues(_data);
+    AppSetting.instance.setValues(_data);
   }
 
   void add(String key, dynamic value) {

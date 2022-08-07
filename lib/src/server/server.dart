@@ -55,6 +55,8 @@ class Server {
 
   Future<void> _initialize(
       LogPipeline logPipeline, AgentConnectors connectors) async {
+    await AppSetting.instance.initialize();
+
     if (_securityContext == null) {
       _server = await HttpServer.bind(_address, _port, shared: true);
     } else {
