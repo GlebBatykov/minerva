@@ -27,6 +27,9 @@ class CreateExampleCLICommand extends CLICommand<void> {
     var middlewaresBuilderFile = File.fromUri(
         Uri.file('$projectPath/lib/builder/middlewares_builder.dart'));
 
+    var agentsBuilderFile =
+        File.fromUri(Uri.file('$projectPath/lib/builder/agents_builder.dart'));
+
     await Future.wait([
       mainFile.create(recursive: true),
       endpointBuilderFile.create(recursive: true),
@@ -34,7 +37,8 @@ class CreateExampleCLICommand extends CLICommand<void> {
       apisBuilderFile.create(recursive: true),
       loggersBuilderFile.create(recursive: true),
       settingBuilderFile.create(recursive: true),
-      middlewaresBuilderFile.create(recursive: true)
+      middlewaresBuilderFile.create(recursive: true),
+      agentsBuilderFile.create(recursive: true)
     ]);
 
     var endpointsBuilderContent = '''
@@ -127,9 +131,10 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
     var settingBuilderContent = '''
 import 'package:minerva/minerva.dart';
 
+import 'agents_builder.dart';
 import 'apis_builder.dart';
 import 'endpoints_builder.dart';
-import 'middlewares_builder.dart';
+import 'middleware_builder.dart';
 import 'server_builder.dart';
 import 'loggers_builder.dart';
 
@@ -143,7 +148,21 @@ class SettingBuilder extends MinervaSettingBuilder {
         endpointsBuilder: EndpointsBuilder(),
         serverBuilder: ServerBuilder(),
         apisBuilder: ApisBuilder(),
+        apisBuilder: ApisBuilder(),
         middlewaresBuilder: MiddlewaresBuilder());
+  }
+}
+''';
+
+    var agentsBuilderContent = '''
+import 'package:minerva/minerva.dart';
+
+class AgentsBuilder extends MinervaAgentsBuilder {
+  @override
+  List<AgentData> build() {
+    var agents = <AgentData>[];
+
+    return agents;
   }
 }
 ''';
@@ -155,7 +174,8 @@ class SettingBuilder extends MinervaSettingBuilder {
       apisBuilderFile.writeAsString(apisBuilderContent),
       loggersBuilderFile.writeAsString(loggersBuilderContent),
       settingBuilderFile.writeAsString(settingBuilderContent),
-      middlewaresBuilderFile.writeAsString(middlewaresBuilderContent)
+      middlewaresBuilderFile.writeAsString(middlewaresBuilderContent),
+      agentsBuilderFile.writeAsString(agentsBuilderContent)
     ]);
   }
 }
