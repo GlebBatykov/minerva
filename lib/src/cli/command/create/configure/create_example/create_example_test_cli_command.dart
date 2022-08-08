@@ -23,9 +23,9 @@ void main() {
   group('Endpoints', () {
     final Dio dio = Dio();
 
-    final String host = TestAppSetting.host;
+    final String host = \$TestAppSetting.host;
 
-    final int port = TestAppSetting.port;
+    final int port = \$TestAppSetting.port;
 
     test('GET /hello', () async {
       var response = await dio.get('http://\$host:\$port/hello');

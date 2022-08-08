@@ -71,9 +71,7 @@ FROM scratch
 COPY --from=build /runtime /
 
 COPY --from=build /app/build/release/bin /app
-COPY --from=build /app/build/release/appsetting.json /app
-
-${_generateCopyAssets(_assets)}
+COPY --from=build /app/build/release/appsetting.json /app${_generateCopyAssets()}
 
 # Start server.
 EXPOSE 8080
@@ -107,9 +105,7 @@ FROM scratch
 COPY --from=build /usr/lib/dart/bin/dart /usr/lib/dart/bin/dart
 
 COPY --from=build /app/build/release/bin /app
-COPY --from=build /app/build/release/appsetting.json /app
-
-${_generateCopyAssets(_assets)}
+COPY --from=build /app/build/release/appsetting.json /app${_generateCopyAssets()}
 
 # Start server.
 EXPOSE 8080
@@ -117,11 +113,15 @@ CMD ["dart", "app/bin/main.dill"]
 ''');
   }
 
-  String _generateCopyAssets(List<String> assets) {
+  String _generateCopyAssets() {
     var value = '';
 
-    for (var i = 0; i < assets.length; i++) {
-      var asset = assets[i];
+    if (_assets.isNotEmpty) {
+      value += '\n\n';
+    }
+
+    for (var i = 0; i < _assets.length; i++) {
+      var asset = _assets[i];
 
       if (asset.startsWith('/')) {
         value += 'COPY --from=build /app/build/release$asset /app';
@@ -129,7 +129,7 @@ CMD ["dart", "app/bin/main.dill"]
         value += 'COPY --from=build /app/build/release/$asset /app';
       }
 
-      if (i < assets.length - 1) {
+      if (i < _assets.length - 1) {
         value += '\n';
       }
     }
