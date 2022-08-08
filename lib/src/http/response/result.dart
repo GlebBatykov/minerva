@@ -12,23 +12,24 @@ class Result {
         statusCode: statusCode, body: body, headers: headers);
   }
 
-  Result({required this.statusCode, this.body, this.headers});
+  const Result({required this.statusCode, this.body, this.headers});
 }
 
 class OkResult extends Result {
-  OkResult({super.body, super.headers}) : super(statusCode: 200);
+  const OkResult({super.body, super.headers}) : super(statusCode: 200);
 }
 
 class BadRequestResult extends Result {
-  BadRequestResult({super.body, super.headers}) : super(statusCode: 400);
+  const BadRequestResult({super.body, super.headers}) : super(statusCode: 400);
 }
 
 class UnauthorizedResult extends Result {
-  UnauthorizedResult({super.body, super.headers}) : super(statusCode: 401);
+  const UnauthorizedResult({super.body, super.headers})
+      : super(statusCode: 401);
 }
 
 class InternalServerErrorResult extends Result {
-  InternalServerErrorResult({super.body, super.headers})
+  const InternalServerErrorResult({super.body, super.headers})
       : super(statusCode: 500);
 }
 
@@ -38,7 +39,7 @@ class JsonResult extends Result {
 }
 
 class NotFoundResult extends Result {
-  NotFoundResult({super.body, super.headers}) : super(statusCode: 404);
+  const NotFoundResult({super.body, super.headers}) : super(statusCode: 404);
 }
 
 class FileResult extends Result {
