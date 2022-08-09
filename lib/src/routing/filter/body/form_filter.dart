@@ -13,5 +13,5 @@ class FormField {
 class FormFilter extends BodyFilter {
   final List<FormField> fields;
 
-  const FormFilter(this.fields);
+  const FormFilter({required this.fields});
 }

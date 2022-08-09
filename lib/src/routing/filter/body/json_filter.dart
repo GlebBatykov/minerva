@@ -13,5 +13,5 @@ class JsonField {
 class JsonFilter extends BodyFilter {
   final List<JsonField> fields;
 
-  const JsonFilter(this.fields);
+  const JsonFilter({required this.fields});
 }
