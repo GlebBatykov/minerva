@@ -5,7 +5,7 @@ class Minerva {
 
   final Agents _agents = Agents();
 
-  final ConsoleLogger _logger = ConsoleLogger();
+  late final LogPipeline _logPipeline;
 
   Minerva._();
 
@@ -72,11 +72,15 @@ class Minerva {
     await _servers.initialize(instance, setting, apisBuilder, endpointsBuilder,
         logPipeline, connectors);
 
+    _logPipeline = LogPipeline(loggers);
+
+    await _logPipeline.initialize(connectors);
+
     var host = setting.address.host;
 
     var port = setting.address.port;
 
-    _logger.info('Server starting in http://$host:$port.');
+    _logPipeline.info('Server starting in http://$host:$port.');
   }
 
   Future<void> pause() async {
