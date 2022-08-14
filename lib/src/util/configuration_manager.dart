@@ -6,9 +6,9 @@ class ConfigurationManager {
   Future<void> load() async {
     _data.clear();
 
-    if (AppSetting.instance.values != null) {
-      _data.addAll(AppSetting.instance.values!);
-    }
+    await AppSetting.instance.initialize();
+
+    _data.addAll(AppSetting.instance.values!);
   }
 
   Future<void> save() async {

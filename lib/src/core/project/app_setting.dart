@@ -3,11 +3,11 @@ part of minerva_core;
 class AppSetting {
   static AppSetting _instance = AppSetting._();
 
-  File? _file;
+  late final File _file;
 
-  late final String _path;
+  final String _path = '${HostEnvironment.contentRootPath}/appsetting.json';
 
-  late final Map<String, dynamic> _data;
+  final Map<String, dynamic> _data = {};
 
   bool _isInitialized = false;
 
@@ -23,7 +23,9 @@ class AppSetting {
 
   bool get isInitialized => _isInitialized;
 
-  AppSetting._();
+  AppSetting._() {
+    _file = File.fromUri(Uri.parse(_path));
+  }
 
   static AppSetting get instance => _instance;
 
@@ -34,17 +36,17 @@ class AppSetting {
   }
 
   Future<void> initialize() async {
-    _path = '${HostEnvironment.contentRootPath}/appsetting.json';
-
-    _file = File.fromUri(Uri.parse(_path));
-
-    if (!await _file!.exists()) {
+    if (!await _file.exists()) {
       throw AppSettingException(
           message: 'The appsetting.json file not exist by path: $_path.');
     }
 
     try {
-      _data = jsonDecode(await _file!.readAsString());
+      var data = jsonDecode(await _file.readAsString());
+
+      _data.clear();
+
+      _data.addAll(data);
     } catch (_) {
       throw AppSettingException(
           message:
@@ -63,8 +65,8 @@ class AppSetting {
   }
 
   Future<void> _save(String data) async {
-    if (await _file!.exists()) {
-      await _file!.writeAsString(data);
+    if (await _file.exists()) {
+      await _file.writeAsString(data);
     } else {
       throw AppSettingException(
           message: 'The setting.json file not exist by path: $_path.');

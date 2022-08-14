@@ -11,7 +11,9 @@ class Minerva {
 
   static Future<Minerva> bind(
       {required List<String> args, required MinervaSetting setting}) async {
-    await AppSetting.instance.initialize();
+    if (!AppSetting.instance.isInitialized) {
+      await AppSetting.instance.initialize();
+    }
 
     var minerva = Minerva._();
 
