@@ -10,7 +10,8 @@ dependencies:
   path: ^1.8.2
   intl: ^0.17.0
   args: ^2.3.1
-  mime_type: ^1.0.0
+  mime: ^1.0.2
+  crypt: ^4.2.1
 
 dev_dependencies:
   lints: ^2.0.0
