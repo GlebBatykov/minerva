@@ -5,5 +5,5 @@ class JwtAuthOptions {
 
   final int? permissionLevel;
 
-  JwtAuthOptions({this.roles, this.permissionLevel});
+  const JwtAuthOptions({this.roles, this.permissionLevel});
 }
