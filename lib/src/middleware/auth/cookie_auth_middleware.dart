@@ -4,16 +4,16 @@ typedef CookieIsAuthorizedCallback = FutureOr<bool> Function(
     ServerContext context, List<Cookie> cookies);
 
 class CookieAuthMiddleware extends Middleware {
-  final CookieIsAuthorizedCallback _cookieIsAuthorized;
+  final CookieIsAuthorizedCallback _isAuthorized;
 
-  CookieAuthMiddleware({required CookieIsAuthorizedCallback cookieIsAuthorized})
-      : _cookieIsAuthorized = cookieIsAuthorized;
+  CookieAuthMiddleware({required CookieIsAuthorizedCallback isAuthorized})
+      : _isAuthorized = isAuthorized;
 
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
     var isAuthorized =
-        await _cookieIsAuthorized(context.context, context.request.cookies);
+        await _isAuthorized(context.context, context.request.cookies);
 
     if (isAuthorized) {
       var cookieContext = CookieAuthContext();
