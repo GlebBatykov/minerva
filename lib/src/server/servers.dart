@@ -25,9 +25,11 @@ class Servers {
     _supervisors
         .addAll(List.generate(instance, (index) => IsolateSupervisor()));
 
-    await Future.wait(_supervisors.map((e) => e.initialize().then((value) =>
-        e.start(ServerTaskHandler(
-            setting, endpoints, apis ?? [], logPipeline, connectors)))));
+    await Future.wait(List.generate(
+        _supervisors.length,
+        (index) => _supervisors[index].initialize().then((value) =>
+            _supervisors[index].start(ServerTaskHandler(index, setting,
+                endpoints, apis ?? [], logPipeline, connectors)))));
   }
 
   Future<void> pause() async {

@@ -38,6 +38,7 @@ class Server {
         _pipeline = MiddlewarePipeline(middlewares);
 
   static Future<Server> bind(
+      int instance,
       ServerSetting setting,
       Endpoints endpoints,
       List<Api> apis,
@@ -48,13 +49,13 @@ class Server {
     var server = Server._(address.host, address.port, setting.builder,
         setting.securityContext, endpoints, apis, setting.middlewares);
 
-    await server._initialize(logPipeline, connectors);
+    await server._initialize(instance, logPipeline, connectors);
 
     return server;
   }
 
   Future<void> _initialize(
-      LogPipeline logPipeline, AgentConnectors connectors) async {
+      int instance, LogPipeline logPipeline, AgentConnectors connectors) async {
     await AppSetting.instance.initialize();
 
     if (_securityContext == null) {
@@ -66,7 +67,7 @@ class Server {
 
     await logPipeline.initialize(connectors);
 
-    _context = ServerContext(logPipeline, connectors);
+    _context = ServerContext(instance, logPipeline, connectors);
 
     for (var api in _apis) {
       await api.initialize(_context);

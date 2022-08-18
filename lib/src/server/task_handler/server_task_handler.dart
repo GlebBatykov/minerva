@@ -1,6 +1,8 @@
 part of minerva_server;
 
 class ServerTaskHandler extends IsolateTaskHandler {
+  final int _instance;
+
   final ServerSetting _setting;
 
   final Endpoints _endpoints;
@@ -13,9 +15,10 @@ class ServerTaskHandler extends IsolateTaskHandler {
 
   late final Server _server;
 
-  ServerTaskHandler(ServerSetting setting, Endpoints endpoints, List<Api> apis,
-      LogPipeline logPipeline, AgentConnectors connectors)
-      : _setting = setting,
+  ServerTaskHandler(int instance, ServerSetting setting, Endpoints endpoints,
+      List<Api> apis, LogPipeline logPipeline, AgentConnectors connectors)
+      : _instance = instance,
+        _setting = setting,
         _endpoints = endpoints,
         _apis = apis,
         _logPipeline = logPipeline,
@@ -24,7 +27,7 @@ class ServerTaskHandler extends IsolateTaskHandler {
   @override
   Future<void> onStart(IsolateContext context) async {
     _server = await Server.bind(
-        _setting, _endpoints, _apis, _logPipeline, _connectors);
+        _instance, _setting, _endpoints, _apis, _logPipeline, _connectors);
   }
 
   @override
