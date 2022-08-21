@@ -36,6 +36,16 @@ class InternalServerErrorResult extends Result {
 class JsonResult extends Result {
   JsonResult(Map<String, dynamic> json, {int? statusCode, super.headers})
       : super(statusCode: statusCode ?? 200, body: jsonEncode(json));
+
+  @override
+  Future<MinervaResponse> get response async {
+    var minervaHeaders = headers ?? MinervaHttpHeaders();
+
+    minervaHeaders.contentType = ContentType.json;
+
+    return MinervaResponse(
+        statusCode: statusCode, body: body, headers: minervaHeaders);
+  }
 }
 
 class NotFoundResult extends Result {
