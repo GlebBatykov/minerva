@@ -1,19 +1,19 @@
 part of minerva_http;
 
 class MinervaHttpHeaders {
-  final bool? chunkedTransferEncoding;
+  bool? chunkedTransferEncoding;
 
-  final bool? persistentConnection;
+  bool? persistentConnection;
 
-  final ContentType? contentType;
+  ContentType? contentType;
 
-  final int? contentLength;
+  int? contentLength;
 
-  final String? host;
+  String? host;
 
-  final int? port;
+  int? port;
 
-  final Map<String, Object> _headers;
+  Map<String, Object> _headers;
 
   Map<String, Object> get headers => Map.unmodifiable(_headers);
 
