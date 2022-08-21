@@ -615,7 +615,7 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 
 Структура папки `wwwroot`:
 
-- `image`;
+- `images`;
   - `cat.jpg`;
 - `index.html`;
 - `some_file.txt`;
