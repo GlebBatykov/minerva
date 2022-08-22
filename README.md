@@ -1,3 +1,12 @@
+<div align="center">
+
+**Languages:**
+  
+[![English](https://img.shields.io/badge/Language-English-blue?style=?style=flat-square)](README.md)
+[![Russian](https://img.shields.io/badge/Language-Russian-blue?style=?style=flat-square)](README.ru.md)
+
+</div>
+
 - [Introduction](#introduction)
 - [About Minerva](#about-minerva)
 - [Ecosystem](#ecosystem)
@@ -943,6 +952,7 @@ Salt generation is available using the `GenerateSalt` method of the `PasswordSec
 - 🚧 Finish error handling. These are errors in case of incorrect server configuration, as well as server shutdown in case of errors during component initialization;
 - 🔜 Make documentation;
 - 🔜 Make more examples;
+- 🔜 Cover with tests;
 - 🔜 Add README files;
 - 🔜 Creating training videos;
 - 🔜 Improve the functionality.
