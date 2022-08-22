@@ -75,7 +75,7 @@ Write me your opinion about this framework, report errors or inaccuracies, illog
 Various packages to simplify working with `Minerva`, as well as in general that simplify writing server applications on `Dart`, are likely to be released as separate packages.
 
 Currently existing my packages that may be useful to you:
-  - [emerald](http://pub.deb/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
+  - [emerald](http://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
 
 # Installing
 
