@@ -214,7 +214,7 @@ During the server configuration process, you can set intermediate [request handl
 
 The components include:
 
-- `intermediate handlers`;
+- `middlewares`;
 - `loggers`;
 - `api`.
 
@@ -224,7 +224,7 @@ Deferred initialization can be used to open a connection to some external source
 
 # Routing
 
-In Minerva, request routing is based on pipelined request processing. When configuring the server, intermediate handlers are set that participate in the processing of the received request. You can read more about intermediate handlers [here](#intermediate-handlers).
+In Minerva, request routing is based on pipelined request processing. When configuring the server, middlewares are set that participate in the processing of the received request. You can read more about middlewares [here](#intermediate-handlers).
 
 Request routing in `Minerva` can be represented as:
 
@@ -234,7 +234,7 @@ Request routing in `Minerva` can be represented as:
 
 ## Pipeline
 
-The request processing pipeline consists of intermediate handlers. In this section, only some of them will be given, about the rest, as well as about the way to create your own intermediate handlers, you can read [here](#intermediate-handlers).
+The request processing pipeline consists of middlewares. In this section, only some of them will be given, about the rest, as well as about the way to create your own middlewares, you can read [here](#intermediate-handlers).
 
 The operation scheme of the request processing pipeline can be represented as follows:
 
@@ -281,7 +281,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 }
 ```
 
-One of the intermediate handlers supplied with `Minerva` is `EndpointMiddleware`, this handler should be the last in the pipeline. It is he who is responsible for matching the incoming request with the specified endpoints.
+One of the middlewares supplied with `Minerva` is `EndpointMiddleware`, this handler should be the last in the pipeline. It is he who is responsible for matching the incoming request with the specified endpoints.
 
 ### Api
 
@@ -536,22 +536,22 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 
 # Middlewares
 
-`Minerva` processes incoming requests using a pipeline of intermediate handlers.
+`Minerva` processes incoming requests using a pipeline of middlewares.
 
 ## Ready-made middlewares
 
-`Minerva` contains a number of ready-made intermediate handlers:
+`Minerva` contains a number of ready-made middlewares:
 
 - `Cookie Auth Middleware` - can be used to verify authorization by cookies;
 - `JwtAuthMiddleware` - can be used to verify JWT authorization;
-- `Error Middleware` - used to handle errors that occurred in subsequent intermediate handlers in the pipeline;
+- `Error Middleware` - used to handle errors that occurred in subsequent middlewares in the pipeline;
 - `Endpoint Middleware` - used to match an incoming request with the endpoints specified in `Minerva`. Must be the last in the pipeline;
 - `Static Files Middleware` - can be used to organize the distribution of static files;
 - `Redirection Middleware` - can be used to organize redirects, taking into account the availability of appropriate access rights. Using this handler, for example, you can implement a gateway microservice.
 
 ## Custom middlewares
 
-You can create your own intermediate handlers.
+You can create your own middlewares.
 
 Each intermediate handler inherits from the `Middleware` class. When creating a derivative of the `Middleware` class, you need to implement the `handle` method in the derived class. In this method, an instance of the `Middleware Context` class is available to you, with its help you can access endpoints, the server context, as well as an incoming request. Each intermediate handler must either process the request independently, returning some result, or delegate this responsibility to the next intermediate handler.
 
