@@ -75,6 +75,7 @@ Write me your opinion about this framework, report errors or inaccuracies, illog
 Various packages to simplify working with `Minerva`, as well as in general that simplify writing server applications on `Dart`, are likely to be released as separate packages.
 
 Currently existing my packages that may be useful to you:
+
   - [emerald](http://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
 
 # Installing
@@ -84,7 +85,7 @@ Currently existing my packages that may be useful to you:
 The framework contains the `CLI` utility `Minerva`, which contains the following commands:
 
 - `create` - creates a project with a standard template;
-- `build` - builds the project according to the current parameters set in the app setting.json file of the project;
+- `build` - builds the project according to the current parameters set in the appsetting.json file of the project;
 - `clear` - clears the project build;
 - `run` - starts the project, if there is no project assembly, then pre-starts the assembly;
 - `debug` - runs the project with `VM` services for debugging, the compilation type of the launched assembly should be `JIT`;
@@ -99,7 +100,7 @@ The command contains a mandatory parameter `name`, which specifies the name of t
 
 Using the `directory` parameter you can specify the project creation directory.
 
-Using the `debug-compile-type` and `release-compile-type` parameters, you can specify compilation types for `debug` and `release` project build types. You can change them at any time in the `app setting.json' file.
+Using the `debug-compile-type` and `release-compile-type` parameters, you can specify compilation types for `debug` and `release` project build types. You can change them at any time in the `appsetting.json' file.
 
 Using the `docker-compile-type` parameter, you can specify the compilation type for which `Dockerfile` will be generated. You can generate the `Dockerfile` again at any time using the `docker` command.
 
@@ -110,7 +111,7 @@ Building a project in `Minerva` assumes the presence of two types of project ass
 - `debug` - for debugging and project development;
 - `release` - for final deployment.
 
-When creating a project, an `app setting.json` file is created in its root. This is the main configuration file of the project.
+When creating a project, an `appsetting.json` file is created in its root. This is the main configuration file of the project.
 
 ## Run project
 
@@ -141,11 +142,11 @@ Docker files differ for different types of compilation. There are 2 docker file 
 
 You can re-generate the docker file with the selected compilation type at any time using the `docker` command. The compilation type is set by the `compile-type` parameter, by default it is `AOT`.
 
-When generating the docker file, the assets added to the final build of the project from the `app setting.json` file are also taken into account. Therefore, after adding them, you must either generate the `Dockerfile` again, or edit the `Dockerfile` manually.
+When generating the docker file, the assets added to the final build of the project from the `appsetting.json` file are also taken into account. Therefore, after adding them, you must either generate the `Dockerfile` again, or edit the `Dockerfile` manually.
 
 # Project configuration
 
-Each 'Minerva' project contains a configuration file `appsetting.json'. This file contains the settings for the `debug` and `release` assemblies of the project, and also allows you to embed values and arbitrary files into the final assembly of the project.
+Each 'Minerva' project contains a configuration file `appsetting.json`. This file contains the settings for the `debug` and `release` assemblies of the project, and also allows you to embed values and arbitrary files into the final assembly of the project.
 
 The `appsetting.json` file contains the `debug` and `release` fields, which contain configuration details of the corresponding project assemblies.
 
@@ -208,7 +209,7 @@ You can read more about the agents [here](#agents).
 
 ## Components
 
-During the server configuration process, you can set intermediate [request handlers] (#intermediate-handlers), [loggers] (#logging), [api](#api). All of them are called components. 
+During the server configuration process, you can set intermediate [request handlers] (#intermediate-handlers), [loggers] (#logging), [api](#api). All of them are called components.
 
 `Components` are entities that have their own life cycle.
 
@@ -317,22 +318,22 @@ class ApisBuilder extends MinervaApisBuilder {
 
 ### Request body
 
-You can access the request body through the `body` field of an instance of the `Minerva Request` class. The 'body` field provides access to an instance of the 'RequestBody' class.
+You can access the request body through the `body` field of an instance of the `MinervaRequest` class. The 'body` field provides access to an instance of the 'RequestBody' class.
 
 Initially, it is represented as bytes (the `data` field), but there are methods for trying to represent it as:
 
-- `text`. To do this, use the `as Text` method;
+- `text`. To do this, use the `asText` method;
 - `json`. The `asJson` method is used for this;
-- `form`. To do this, use the `as Form` method.
+- `form`. To do this, use the `asForm` method.
 
 #### FormData
 
-The `as Form` method of an instance of the `Request Body` class returns `Future`, which will return an instance of the `Form Data` class.
+The `asForm` method of an instance of the `RequestBody` class returns `Future`, which will return an instance of the `FormData` class.
 
-An instance of the `Form Data` class contains the `data` field. This is `Map<String, Form Data Value>` where `String` is the name of the form field, and `Form Data Value` can be of 2 types:
+An instance of the `FormData` class contains the `data` field. This is `Map<String, Form Data Value>` where `String` is the name of the form field, and `FormDataValue` can be of 2 types:
 
-- `Form Data String` is a form field representing a value in the form of a string;
-- `Form Data File` is a form field containing a file.
+- `FormDataString` is a form field representing a value in the form of a string;
+- `FormDataFile` is a form field containing a file.
 
 ### Path parameters
 
@@ -425,7 +426,7 @@ The `JWT` settings are set using the `JwtAuthOptions` class, the very existence 
 Also in the `JwtAuthOptions' class you can set:
 
 - `roles`. Roles, one of which must correspond to the user role;
-- `permission Level`. Roles can contain a `permission Level`, this is the access level. Allows you to configure access to endpoints more flexibly.
+- `permissionLevel`. Roles can contain a `permissionLevel`, this is the access level. Allows you to configure access to endpoints more flexibly.
 
 Example of creating an endpoint with the specified JWT authentication settings:
 
@@ -450,7 +451,7 @@ When creating an instance of `JwtAuthMiddleware`, you must set the required para
 
 When creating an instance of `JwtAuthMiddleware`, you can set the `getRole` parameter. This is a handler where you prescribe the logic of getting a role from a token. The handler should return an instance of the `Role` class, specifying the role name. You can also set the `permission Level` for the role in.
 
-Example of adding `Endpoint Middleware` to the request processing pipeline:
+Example of adding `EndpointMiddleware` to the request processing pipeline:
 
 ```dart
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
@@ -487,7 +488,7 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 
 When creating an endpoint in `Minerva` using the optional parameter `authOptions`, you can set cookie authorization settings for this endpoint.
 
-Cookie authorization settings are set using the `Cookie Auth Options` class, the very existence of an instance of the `CookieAuthOptions` class will assume that the user has successfully passed authentication.
+Cookie authorization settings are set using the `CookieAuthOptions` class, the very existence of an instance of the `CookieAuthOptions` class will assume that the user has successfully passed authentication.
 
 Example of creating an endpoint with the specified cookie authorization settings:
 
@@ -504,11 +505,11 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 }
 ```
 
-`Minerva` contains a ready-made intermediate handler for authorization by cookies - `Cookie Auth Middleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
+`Minerva` contains a ready-made intermediate handler for authorization by cookies - `CookieAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
 
-When creating an instance of `Cookie Auth Middleware`, you must set the mandatory parameter `cookie Is Authorized`. This is a handler where you prescribe the logic for checking cookies and should return `true` if the user is authorized, `false` if the user is not authorized.
+When creating an instance of `CookieAuthMiddleware`, you must set the mandatory parameter `isAuthorized`. This is a handler where you prescribe the logic for checking cookies and should return `true` if the user is authorized, `false` if the user is not authorized.
 
-Example of adding `Cookie Auth Middleware` to the request processing pipeline:
+Example of adding `CookieAuthMiddleware` to the request processing pipeline:
 
 ```dart
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
@@ -542,12 +543,12 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 
 `Minerva` contains a number of ready-made middlewares:
 
-- `Cookie Auth Middleware` - can be used to verify authorization by cookies;
+- `CookieAuthMiddleware` - can be used to verify authorization by cookies;
 - `JwtAuthMiddleware` - can be used to verify JWT authorization;
-- `Error Middleware` - used to handle errors that occurred in subsequent middlewares in the pipeline;
-- `Endpoint Middleware` - used to match an incoming request with the endpoints specified in `Minerva`. Must be the last in the pipeline;
-- `Static Files Middleware` - can be used to organize the distribution of static files;
-- `Redirection Middleware` - can be used to organize redirects, taking into account the availability of appropriate access rights. Using this handler, for example, you can implement a gateway microservice.
+- `ErrorMiddleware` - used to handle errors that occurred in subsequent middlewares in the pipeline;
+- `EndpointMiddleware` - used to match an incoming request with the endpoints specified in `Minerva`. Must be the last in the pipeline;
+- `StaticFilesMiddleware` - can be used to organize the distribution of static files;
+- `RedirectionMiddleware` - can be used to organize redirects, taking into account the availability of appropriate access rights. Using this handler, for example, you can implement a gateway microservice.
 
 ## Custom middlewares
 
@@ -578,7 +579,7 @@ The intermediate handler created in the example will print the message `Hello, m
 
 `Minerva` contains an intermediate handler for organizing access to static files - `StaticFilesMiddleware`.
 
-When creating `Static Files Middleware`, you can set the following settings:
+When creating `StaticFilesMiddleware`, you can set the following settings:
 
 - `directory`. Required parameter. The path to the folder is set relative to the project folder;
 - `path`. Required parameter. The path by which the intermediate handler will try to match the request with static files;
@@ -586,7 +587,7 @@ When creating `Static Files Middleware`, you can set the following settings:
 
 Let's analyze an example of creating an intermediate handler for organizing access to static files.
 
-Contents of `Middleware sBuilder`:
+Contents of `MiddlewaresBuilder`:
 
 ```dart
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
@@ -606,7 +607,7 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 }
 ```
 
-Contents of the `app setting.json` file:
+Contents of the `appsetting.json` file:
 
 ```dart
 {
@@ -639,7 +640,7 @@ In the example given, by assembling the project in the `debug` assembly, we can 
 
 `Minerva` uses classes derived from the `MinervaServerBuilder` class to inject dependencies into each server instance.
 
-Of the built-in tools for implementing dependencies, `Minerva` contains only `Server Store`. This is a `key-value` collection that you can access using a `ServerContext` instance.
+Of the built-in tools for implementing dependencies, `Minerva` contains only `ServerStore`. This is a `key-value` collection that you can access using a `ServerContext` instance.
 
 In the `Dart` ecosystem, there are good packages for implementing dependencies that you can use (for example, [get_it](https://pub.dev/packages/get_it), having prescribed the logic of dependency injection in a class derived from the `MinervaServerBuilder` class.
 
@@ -771,7 +772,7 @@ The logging template contains substituted values, such as:
 
 For logging to the file `Minerva` contains a ready-made logger `FileLogger'.
 
-This logger works in conjunction with a ready-made agent `FileLoggerAgent`. You can set the path to the logging file when configuring agents using the `log Path` parameter of the `FileLoggerAgentData` class. The path to the logging file can be set either absolute or relative to the project folder. The relative path must start with `~/`. The default path to the logging file is `~/log/log.log`. 
+This logger works in conjunction with a ready-made agent `FileLoggerAgent`. You can set the path to the logging file when configuring agents using the `log Path` parameter of the `FileLoggerAgentData` class. The path to the logging file can be set either absolute or relative to the project folder. The relative path must start with `~/`. The default path to the logging file is `~/log/log.log`.
 
 In order to use a logger to a file, we also need to use `FileLoggerAgent`.
 
@@ -809,18 +810,18 @@ class AgentsBuilder extends MinervaAgentsBuilder {
 
 ## Logging configuration
 
-In `Minerva` when configuring the project build, using `app setting.json` you can configure logging. You can specify active logging levels for each specific logger, for each type of assembly.
+In `Minerva` when configuring the project build, using `appsetting.json` you can configure logging. You can specify active logging levels for each specific logger, for each type of assembly.
 
 Every blogger in `Minerva` has his own name. For ready-made loggers , this is:
 
 - `ConsoleLogger` - `console`;
 - `FileLogger` - `file`.
 
-If the settings for any blogger are not specified in `app setting.json`, this means that all logging levels are available for him.
+If the settings for any blogger are not specified in `appsetting.json`, this means that all logging levels are available for him.
 
 Consider an example where we disable in the `release` build of the project only the `critical`, `error` levels for the `console` logger.
 
-Contents of the `app setting.json` file:
+Contents of the `appsetting.json` file:
 
 ```dart
 {
@@ -906,11 +907,11 @@ class CustomLogger extends Logger {
 
 # Configuration manager
 
-The values that you set using the `values` parameter in `app setting.json` are available to you while the server is running, you can access and modify them. When building and starting the server, you interact with the `app setting.json` of the current build, not the entire project. The modification of the value also occurs within the current build, and not the entire project.
+The values that you set using the `values` parameter in `appsetting.json` are available to you while the server is running, you can access and modify them. When building and starting the server, you interact with the `appsetting.json` of the current build, not the entire project. The modification of the value also occurs within the current build, and not the entire project.
 
-To work with the `values` of the current build, the `ConfigurationManager` class is available in `Minerva`. To load values from `app setting.json` into the current instance of `ConfigurationManager`, the `load` method is available to you. Next, you can modify these values within the current instance of `Configuration Manager`, and also save them to the `appsetting.json` file using the `save` method.
+To work with the `values` of the current build, the `ConfigurationManager` class is available in `Minerva`. To load values from `appsetting.json` into the current instance of `ConfigurationManager`, the `load` method is available to you. Next, you can modify these values within the current instance of `ConfigurationManager`, and also save them to the `appsetting.json` file using the `save` method.
 
-Example of using the `Configuration Manager` class:
+Example of using the `ConfigurationManager` class:
 
 ```dart
 class EndpointsBuilder extends MinervaEndpointsBuilder {
@@ -933,7 +934,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 
 Password hashing in `Minerva` is available using the `Password Security' class.
 
-Example of password hashing using the `Password Security` class:
+Example of password hashing using the `PasswordSecurity` class:
 
 ```dart
 var security = PasswordSecurity();
