@@ -211,7 +211,7 @@ The `Minerva` structure was created taking into account the possibility of proce
 The server structure can be represented as follows:
 
 <div align="center">
-  <img src="doc/images/server%20structure.png" width="75%"/>
+  <img src="doc/images/server_structure.png" width="75%"/>
 </div>
 
 Using the `instance` parameter of the `MinervaSetting` class, you can set the number of isolates in which server instances will be started.
@@ -232,7 +232,7 @@ All server instances can access and interact with one `agent`.
 Then the scheme of the server operation can be represented as follows:
 
 <div align="center">
-  <img src="doc/images/server%20structure%20with%20agent.png" width="75%"/>
+  <img src="doc/images/server_structure_with_agent.png" width="75%"/>
 </div>
 
 Of course, the fact that the `agent` is executed in a separate isolate hits performance, due to losses in the transmission of messages between isolates. However, it can be a useful tool in specific scenarios.
@@ -272,7 +272,7 @@ The request processing pipeline consists of middlewares. In this section, only s
 The operation scheme of the request processing pipeline can be represented as follows:
 
 <div align="center">
-  <img src="doc/images/middlewares%20pipeline.png" width="75%"/>
+  <img src="doc/images/middlewares_pipeline.png" width="75%"/>
 </div>
 
 ## Endpoints

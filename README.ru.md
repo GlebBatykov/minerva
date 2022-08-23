@@ -210,7 +210,7 @@ minerva run
 Структура сервера может быть представлена так:
 
 <div align="center">
-  <img src="doc/images/server%20structure.png" width="75%"/>
+  <img src="doc/images/server_structure.png" width="75%"/>
 </div>
 
 При помощи параметра `instance` класса `MinervaSetting` вы можете задать количество изолятов в которых будут запущены экземпляры сервера.
@@ -231,7 +231,7 @@ minerva run
 Тогда схема работы сервера может быть представлена так:
 
 <div align="center">
-  <img src="doc/images/server%20structure%20with%20agent.png" width="75%"/>
+  <img src="doc/images/server_structure_with_agent.png" width="75%"/>
 </div>
 
 Конечно то что `агент` исполняется в отдельном изоляте бьет по производительности, из за потерь на передаче сообщений между изолятами. Однако он может быть полезным инструментом, в специфичных сценариях.
@@ -271,7 +271,7 @@ minerva run
 Схема работы конвейера обработки запросов может быть представлена так:
 
 <div align="center">
-  <img src="doc/images/middlewares%20pipeline.png" width="75%"/>
+  <img src="doc/images/middlewares_pipeline.png" width="75%"/>
 </div>
 
 ## Конечные точки
