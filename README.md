@@ -76,7 +76,7 @@ Write me your opinion about this framework, report errors or inaccuracies, illog
 
 - project build system;
 - multithreaded request processing;
-- routing requests, processing requests using intermediate handlers;
+- routing requests, processing requests using middlewares;
 - logging capabilities, creating your own bloggers;
 - provides means for authentication by JWT, cookies;
 - tools for distributing static files;
@@ -475,7 +475,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 }
 ```
 
-`Minerva` contains a ready-made intermediate handler for `JWT` authorization - `JwtAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
+`Minerva` contains a ready-made middleware for `JWT` authorization - `JwtAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
 
 When creating an instance of `JwtAuthMiddleware`, you must set the required parameter `tokenVerify`. This is a handler where you prescribe the logic of checking the token for validity and must return `true` if the user is authorized, `false` if the user is not authorized.
 
@@ -537,7 +537,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 }
 ```
 
-`Minerva` contains a ready-made intermediate handler for authorization by cookies - `CookieAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
+`Minerva` contains a ready-made middleware for authorization by cookies - `CookieAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
 
 When creating an instance of `CookieAuthMiddleware`, you must set the mandatory parameter `isAuthorized`. This is a handler where you prescribe the logic for checking cookies and should return `true` if the user is authorized, `false` if the user is not authorized.
 
@@ -586,9 +586,9 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 
 You can create your own middlewares.
 
-Each intermediate handler inherits from the `Middleware` class. When creating a derivative of the `Middleware` class, you need to implement the `handle` method in the derived class. In this method, an instance of the `Middleware Context` class is available to you, with its help you can access endpoints, the server context, as well as an incoming request. Each intermediate handler must either process the request independently, returning some result, or delegate this responsibility to the next intermediate handler.
+Each middleware inherits from the `Middleware` class. When creating a derivative of the `Middleware` class, you need to implement the `handle` method in the derived class. In this method, an instance of the `Middleware Context` class is available to you, with its help you can access endpoints, the server context, as well as an incoming request. Each middleware must either process the request independently, returning some result, or delegate this responsibility to the next middleware.
 
-Example of creating your own intermediate handler:
+Example of creating your own middleware:
 
 ```dart
 class TestMiddleware extends Middleware {
@@ -605,19 +605,19 @@ class TestMiddleware extends Middleware {
 }
 ```
 
-The intermediate handler created in the example will print the message `Hello, middleware world!`, and also check whether the next intermediate handler exists in the pipeline. If it exists, it delegates the processing of the request to it, and if it is missing, it will return the error `404'.
+The middleware created in the example will print the message `Hello, middleware world!`, and also check whether the next middleware exists in the pipeline. If it exists, it delegates the processing of the request to it, and if it is missing, it will return the error `404'.
 
 # Static files
 
-`Minerva` contains an intermediate handler for organizing access to static files - `StaticFilesMiddleware`.
+`Minerva` contains an middleware for organizing access to static files - `StaticFilesMiddleware`.
 
 When creating `StaticFilesMiddleware`, you can set the following settings:
 
 - `directory`. Required parameter. The path to the folder is set relative to the project folder;
-- `path`. Required parameter. The path by which the intermediate handler will try to match the request with static files;
+- `path`. Required parameter. The path by which the middleware will try to match the request with static files;
 - `root`. Optional parameter. Specifies the path to the file relative to the specified `directory`, which will be given if the request path matches `path`, will not contain any further path pointing to the required file.
 
-Let's analyze an example of creating an intermediate handler for organizing access to static files.
+Let's analyze an example of creating an middleware for organizing access to static files.
 
 Contents of `MiddlewaresBuilder`:
 
