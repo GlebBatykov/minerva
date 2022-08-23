@@ -13,7 +13,7 @@ class MinervaHttpHeaders {
 
   int? port;
 
-  Map<String, Object> _headers;
+  final Map<String, Object> _headers;
 
   Map<String, Object> get headers => Map.unmodifiable(_headers);
 
