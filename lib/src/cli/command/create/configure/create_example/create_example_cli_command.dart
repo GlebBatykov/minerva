@@ -102,7 +102,7 @@ class LoggersBuilder extends MinervaLoggersBuilder {
     var loggers = <Logger>[];
 
     //
-    loggers.add(MinervaLogger());
+    loggers.add(ConsoleLogger());
 
     return loggers;
   }
@@ -134,7 +134,7 @@ import 'package:minerva/minerva.dart';
 import 'agents_builder.dart';
 import 'apis_builder.dart';
 import 'endpoints_builder.dart';
-import 'middleware_builder.dart';
+import 'middlewares_builder.dart';
 import 'server_builder.dart';
 import 'loggers_builder.dart';
 
@@ -147,7 +147,6 @@ class SettingBuilder extends MinervaSettingBuilder {
         loggersBuilder: LoggersBuilder(),
         endpointsBuilder: EndpointsBuilder(),
         serverBuilder: ServerBuilder(),
-        apisBuilder: ApisBuilder(),
         apisBuilder: ApisBuilder(),
         middlewaresBuilder: MiddlewaresBuilder());
   }
