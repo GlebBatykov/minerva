@@ -11,7 +11,6 @@ import 'routing.dart';
 import 'http.dart';
 import 'core.dart';
 import 'logging.dart';
-import 'util.dart';
 
 part 'server/exception/server_store_exception.dart';
 part 'server/exception/minerva_bind_exception.dart';
