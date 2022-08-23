@@ -70,6 +70,20 @@ Write me your opinion about this framework, report errors or inaccuracies, illog
 
 # About Minerva
 
+`Minerva` is a framework for creating a multithreaded REST API.
+
+`Minerva` provides:
+
+- project build system;
+- multithreaded request processing;
+- routing requests, processing requests using intermediate handlers;
+- logging capabilities, creating your own bloggers;
+- provides means for authentication by JWT, cookies;
+- tools for distributing static files;
+- working with `FormData`;
+- ability to generate a Docker file;
+- and another.
+
 # Ecosystem
 
 Various packages to simplify working with `Minerva`, as well as in general that simplify writing server applications on `Dart`, are likely to be released as separate packages.
@@ -79,6 +93,24 @@ Currently existing my packages that may be useful to you:
   - [emerald](http://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
 
 # Installing
+
+Install `Dart`.
+
+Installing `Minerva`:
+
+```dart
+dart pub global activate Minerva
+```
+
+Create project and run example:
+
+```dart
+minerva create -n my_application
+
+cd my_application
+
+minerva run
+```
 
 # CLI
 
