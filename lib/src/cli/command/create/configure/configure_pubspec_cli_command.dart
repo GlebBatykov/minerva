@@ -23,8 +23,7 @@ environment:
   sdk: '>=2.17.5 <3.0.0'
 
 dependencies:
-  minerva:
-    git: https://github.com/GlebBatykov/minerva.git
+  minerva: ^0.1.0
   get_it: ^7.2.0
 
 dev_dependencies:
