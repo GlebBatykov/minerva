@@ -43,7 +43,8 @@ export 'src/logging.dart'
         ConsoleLogger,
         FileLogger,
         FileLoggerAgent,
-        FileLoggerAgentData;
+        FileLoggerAgentData,
+        LogLevel;
 
 export 'src/core.dart' show HostEnvironment, BuildManager, BuildType;
 
