@@ -11,7 +11,7 @@ class AssetsFilesParser {
     _files.clear();
 
     for (var asset in assets) {
-      _parceAsset(asset);
+      await _parceAsset(asset);
     }
 
     return _files;
@@ -20,7 +20,7 @@ class AssetsFilesParser {
   Future<List<File>> parseOne(String asset) async {
     _files.clear();
 
-    _parceAsset(asset);
+    await _parceAsset(asset);
 
     return _files;
   }

@@ -5,6 +5,10 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
 
   final String compileType;
 
+  late Map<String, dynamic> _appSetting;
+
+  late Map<String, dynamic> _buildSetting;
+
   late final List<String> _assets;
 
   CreateDockerFileCLICommand(this.projectPath, this.compileType);
@@ -18,6 +22,8 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
     var dockerFile = File.fromUri(Uri.file(filePath));
 
     await dockerFile.create();
+
+    _buildSetting = BuildSettingParser().parseCurrent(_appSetting, 'release');
 
     if (compileType == 'AOT') {
       await _writeAOTFile(dockerFile);
@@ -35,10 +41,10 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
       throw CLICommandException(message: object.message!);
     }
 
-    var appSetting = appSettingParseResult.data;
+    _appSetting = appSettingParseResult.data;
 
     try {
-      _assets = AppSettingAssetsParser().parse(appSetting);
+      _assets = AppSettingAssetsParser().parse(_appSetting);
     } on CLICommandException catch (_) {
       rethrow;
     }
@@ -63,18 +69,19 @@ RUN dart pub global activate minerva
 
 # Build project.
 RUN dart pub get --offline
-RUN minerva build -m release
+
+RUN \${HOME}/.pub-cache/bin/minerva build -m release
 
 # Build minimal serving image from AOT-compiled and required system
 # libraries and configuration files stored in `/runtime/` from the build stage.
 FROM scratch
 COPY --from=build /runtime /
 
-COPY --from=build /app/build/release/bin /app
+COPY --from=build /app/build/release/bin /app/bin
 COPY --from=build /app/build/release/appsetting.json /app${await _generateCopyAssets()}
 
 # Start server.
-EXPOSE 8080
+EXPOSE ${_buildSetting['port']}
 CMD ["app/bin/main"]
 ''');
   }
@@ -108,7 +115,7 @@ COPY --from=build /app/build/release/bin /app
 COPY --from=build /app/build/release/appsetting.json /app${await _generateCopyAssets()}
 
 # Start server.
-EXPOSE 8080
+EXPOSE ${_buildSetting['port']}
 CMD ["dart", "app/bin/main.dill"]
 ''');
   }
@@ -129,7 +136,7 @@ CMD ["dart", "app/bin/main.dill"]
         if (asset.startsWith('/')) {
           value += 'COPY --from=build /app/build/release$asset /app';
         } else {
-          value += 'COPY --from=build /app/build/release/$asset /app';
+          value += 'COPY --from=build app/build/release/$asset /app';
         }
 
         if (i < _assets.length - 1) {
@@ -138,6 +145,6 @@ CMD ["dart", "app/bin/main.dill"]
       }
     }
 
-    return value;
+    return value == '\n\n' ? '' : value;
   }
 }
