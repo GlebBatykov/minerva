@@ -5,5 +5,5 @@ class Role {
 
   final int? permissionLevel;
 
-  Role(this.name, {this.permissionLevel});
+  const Role(this.name, {this.permissionLevel});
 }
