@@ -531,7 +531,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
       var id = request.pathParameters['id'];
 
       return 'User with id: $id.';
-    }, authOptions: AuthOptions(cookie: CookieAuthOptions(isAuthorized: true)));
+    }, authOptions: AuthOptions(cookie: CookieAuthOptions()));
   }
 }
 ```
@@ -769,11 +769,11 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 
 Логи в `Minerva` делятся на следующие уровни:
 
-- info;
-- debug;
-- warning;
-- error;
-- critical.
+- `info`;
+- `debug`;
+- `warning`;
+- `error`;
+- `critical`.
 
 ## Конвейер
 
@@ -987,6 +987,7 @@ var hash = security.hashPassword(password, salt: salt);
 - 🔜 Покрыть тестами;
 - 🔜 Дополнить README файлы;
 - 🔜 Создание обучающих видео;
+- 🔜 Добавить тесты производительности;
 - 🔜 Создать сайт с документацией.
 
 Ну и конечно же исправление ошибок что будут обнаружены.

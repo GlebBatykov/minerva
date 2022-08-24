@@ -169,7 +169,7 @@ When creating a project using the `create` command, a `Dockerfile` is generated 
 
 Docker files differ for different types of compilation. There are 2 docker file templates:
 
-- `LIVE`;
+- `JIT`;
 - `AOT`.
 
 You can re-generate the docker file with the selected compilation type at any time using the `docker` command. The compilation type is set by the `compile-type` parameter, by default it is `AOT`.
@@ -532,12 +532,12 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
       var id = request.pathParameters['id'];
 
       return 'User with id: $id.';
-    }, authOptions: AuthOptions(cookie: CookieAuthOptions(isAuthorized: true)));
+    }, authOptions: AuthOptions(cookie: CookieAuthOptions()));
   }
 }
 ```
 
-`Minerva` contains a ready-made middleware for authorization by cookies - `CookieAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
+`Minerva` contains a ready-made middleware for authorization by cookies - `CookieAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware`.
 
 When creating an instance of `CookieAuthMiddleware`, you must set the mandatory parameter `isAuthorized`. This is a handler where you prescribe the logic for checking cookies and should return `true` if the user is authorized, `false` if the user is not authorized.
 
@@ -674,7 +674,7 @@ In the example given, by assembling the project in the `debug` assembly, we can 
 
 Of the built-in tools for implementing dependencies, `Minerva` contains only `ServerStore`. This is a `key-value` collection that you can access using a `ServerContext` instance.
 
-In the `Dart` ecosystem, there are good packages for implementing dependencies that you can use (for example, [get_it](https://pub.dev/packages/get_it), having prescribed the logic of dependency injection in a class derived from the `MinervaServerBuilder` class.
+In the `Dart` ecosystem, there are good packages for implementing dependencies that you can use (for example, [get_it](https://pub.dev/packages/get_it)), having prescribed the logic of dependency injection in a class derived from the `MinervaServerBuilder` class.
 
 # Agents
 
@@ -766,15 +766,15 @@ Thus, we have created 2 endpoints, and in whichever of the server instances the 
 
 # Logging
 
-`Minerva`, as well as creating your own bloggers.
+`Minerva`, as well as creating your own loggers.
 
-divided into the following levels `Minerva` is divided into the following levels:
+Logging divided into the following levels `Minerva` is divided into the following levels:
 
-- information;
-- debugging;
-- warning;
-- error;
-- critical.
+- `information`;
+- `debugging`;
+- `warning`;
+- `error`;
+- `critical`.
 
 ## Pipeline
 
@@ -791,7 +791,7 @@ The logging process in `Minerva` is organized in the form of a pipeline. When co
 
 Ready-made loggers in `Minerva` allow you to set a logging template.
 
-By default, the logging template looks like: `[&time] [&level] &message'`.
+By default, the logging template looks like: `'[&time] [&level] &message'`.
 
 The logging template contains substituted values, such as:
 
@@ -802,7 +802,7 @@ The logging template contains substituted values, such as:
 
 ### Logging to files
 
-For logging to the file `Minerva` contains a ready-made logger `FileLogger'.
+For logging to the file `Minerva` contains a ready-made logger `FileLogger`.
 
 This logger works in conjunction with a ready-made agent `FileLoggerAgent`. You can set the path to the logging file when configuring agents using the `log Path` parameter of the `FileLoggerAgentData` class. The path to the logging file can be set either absolute or relative to the project folder. The relative path must start with `~/`. The default path to the logging file is `~/log/log.log`.
 
@@ -986,8 +986,9 @@ Salt generation is available using the `GenerateSalt` method of the `PasswordSec
 - 🔜 Make documentation;
 - 🔜 Make more examples;
 - 🔜 Cover with tests;
-- 🔜 Add README files;
+- 🔜 Update README files;
 - 🔜 Creating video tutorials;
+- 🔜 Add benchmarks;
 - 🔜 Create documentation website.
 
 And of course the correction of errors that will be detected.
