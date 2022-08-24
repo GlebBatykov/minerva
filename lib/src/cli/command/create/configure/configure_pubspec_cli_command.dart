@@ -23,7 +23,7 @@ environment:
   sdk: '>=2.17.5 <3.0.0'
 
 dependencies:
-  minerva: ^0.1.2
+  minerva: ^0.1.3
   get_it: ^7.2.0
 
 dev_dependencies:
