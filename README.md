@@ -187,12 +187,12 @@ In them you can configure:
 - `host` - the address where the server is started. By default, for `debug` it is `127.0.0.1`, and for `release` it is `0.0.0.0`;
 - `port` - the port on which the server is started. By default, for `debug` it is `5000`, and for `release` it is `8080`;
 - `compile-type` - the type of compilation of the project. Can be either `JIT` or `AOT`;
-- `values` - values embedded in the assembly. You can access them using [configuration manager](#configuration manager);
+- `values` - values embedded in the assembly. You can access them using [configuration manager](#configuration-manager);
 - `logging` - logging configuration. You can read more about it [here](#configuration-logging).
 
 Also, `appsetting.json' can contain general settings for all types of project builds.:
 
-- `values` - values embedded in the assembly. You can access them using [configuration manager](#configuration manager);
+- `values` - values embedded in the assembly. You can access them using [configuration manager](#configuration-manager);
 - `assets` - by specifying assets, you can embed arbitrary files into the project assembly. The path to them is set relative to the project folder.
 
 Example of specifying a list of assets:
@@ -241,7 +241,7 @@ You can read more about the agents [here](#agents).
 
 ## Components
 
-During the server configuration process, you can set intermediate [request handlers] (#intermediate-handlers), [loggers] (#logging), [api](#api). All of them are called components.
+During the server configuration process, you can set intermediate [request handlers](#intermediate-handlers), [loggers] (#logging), [api](#api). All of them are called components.
 
 `Components` are entities that have their own life cycle.
 
