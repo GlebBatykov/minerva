@@ -99,7 +99,7 @@ Install `Dart`.
 Installing `Minerva`:
 
 ```dart
-dart pub global activate Minerva
+dart pub global activate minerva
 ```
 
 Create project and run example:

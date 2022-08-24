@@ -98,7 +98,7 @@
 Установите `Minerva`:
 
 ```dart
-dart pub global activate Minerva
+dart pub global activate minerva
 ```
 
 Создать проект и запустить пример:

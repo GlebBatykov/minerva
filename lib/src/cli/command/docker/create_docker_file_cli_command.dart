@@ -59,7 +59,7 @@ COPY . .
 RUN dart pub get
 
 # Activate Minerva.
-RUN dart pub global activate Minerva
+RUN dart pub global activate minerva
 
 # Build project.
 RUN dart pub get --offline
@@ -94,7 +94,7 @@ COPY . .
 RUN dart pub get
 
 # Activate Minerva.
-RUN dart pub global activate Minerva
+RUN dart pub global activate minerva
 
 # Build project.
 RUN dart pub get --offline
