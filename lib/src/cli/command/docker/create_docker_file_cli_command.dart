@@ -69,7 +69,6 @@ RUN dart pub global activate minerva
 
 # Build project.
 RUN dart pub get --offline
-
 RUN \${HOME}/.pub-cache/bin/minerva build -m release
 
 # Build minimal serving image from AOT-compiled and required system
@@ -105,18 +104,18 @@ RUN dart pub global activate minerva
 
 # Build project.
 RUN dart pub get --offline
-RUN minerva build -m release
+RUN \${HOME}/.pub-cache/bin/minerva build -m release
 
 # Build minimal serving image from kernel snapshot and dart from build stage.
-FROM scratch
+FROM subfuzion/dart:slim
 COPY --from=build /usr/lib/dart/bin/dart /usr/lib/dart/bin/dart
 
-COPY --from=build /app/build/release/bin /app
+COPY --from=build /app/build/release/bin /app/bin
 COPY --from=build /app/build/release/appsetting.json /app${await _generateCopyAssets()}
 
 # Start server.
 EXPOSE ${_buildSetting['port']}
-CMD ["dart", "app/bin/main.dill"]
+CMD ["usr/lib/dart/bin/dart", "app/bin/main.dill"]
 ''');
   }
 
@@ -134,9 +133,16 @@ CMD ["dart", "app/bin/main.dill"]
 
       if (files.isNotEmpty) {
         if (asset.startsWith('/')) {
-          value += 'COPY --from=build /app/build/release$asset /app';
+          value +=
+              'COPY --from=build /app/build/release$asset /app/${asset.substring(1)}';
         } else {
-          value += 'COPY --from=build app/build/release/$asset /app';
+          var segments = asset.split('/');
+
+          segments.removeLast();
+
+          var path = segments.join('/');
+
+          value += 'COPY --from=build app/build/release/$asset /app/$path';
         }
 
         if (i < _assets.length - 1) {
