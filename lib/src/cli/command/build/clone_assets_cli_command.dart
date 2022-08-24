@@ -25,7 +25,7 @@ class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
 
     _files.clear();
 
-    _files.addAll(await AssetsFilesParser(projectPath).parse(assets));
+    _files.addAll(await AssetsFilesParser(projectPath).parseMany(assets));
 
     await _cloneFiles();
 

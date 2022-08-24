@@ -7,39 +7,50 @@ class AssetsFilesParser {
 
   AssetsFilesParser(String projectPath) : _projectPath = projectPath;
 
-  Future<List<File>> parse(List<String> assets) async {
+  Future<List<File>> parseMany(List<String> assets) async {
     _files.clear();
 
     for (var asset in assets) {
-      if (asset[0] == '/') {
-        var directoryPath = '$_projectPath$asset';
-
-        var directory = Directory.fromUri(
-            Uri.directory(directoryPath, windows: Platform.isWindows));
-
-        if (!await directory.exists()) {
-          throw CLICommandException(
-              message:
-                  'The directory along the path $directoryPath does not exist');
-        }
-
-        await _decomposeFileSystemEntry(directory);
-      } else {
-        var filePath = '$_projectPath/$asset';
-
-        var file =
-            File.fromUri(Uri.file(filePath, windows: Platform.isWindows));
-
-        if (!await file.exists()) {
-          throw CLICommandException(
-              message: 'The file along the path $filePath does not exist');
-        }
-
-        _files.add(file);
-      }
+      _parceAsset(asset);
     }
 
     return _files;
+  }
+
+  Future<List<File>> parseOne(String asset) async {
+    _files.clear();
+
+    _parceAsset(asset);
+
+    return _files;
+  }
+
+  Future<void> _parceAsset(String asset) async {
+    if (asset[0] == '/') {
+      var directoryPath = '$_projectPath$asset';
+
+      var directory = Directory.fromUri(
+          Uri.directory(directoryPath, windows: Platform.isWindows));
+
+      if (!await directory.exists()) {
+        throw CLICommandException(
+            message:
+                'The directory along the path $directoryPath does not exist');
+      }
+
+      await _decomposeFileSystemEntry(directory);
+    } else {
+      var filePath = '$_projectPath/$asset';
+
+      var file = File.fromUri(Uri.file(filePath, windows: Platform.isWindows));
+
+      if (!await file.exists()) {
+        throw CLICommandException(
+            message: 'The file along the path $filePath does not exist');
+      }
+
+      _files.add(file);
+    }
   }
 
   Future<void> _decomposeFileSystemEntry(FileSystemEntity entity) async {

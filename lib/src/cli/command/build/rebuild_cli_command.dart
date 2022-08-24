@@ -113,7 +113,7 @@ class RebuildCLICommand extends CLICommand<void> {
       assets = [];
     }
 
-    var assetsFiles = await AssetsFilesParser(projectPath).parse(assets);
+    var assetsFiles = await AssetsFilesParser(projectPath).parseMany(assets);
 
     if (assets.isNotEmpty) {
       await _removeUnnecessaryBuildAssets(buildAssetsFiles, assetsFiles);

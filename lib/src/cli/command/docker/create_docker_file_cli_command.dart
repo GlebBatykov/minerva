@@ -71,7 +71,7 @@ FROM scratch
 COPY --from=build /runtime /
 
 COPY --from=build /app/build/release/bin /app
-COPY --from=build /app/build/release/appsetting.json /app${_generateCopyAssets()}
+COPY --from=build /app/build/release/appsetting.json /app${await _generateCopyAssets()}
 
 # Start server.
 EXPOSE 8080
@@ -105,7 +105,7 @@ FROM scratch
 COPY --from=build /usr/lib/dart/bin/dart /usr/lib/dart/bin/dart
 
 COPY --from=build /app/build/release/bin /app
-COPY --from=build /app/build/release/appsetting.json /app${_generateCopyAssets()}
+COPY --from=build /app/build/release/appsetting.json /app${await _generateCopyAssets()}
 
 # Start server.
 EXPOSE 8080
@@ -113,7 +113,7 @@ CMD ["dart", "app/bin/main.dill"]
 ''');
   }
 
-  String _generateCopyAssets() {
+  Future<String> _generateCopyAssets() async {
     var value = '';
 
     if (_assets.isNotEmpty) {
@@ -123,14 +123,18 @@ CMD ["dart", "app/bin/main.dill"]
     for (var i = 0; i < _assets.length; i++) {
       var asset = _assets[i];
 
-      if (asset.startsWith('/')) {
-        value += 'COPY --from=build /app/build/release$asset /app';
-      } else {
-        value += 'COPY --from=build /app/build/release/$asset /app';
-      }
+      var files = await AssetsFilesParser(projectPath).parseOne(asset);
 
-      if (i < _assets.length - 1) {
-        value += '\n';
+      if (files.isNotEmpty) {
+        if (asset.startsWith('/')) {
+          value += 'COPY --from=build /app/build/release$asset /app';
+        } else {
+          value += 'COPY --from=build /app/build/release/$asset /app';
+        }
+
+        if (i < _assets.length - 1) {
+          value += '\n';
+        }
       }
     }
 
