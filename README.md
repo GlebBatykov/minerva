@@ -155,7 +155,7 @@ Debugging is only available using `JIT` compilation. To run the application in d
 
 ### VS Code
 
-To start debugging in the VS Code editor, you must create a `launch.json` file and specify the `program` parameter in the `configuration`. In the `program` parameter, you specify the path to the executable file. For `JIT` compilation, `Minerva` creates a `kernel snapshot`, it is stored at the path build/`build type`/bin/main.dll . Example path: `build/debug/bin/main.dill`.
+To start debugging in the VS Code editor, you must create a `launch.json` file and specify the `program` parameter in the `configuration`. In the `program` parameter, you specify the path to the executable file. For `JIT` compilation, `Minerva` creates a `kernel snapshot`, it is stored at the path build/`build type`/bin/main.dill. Example path: `build/debug/bin/main.dill`.
 
 ## Testing
 
@@ -190,7 +190,7 @@ In them you can configure:
 - `values` - values embedded in the assembly. You can access them using [configuration manager](#configuration-manager);
 - `logging` - logging configuration. You can read more about it [here](#configuration-logging).
 
-Also, `appsetting.json' can contain general settings for all types of project builds.:
+Also, `appsetting.json` can contain general settings for all types of project builds:
 
 - `values` - values embedded in the assembly. You can access them using [configuration manager](#configuration-manager);
 - `assets` - by specifying assets, you can embed arbitrary files into the project assembly. The path to them is set relative to the project folder.
@@ -225,7 +225,7 @@ If everything is clear with server instances, these are isolates where the serve
 
 Running server instances in different isolates imposes some limitations and inconveniences. For example, you have a database connection, but if we run the server in several isolates, then each of the running server instances must have its own connection. This may not always be convenient, there may be different scenarios for using something like this. Or, for example, we should have some kind of common state between all `server instances`. That's why there are agents in `Minerva`.
 
-An `agent` is a separate isolate that can store a certain state, receives messages with certain actions that it can perform.
+`agent` is a separate isolate that can store a certain state, receives messages with certain actions that it can perform.
 
 All server instances can access and interact with one `agent`.
 
@@ -277,7 +277,7 @@ The operation scheme of the request processing pipeline can be represented as fo
 
 ## Endpoints
 
-Endpoints are used to process requests. Each endpoint has its own address. Endpoint processing returns `dynamic'. 
+Endpoints are used to process requests. Each endpoint has its own address. Endpoint processing returns `dynamic`. 
 
 Endpoints are configured using classes derived from the MinervaEndpointsBuilder class.
 
@@ -350,7 +350,7 @@ class ApisBuilder extends MinervaApisBuilder {
 
 ### Request body
 
-You can access the request body through the `body` field of an instance of the `MinervaRequest` class. The 'body` field provides access to an instance of the 'RequestBody' class.
+You can access the request body through the `body` field of an instance of the `MinervaRequest` class. The `body` field provides access to an instance of the `RequestBody` class.
 
 Initially, it is represented as bytes (the `data` field), but there are methods for trying to represent it as:
 
@@ -455,7 +455,7 @@ When creating an endpoint in `Minerva` using the optional `authOptions` paramete
 
 The `JWT` settings are set using the `JwtAuthOptions` class, the very existence of an instance of the `JwtAuthOptions` class will assume that the user has successfully completed authentication.
 
-Also in the `JwtAuthOptions' class you can set:
+Also in the `JwtAuthOptions` class you can set:
 
 - `roles`. Roles, one of which must correspond to the user role;
 - `permissionLevel`. Roles can contain a `permissionLevel`, this is the access level. Allows you to configure access to endpoints more flexibly.
@@ -475,7 +475,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 }
 ```
 
-`Minerva` contains a ready-made middleware for `JWT` authorization - `JwtAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware'.
+`Minerva` contains a ready-made middleware for `JWT` authorization - `JwtAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware`.
 
 When creating an instance of `JwtAuthMiddleware`, you must set the required parameter `tokenVerify`. This is a handler where you prescribe the logic of checking the token for validity and must return `true` if the user is authorized, `false` if the user is not authorized.
 
@@ -690,8 +690,8 @@ All agent classes in `Minerva` are derived from the `Agent` class.
 
 Agents have methods:
 
-- `initialize`. The method is triggered at the initial initialization of the server. You should use it to open connections, initialize resources, etc.;
-- `call'. The method handles call calls to the agent. A call request means that the agent must send a response to the sender;
+- `initialize`. The method is triggered at the initial initialization of the server. You should use it to open connections, initialize resources;
+- `call`. The method handles call calls to the agent. A call request means that the agent must send a response to the sender;
 - `cast`. The method handles cast calls to the agent. A cast request means that the agent does not send a response to the sender, and the sender does not wait for the results of the cast request;
 - `dispose`. The method is triggered when the agent is destroyed.
 
@@ -702,9 +702,9 @@ As you may have noticed , there are 2 types of calls to the agent:
 
 Every time we contact the agent, we send him an `action`, according to which he already performs some action, and we can also send some data.
 
-Let's consider a simple example of creating an agent that stores the state of the counter, as well as creating endpoints that interact with this state.
+Let's consider a simple example of creating agent that stores the state of the counter, as well as creating endpoints that interact with this state.
 
-Creating an Agent class:
+Creating Agent class:
 
 ```dart
 class CounterAgent extends Agent {
@@ -728,7 +728,7 @@ class CounterAgent extends Agent {
 }
 ```
 
-Configuring agents, creating an agent named 'counter':
+Configuring agents, creating agent named 'counter':
 
 ```dart
 class AgentsBuilder extends MinervaAgentsBuilder {
@@ -987,5 +987,7 @@ Salt generation is available using the `GenerateSalt` method of the `PasswordSec
 - 🔜 Make more examples;
 - 🔜 Cover with tests;
 - 🔜 Add README files;
-- 🔜 Creating training videos;
-- 🔜 Improve the functionality.
+- 🔜 Creating video tutorials;
+- 🔜 Create documentation website.
+
+And of course the correction of errors that will be detected.
