@@ -90,7 +90,7 @@ Various packages to simplify working with `Minerva`, as well as in general that 
 
 Currently existing my packages that may be useful to you:
 
-  - [emerald](http://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
+  - [emerald](https://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
 
 # Installing
 
@@ -285,7 +285,7 @@ There are several scenarios of how `Minerva` interprets the endpoint result befo
 
 - if you returned `Map<String, dynamic>`, then `Minerva` will send a response with the code `200` and interpret your response as `json`;
 - if you have returned an instance of the `Result` class, then `Minerva` will send a response with the settings specified in the `Result` instance;
-- if you return any other type, then `Minerva` will bring it to a string (using the `toString` method) and send a response with the code `200'.
+- if you return any other type, then `Minerva` will bring it to a string (using the `toString` method) and send a response with the code `200`.
 
 `Result` is an auxiliary class for configuring the response code, its headers and body. 'Minerva` contains ready-made result templates:
 
