@@ -13,7 +13,7 @@ class Server {
 
   final Endpoints _endpoints;
 
-  final List<Api> _apis;
+  final Apis _apis;
 
   final MiddlewarePipeline _pipeline;
 
@@ -27,7 +27,7 @@ class Server {
       MinervaServerBuilder? builder,
       SecurityContext? securityContext,
       Endpoints endpoints,
-      List<Api> apis,
+      Apis apis,
       List<Middleware> middlewares)
       : _address = address,
         _port = port,
@@ -41,7 +41,7 @@ class Server {
       int instance,
       ServerSetting setting,
       Endpoints endpoints,
-      List<Api> apis,
+      Apis apis,
       LogPipeline logPipeline,
       AgentConnectors connectors) async {
     var address = setting.address;
@@ -69,9 +69,7 @@ class Server {
 
     _context = ServerContext(instance, logPipeline, connectors);
 
-    for (var api in _apis) {
-      await api.initialize(_context);
-    }
+    await _apis.initialize(_context);
 
     await _pipeline.initialize(_context);
 
@@ -84,5 +82,11 @@ class Server {
 
   Future<void> dispose() async {
     await _server.close();
+
+    await _apis.dispose(_context);
+
+    await _pipeline.dispose(_context);
+
+    await _context.logPipeline.dispose(_context.connectors);
   }
 }

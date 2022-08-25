@@ -12,13 +12,9 @@ class Servers {
       AgentConnectors connectors) async {
     var endpoints = Endpoints();
 
-    var apis = await apisBuilder?.build();
+    var apis = Apis(await apisBuilder?.build() ?? []);
 
-    if (apis != null) {
-      for (var api in apis) {
-        await api.build(endpoints);
-      }
-    }
+    await apis.build(endpoints);
 
     await endpointsBuilder?.build(endpoints);
 
@@ -28,8 +24,8 @@ class Servers {
     await Future.wait(List.generate(
         _supervisors.length,
         (index) => _supervisors[index].initialize().then((value) =>
-            _supervisors[index].start(ServerTaskHandler(index, setting,
-                endpoints, apis ?? [], logPipeline, connectors)))));
+            _supervisors[index].start(ServerTaskHandler(
+                index, setting, endpoints, apis, logPipeline, connectors)))));
   }
 
   Future<void> pause() async {

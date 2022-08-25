@@ -24,6 +24,7 @@ part 'server/servers.dart';
 part 'server/server_setting.dart';
 part 'server/server_address.dart';
 part 'server/server_request_handler.dart';
+part 'server/apis.dart';
 
 part 'server/builder/minerva_agents_builder.dart';
 part 'server/builder/minerva_apis_builder.dart';

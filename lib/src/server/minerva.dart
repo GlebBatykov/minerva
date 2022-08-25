@@ -3,7 +3,7 @@ part of minerva_server;
 class Minerva {
   final Servers _servers = Servers();
 
-  final Agents _agents = Agents();
+  late final Agents _agents;
 
   late final LogPipeline _logPipeline;
 
@@ -63,16 +63,16 @@ class Minerva {
       List<AgentData> agentsData) async {
     var loggers = await loggersBuilder.build();
 
-    var logPipeline = LogPipeline(loggers);
+    _agents = Agents(agentsData);
 
-    await _agents.initialize(agentsData);
+    await _agents.initialize();
 
     var connectors = AgentConnectors(_agents.connectors);
 
     await _servers.initialize(instance, setting, apisBuilder, endpointsBuilder,
-        logPipeline, connectors);
+        LogPipeline(List.from(loggers)), connectors);
 
-    _logPipeline = LogPipeline(loggers);
+    _logPipeline = LogPipeline(List.from(loggers));
 
     await _logPipeline.initialize(connectors);
 
@@ -96,8 +96,10 @@ class Minerva {
   }
 
   Future<void> dispose() async {
-    await _agents.dispose();
-
     await _servers.dispose();
+
+    await _logPipeline.dispose(AgentConnectors(_agents.connectors));
+
+    await _agents.dispose();
   }
 }
