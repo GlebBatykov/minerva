@@ -34,6 +34,8 @@ class IsolateHandler {
       _pause();
     } else if (action is IsolateResume) {
       _resume();
+    } else if (action is IsolateDispose) {
+      _dispose();
     }
   }
 
@@ -63,5 +65,11 @@ class IsolateHandler {
     await _taskHandler.onResume(_context);
 
     _supervisorPort.send(IsolateResumed());
+  }
+
+  void _dispose() async {
+    await _taskHandler.onDispose(_context);
+
+    _supervisorPort.send(IsolateDisposed());
   }
 }

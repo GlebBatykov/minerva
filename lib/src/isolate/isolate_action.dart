@@ -15,3 +15,5 @@ class IsolateStop extends IsolateAction {}
 class IsolateResume extends IsolateAction {}
 
 class IsolatePause extends IsolateAction {}
+
+class IsolateDispose extends IsolateAction {}

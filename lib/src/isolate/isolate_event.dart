@@ -15,3 +15,5 @@ class IsolateStoped extends IsolateEvent {}
 class IsolateResumed extends IsolateEvent {}
 
 class IsolatePaused extends IsolateEvent {}
+
+class IsolateDisposed extends IsolateEvent {}

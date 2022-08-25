@@ -8,4 +8,6 @@ abstract class IsolateTaskHandler {
   FutureOr<void> onPause(IsolateContext context) {}
 
   FutureOr<void> onResume(IsolateContext context) {}
+
+  FutureOr<void> onDispose(IsolateContext context) {}
 }
