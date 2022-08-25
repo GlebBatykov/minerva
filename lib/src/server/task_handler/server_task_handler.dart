@@ -7,7 +7,7 @@ class ServerTaskHandler extends IsolateTaskHandler {
 
   final Endpoints _endpoints;
 
-  final List<Api> _apis;
+  final Apis _apis;
 
   final LogPipeline _logPipeline;
 
@@ -16,7 +16,7 @@ class ServerTaskHandler extends IsolateTaskHandler {
   late final Server _server;
 
   ServerTaskHandler(int instance, ServerSetting setting, Endpoints endpoints,
-      List<Api> apis, LogPipeline logPipeline, AgentConnectors connectors)
+      Apis apis, LogPipeline logPipeline, AgentConnectors connectors)
       : _instance = instance,
         _setting = setting,
         _endpoints = endpoints,
@@ -36,8 +36,7 @@ class ServerTaskHandler extends IsolateTaskHandler {
   }
 
   @override
-  FutureOr<void> onPause(IsolateContext context) {}
-
-  @override
-  FutureOr<void> onResume(IsolateContext context) {}
+  Future<void> onDispose(IsolateContext context) async {
+    await _server.dispose();
+  }
 }

@@ -1,13 +1,17 @@
 part of minerva_server;
 
 class AgentTaskHandler extends IsolateTaskHandler {
-  late final Agent _agent;
+  final Agent _agent;
+
+  final Map<String, dynamic> _data;
+
+  AgentTaskHandler(Agent agent, Map<String, dynamic> data)
+      : _agent = agent,
+        _data = data;
 
   @override
   Future<void> onStart(IsolateContext context) async {
-    _agent = context.data['agent'];
-
-    _agent.initialize(context.data['data']);
+    await _agent.initialize(_data);
 
     context.receive<AgentCall>(_handleAgentCall);
 
@@ -22,5 +26,10 @@ class AgentTaskHandler extends IsolateTaskHandler {
 
   void _handleAgentCast(AgentCast action) {
     _agent.cast(action.action, action.data);
+  }
+
+  @override
+  Future<void> onDispose(IsolateContext context) async {
+    await _agent.dispose();
   }
 }
