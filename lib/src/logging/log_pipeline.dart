@@ -41,9 +41,9 @@ class LogPipeline {
     }
   }
 
-  Future<void> dispose(ServerContext context) async {
+  Future<void> dispose(AgentConnectors connectors) async {
     for (var logger in _loggers) {
-      await logger.dispose(context);
+      await logger.dispose();
     }
   }
 }

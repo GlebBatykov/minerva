@@ -23,5 +23,5 @@ abstract class Logger {
 
   FutureOr<void> critical(dynamic object);
 
-  FutureOr<void> dispose(ServerContext context) {}
+  FutureOr<void> dispose() {}
 }
