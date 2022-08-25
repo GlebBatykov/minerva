@@ -37,4 +37,10 @@ class MiddlewarePipeline {
       return NotFoundResult();
     }
   }
+
+  Future<void> dispose(ServerContext context) async {
+    for (var middleware in _middlewares) {
+      await middleware.dispose(context);
+    }
+  }
 }
