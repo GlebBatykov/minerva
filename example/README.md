@@ -7,4 +7,4 @@
 
 </div>
 
-Examples will be added later.
+You can find usage examples [here](https://github.com/GlebBatykov/minerva_examples).

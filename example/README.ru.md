@@ -7,4 +7,4 @@
 
 </div>
 
-Примеры будут добавлены позже.
+Примеры использования вы можете найти [тут](https://github.com/GlebBatykov/minerva_examples).
