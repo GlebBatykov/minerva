@@ -61,6 +61,7 @@ Server side framework for build multithreading REST API
 - [Configuration manager](#configuration-manager)
 - [Password hashing](#password-hashing)
 - [Road map](#road-map)
+- [Gratitude](#gratitude)
 
 # Introduction
 
@@ -216,7 +217,7 @@ Example of specifying a list of assets:
 
 # Framework structure
 
-The `Minerva` structure was created taking into account the possibility of processing requests in many isolates, to improve performance. Multithreaded request processing is implemented by running a server instance in multiple isolates, using the `shared` parameter.
+The `Minerva` structure was created taking into account the possibility of processing requests in many isolates, to improve performance. Multithreaded request processing is implemented by running a server instance in multiple isolates, using the `shared` parameter of class `HttpServer` from `dart:io` library.
 
 The server structure can be represented as follows:
 
@@ -1002,3 +1003,9 @@ Salt generation is available using the `GenerateSalt` method of the `PasswordSec
 - 🔜 Create documentation website.
 
 And of course the correction of errors that will be detected.
+
+# Gratitude
+
+I express my gratitude:
+
+- to my [friend](https://vk.com/rubro.official) for creating the logo.
