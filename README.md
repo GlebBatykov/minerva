@@ -10,6 +10,8 @@ Server side framework for build multithreading REST API
 
 <div align="center">
 
+[![pub package](https://img.shields.io/pub/v/minerva.svg?label=minerva&color=blue)](https://pub.dev/packages/minerva)
+
 **Languages:**
   
 [![English](https://img.shields.io/badge/Language-English-blue?style=?style=flat-square)](README.md)
