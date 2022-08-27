@@ -2,8 +2,10 @@
 
 <img src="doc/images/logo.png" width="150px"/>
 
+&nbsp;
+
 Фреймворк для создания многопоточного REST API сервера
-  
+
 </div>
 
 <div align="center">

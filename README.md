@@ -2,8 +2,10 @@
 
 <img src="doc/images/logo.png" width="150px"/>
 
+&nbsp;
+
 Server side framework for build multithreading REST API
-  
+
 </div>
 
 <div align="center">
