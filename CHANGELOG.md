@@ -1,4 +1,11 @@
-# 0.1.5
+# 0.1.6
+
+- Add logo;
+- Update REAMDE files;
+- Update CLI tools;
+- Other little changes.
+
+## 0.1.5
 
 - Update Dockerfile generation.
 
