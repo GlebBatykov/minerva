@@ -1,3 +1,11 @@
+<div align="center" width="200px">
+
+<img src="doc/images/logo.png" width="250px"/>
+
+Фреймворк для создания многопоточного REST API сервера
+  
+</div>
+
 <div align="center">
 
 **Языки:**

@@ -1,3 +1,11 @@
+<div align="center" width="200px">
+
+<img src="doc/images/logo.png" width="250px"/>
+
+Server side framework for build multithreading REST API
+  
+</div>
+
 <div align="center">
 
 **Languages:**
