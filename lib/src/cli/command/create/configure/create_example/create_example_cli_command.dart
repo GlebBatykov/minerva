@@ -148,6 +148,7 @@ class SettingBuilder extends MinervaSettingBuilder {
         endpointsBuilder: EndpointsBuilder(),
         serverBuilder: ServerBuilder(),
         apisBuilder: ApisBuilder(),
+        agentsBuilder: AgentsBuilder(),
         middlewaresBuilder: MiddlewaresBuilder());
   }
 }
