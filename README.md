@@ -1,6 +1,6 @@
 <div align="center" width="200px">
 
-<img src="doc/images/logo.png" width="250px"/>
+<img src="doc/images/logo.png" width="150px"/>
 
 Server side framework for build multithreading REST API
   
