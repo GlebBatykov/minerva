@@ -977,7 +977,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 
 `Minerva` contains functionality for hashing passwords with a given salt. Under the hood, `Minerva` uses the package [crypt](https://pub.dev/package/crypt). I decided to include this functionality in the framework because before I discovered the current package and a convenient package for hashing passwords, I tried more than one package.
 
-Password hashing in `Minerva` is available using the `Password Security' class.
+Password hashing in `Minerva` is available using the `Password Security` class.
 
 Example of password hashing using the `PasswordSecurity` class:
 
