@@ -1,4 +1,8 @@
-# 0.1.6
+# 0.1.7
+
+- Fix logo.
+
+## 0.1.6
 
 - Add logo;
 - Update REAMDE files;
