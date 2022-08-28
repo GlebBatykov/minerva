@@ -50,7 +50,7 @@ Server side framework for build multithreading REST API
   - [Ready-made middlewares](#ready-made-middlewares)
   - [Custom middlewares](#custom-middlewares)
 - [Static files](#static-files)
-- [Dependency injaction](#dependency-injaction)
+- [Dependency injection](#dependency-injection)
 - [Agents](#agents)
   - [Custom agents](#custom-agents)
 - [Logging](#logging)
@@ -681,7 +681,7 @@ Structure of the `wwwroot` folder:
 
 In the example given, by assembling the project in the `debug` assembly, we can access the file `cat.jpg`on the way `http://127.0.0.1:5000/wwwroot/images/cat.jpg`.
 
-# Dependency injaction
+# Dependency injection
 
 `Minerva` uses classes derived from the `MinervaServerBuilder` class to inject dependencies into each server instance.
 
