@@ -101,7 +101,7 @@ class LoggersBuilder extends MinervaLoggersBuilder {
   List<Logger> build() {
     var loggers = <Logger>[];
 
-    //
+    // Adds console logger to log pipeline
     loggers.add(ConsoleLogger());
 
     return loggers;
@@ -117,10 +117,10 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   List<Middleware> build() {
     var middlewares = <Middleware>[];
 
-    //
+    // Adds middleware for handling errors in middleware pipeline
     middlewares.add(ErrorMiddleware());
 
-    //
+    // Adds middleware for query mappings to endpoints in middleware pipeline
     middlewares.add(EndpointMiddleware());
 
     return middlewares;
@@ -141,7 +141,7 @@ import 'loggers_builder.dart';
 class SettingBuilder extends MinervaSettingBuilder {
   @override
   MinervaSetting build() {
-    //
+    // Creates server setting
     return MinervaSetting(
         instance: 1,
         loggersBuilder: LoggersBuilder(),

@@ -192,6 +192,10 @@ class RebuildCLICommand extends CLICommand<void> {
   }
 
   Future<void> _writeFile(File buildFile, File file) async {
+    if (!await buildFile.exists()) {
+      await buildFile.create(recursive: true);
+    }
+
     fileLogs.removeWhere((element) =>
         element.path == relative(buildFile.path, from: _buildDirectory));
 
