@@ -1,6 +1,6 @@
 <div align="center" width="200px">
 
-<img src="doc/images/logo.png" width="150px"/>
+<img src="https://raw.githubusercontent.com/GlebBatykov/minerva/main/doc/images/logo.png" width="150px"/>
 
 &nbsp;
 
