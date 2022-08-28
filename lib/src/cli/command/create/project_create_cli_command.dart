@@ -3,14 +3,12 @@ part of minerva_cli;
 class ProjectCreateCommand extends CLICommand<void> {
   final String projectName;
 
-  final String directoryPath;
-
-  ProjectCreateCommand(this.projectName, this.directoryPath);
+  ProjectCreateCommand(this.projectName);
 
   @override
   Future<void> run() async {
-    var createProcess = await Process.start(
-        'dart', ['create', '-t', 'console', projectName, directoryPath]);
+    var createProcess =
+        await Process.start('dart', ['create', '-t', 'console', projectName]);
 
     createProcess.stdout.listen((event) => stdout.add(event));
     createProcess.stderr.listen((event) => stdout.add(event));

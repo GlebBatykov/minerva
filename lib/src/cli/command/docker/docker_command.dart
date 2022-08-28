@@ -5,7 +5,7 @@ class DockerCommand extends Command {
   String get name => 'docker';
 
   @override
-  String get description => 'Generates docker file.';
+  String get description => 'Generate docker file.';
 
   @override
   String get usage => '''
