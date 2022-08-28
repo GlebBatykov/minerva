@@ -270,7 +270,7 @@ Deferred initialization can be used to open a connection to some external source
 
 # Routing
 
-In Minerva, request routing is based on pipelined request processing. When configuring the server, middlewares are set that participate in the processing of the received request. You can read more about middlewares [here](#intermediate-handlers).
+In Minerva, request routing is based on pipelined request processing. When configuring the server, middlewares are set that participate in the processing of the received request. You can read more about middlewares [here](#middlewares).
 
 Request routing in `Minerva` can be represented as:
 
@@ -280,7 +280,7 @@ Request routing in `Minerva` can be represented as:
 
 ## Pipeline
 
-The request processing pipeline consists of middlewares. In this section, only some of them will be given, about the rest, as well as about the way to create your own middlewares, you can read [here](#intermediate-handlers).
+The request processing pipeline consists of middlewares. In this section, only some of them will be given, about the rest, as well as about the way to create your own middlewares, you can read [here](#middlewares).
 
 The operation scheme of the request processing pipeline can be represented as follows:
 
