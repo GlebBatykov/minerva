@@ -1,4 +1,8 @@
-# 0.1.7
+# 0.1.8
+
+- Update README files.
+
+## 0.1.7
 
 - Fix logo.
 
@@ -22,7 +26,7 @@
 - Update README files.
 - Update Dockerfile generation.
 
-# 0.1.2
+## 0.1.2
 
 - Fix docs images.
 
