@@ -300,7 +300,7 @@ There are several scenarios of how `Minerva` interprets the endpoint result befo
 - if you have returned an instance of the `Result` class, then `Minerva` will send a response with the settings specified in the `Result` instance;
 - if you return any other type, then `Minerva` will bring it to a string (using the `toString` method) and send a response with the code `200`.
 
-`Result` is an auxiliary class for configuring the response code, its headers and body. 'Minerva` contains ready-made result templates:
+`Result` is an auxiliary class for configuring the response code, its headers and body. `Minerva` contains ready-made result templates:
 
 - `OkResult` - sends a response with the code `200`;
 - `BadRequestResult` - sends a response with the code `400`;
