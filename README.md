@@ -50,7 +50,7 @@ Server side framework for build multithreading REST API
   - [Ready-made middlewares](#ready-made-middlewares)
   - [Custom middlewares](#custom-middlewares)
 - [Static files](#static-files)
-- [Dependency injaction](#dependency-injaction)
+- [Dependency injection](#dependency-injection)
 - [Agents](#agents)
   - [Custom agents](#custom-agents)
 - [Logging](#logging)
@@ -71,7 +71,7 @@ I decided to start writing my own server framework due to the fact that most of 
 
 When creating the framework, I wanted it to work with both `JIT` and `AOT` compilation types, that is, it should not have used `dart:mirrors`, which greatly affected the implementation of many things. I do not rule out writing separate packages for the ecosystem of this framework in the future, which will be based on `dart:mirros` or on `build_runner`. But if they are based on `dart:mirros`, they will act as separate packages, and not be part of the main framework.
 
-In other server frameworks, I liked the presence of configuration files in the project, as well as the build system (I was inspired by part of it ASP.NET ). Therefore, this framework has a project build system, and several build modes: `debug` and `release`. Also, within each build, you can choose the type of compilation: `JIT` or `AOT`. Along with the package comes a `CLI` utility for this.
+In other server frameworks, I liked the presence of configuration files in the project, as well as the build system (i was inspired by part of it ASP.NET). Therefore, this framework has a project build system, and several build modes: `debug` and `release`. Also, within each build, you can choose the type of compilation: `JIT` or `AOT`. Along with the package comes a `CLI` utility for this.
 
 The utility supplied by the `CLI` also has the ability to generate a `docker` file, which seemed to me a convenient thing.
 
@@ -91,10 +91,10 @@ Write me your opinion about this framework, report errors or inaccuracies, illog
 - multithreaded request processing;
 - routing requests, processing requests using middlewares;
 - logging capabilities, creating your own bloggers;
-- provides means for authentication by JWT, cookies;
+- provides means for authentication by `JWT`, `cookies`;
 - tools for distributing static files;
 - working with `FormData`;
-- ability to generate a Docker file;
+- ability to generate a `Dockerfile`;
 - and another.
 
 # Ecosystem
@@ -103,7 +103,7 @@ Various packages to simplify working with `Minerva`, as well as in general that 
 
 Currently existing my packages that may be useful to you:
 
-  - [emerald](https://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
+- [emerald](https://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
 
 # Installing
 
@@ -191,7 +191,7 @@ When generating the docker file, the assets added to the final build of the proj
 
 # Project configuration
 
-Each 'Minerva' project contains a configuration file `appsetting.json`. This file contains the settings for the `debug` and `release` assemblies of the project, and also allows you to embed values and arbitrary files into the final assembly of the project.
+Each `Minerva` project contains a configuration file `appsetting.json`. This file contains the settings for the `debug` and `release` assemblies of the project, and also allows you to embed values and arbitrary files into the final assembly of the project.
 
 The `appsetting.json` file contains the `debug` and `release` fields, which contain configuration details of the corresponding project assemblies.
 
@@ -201,7 +201,7 @@ In them you can configure:
 - `port` - the port on which the server is started. By default, for `debug` it is `5000`, and for `release` it is `8080`;
 - `compile-type` - the type of compilation of the project. Can be either `JIT` or `AOT`;
 - `values` - values embedded in the assembly. You can access them using [configuration manager](#configuration-manager);
-- `logging` - logging configuration. You can read more about it [here](#configuration-logging).
+- `logging` - logging configuration. You can read more about it [here](#logging-configuration).
 
 Also, `appsetting.json` can contain general settings for all types of project builds:
 
@@ -254,7 +254,7 @@ You can read more about the agents [here](#agents).
 
 ## Components
 
-During the server configuration process, you can set intermediate [request handlers](#intermediate-handlers), [loggers] (#logging), [api](#api). All of them are called components.
+During the server configuration process, you can set [middlewares](#middlewares), [loggers](#logging), [api](#api). All of them are called components.
 
 `Components` are entities that have their own life cycle.
 
@@ -290,7 +290,7 @@ The operation scheme of the request processing pipeline can be represented as fo
 
 ## Endpoints
 
-Endpoints are used to process requests. Each endpoint has its own address. Endpoint processing returns `dynamic`. 
+Endpoints are used to process requests. Each endpoint has its own address. Endpoint processing returns `dynamic`.
 
 Endpoints are configured using classes derived from the MinervaEndpointsBuilder class.
 
@@ -300,7 +300,7 @@ There are several scenarios of how `Minerva` interprets the endpoint result befo
 - if you have returned an instance of the `Result` class, then `Minerva` will send a response with the settings specified in the `Result` instance;
 - if you return any other type, then `Minerva` will bring it to a string (using the `toString` method) and send a response with the code `200`.
 
-`Result` is an auxiliary class for configuring the response code, its headers and body. 'Minerva` contains ready-made result templates:
+`Result` is an auxiliary class for configuring the response code, its headers and body. `Minerva` contains ready-made result templates:
 
 - `OkResult` - sends a response with the code `200`;
 - `BadRequestResult` - sends a response with the code `400`;
@@ -618,7 +618,7 @@ class TestMiddleware extends Middleware {
 }
 ```
 
-The middleware created in the example will print the message `Hello, middleware world!`, and also check whether the next middleware exists in the pipeline. If it exists, it delegates the processing of the request to it, and if it is missing, it will return the error `404'.
+The middleware created in the example will print the message `Hello, middleware world!`, and also check whether the next middleware exists in the pipeline. If it exists, it delegates the processing of the request to it, and if it is missing, it will return the error `404`.
 
 # Static files
 
@@ -681,7 +681,7 @@ Structure of the `wwwroot` folder:
 
 In the example given, by assembling the project in the `debug` assembly, we can access the file `cat.jpg`on the way `http://127.0.0.1:5000/wwwroot/images/cat.jpg`.
 
-# Dependency injaction
+# Dependency injection
 
 `Minerva` uses classes derived from the `MinervaServerBuilder` class to inject dependencies into each server instance.
 
@@ -741,7 +741,7 @@ class CounterAgent extends Agent {
 }
 ```
 
-Configuring agents, creating agent named 'counter':
+Configuring agents, creating agent named `'counter'`:
 
 ```dart
 class AgentsBuilder extends MinervaAgentsBuilder {
@@ -977,7 +977,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 
 `Minerva` contains functionality for hashing passwords with a given salt. Under the hood, `Minerva` uses the package [crypt](https://pub.dev/package/crypt). I decided to include this functionality in the framework because before I discovered the current package and a convenient package for hashing passwords, I tried more than one package.
 
-Password hashing in `Minerva` is available using the `Password Security' class.
+Password hashing in `Minerva` is available using the `Password Security` class.
 
 Example of password hashing using the `PasswordSecurity` class:
 
