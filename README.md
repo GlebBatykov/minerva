@@ -375,7 +375,7 @@ Initially, it is represented as bytes (the `data` field), but there are methods 
 
 The `asForm` method of an instance of the `RequestBody` class returns `Future`, which will return an instance of the `FormData` class.
 
-An instance of the `FormData` class contains the `data` field. This is `Map<String, Form Data Value>` where `String` is the name of the form field, and `FormDataValue` can be of 2 types:
+An instance of the `FormData` class contains the `data` field. This is `Map<String, FormDataValue>` where `String` is the name of the form field, and `FormDataValue` can be of 2 types:
 
 - `FormDataString` is a form field representing a value in the form of a string;
 - `FormDataFile` is a form field containing a file.
@@ -488,13 +488,13 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 }
 ```
 
-`Minerva` contains a ready-made middleware for `JWT` authorization - `JwtAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `Endpoint Middleware`.
+`Minerva` contains a ready-made middleware for `JWT` authorization - `JwtAuthMiddleware`. In the pipeline of intermediate request handlers, it should go earlier than `EndpointMiddleware`.
 
 When creating an instance of `JwtAuthMiddleware`, you must set the required parameter `tokenVerify`. This is a handler where you prescribe the logic of checking the token for validity and must return `true` if the user is authorized, `false` if the user is not authorized.
 
 `Minerva` does not contain built-in tools for working with `JWT` tokens due to the availability of ready-made third-party packages for this.
 
-When creating an instance of `JwtAuthMiddleware`, you can set the `getRole` parameter. This is a handler where you prescribe the logic of getting a role from a token. The handler should return an instance of the `Role` class, specifying the role name. You can also set the `permission Level` for the role in.
+When creating an instance of `JwtAuthMiddleware`, you can set the `getRole` parameter. This is a handler where you prescribe the logic of getting a role from a token. The handler should return an instance of the `Role` class, specifying the role name. You can also set the `permissionLevel` for the role in.
 
 Example of adding `EndpointMiddleware` to the request processing pipeline:
 
