@@ -77,7 +77,7 @@ The utility supplied by the `CLI` also has the ability to generate a `docker` fi
 
 I created this framework with the expectation of getting the most out of using isolates when processing requests. I also tried to solve the problems that can be encountered when using isolates when building a server.
 
-Many components of the framework, such as intermediate request handlers, logging tools and other components, allow you to write your own, custom components for your needs.
+Many components of the framework, such as middlewares, logging tools and other components, allow you to write your own, custom components for your needs.
 
 Write me your opinion about this framework, report errors or inaccuracies, illogicalities. I really want to know your opinion.
 
