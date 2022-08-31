@@ -238,7 +238,7 @@ If everything is clear with server instances, these are isolates where the serve
 
 Running server instances in different isolates imposes some limitations and inconveniences. For example, you have a database connection, but if we run the server in several isolates, then each of the running server instances must have its own connection. This may not always be convenient, there may be different scenarios for using something like this. Or, for example, we should have some kind of common state between all `server instances`. That's why there are agents in `Minerva`.
 
-`agent` is a separate isolate that can store a certain state, receives messages with certain actions that it can perform.
+`Agent` is a separate isolate that can store a certain state, receives messages with certain actions that it can perform.
 
 All server instances can access and interact with one `agent`.
 
@@ -599,7 +599,7 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 
 You can create your own middlewares.
 
-Each middleware inherits from the `Middleware` class. When creating a derivative of the `Middleware` class, you need to implement the `handle` method in the derived class. In this method, an instance of the `Middleware Context` class is available to you, with its help you can access endpoints, the server context, as well as an incoming request. Each middleware must either process the request independently, returning some result, or delegate this responsibility to the next middleware.
+Each middleware inherits from the `Middleware` class. When creating a derivative of the `Middleware` class, you need to implement the `handle` method in the derived class. In this method, an instance of the `MiddlewareContext` class is available to you, with its help you can access endpoints, the server context, as well as an incoming request. Each middleware must either process the request independently, returning some result, or delegate this responsibility to the next middleware.
 
 Example of creating your own middleware:
 
@@ -618,7 +618,7 @@ class TestMiddleware extends Middleware {
 }
 ```
 
-The middleware created in the example will print the message `Hello, middleware world!`, and also check whether the next middleware exists in the pipeline. If it exists, it delegates the processing of the request to it, and if it is missing, it will return the error `404`.
+The middleware created in the example will print the message `'Hello, middleware world!'`, and also check whether the next middleware exists in the pipeline. If it exists, it delegates the processing of the request to it, and if it is missing, it will return the error `404`.
 
 # Static files
 
@@ -783,8 +783,8 @@ Thus, we have created 2 endpoints, and in whichever of the server instances the 
 
 Logging divided into the following levels `Minerva` is divided into the following levels:
 
-- `information`;
-- `debugging`;
+- `info`;
+- `debug`;
 - `warning`;
 - `error`;
 - `critical`.
@@ -838,7 +838,7 @@ class LoggersBuilder extends MinervaLoggersBuilder {
 }
 ```
 
-Agent Configuration:
+Agents Configuration:
 
 ```dart
 class AgentsBuilder extends MinervaAgentsBuilder {
@@ -975,7 +975,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 
 # Password hashing
 
-`Minerva` contains functionality for hashing passwords with a given salt. Under the hood, `Minerva` uses the package [crypt](https://pub.dev/package/crypt). I decided to include this functionality in the framework because before I discovered the current package and a convenient package for hashing passwords, I tried more than one package.
+`Minerva` contains functionality for hashing passwords with a given salt. Under the hood, `Minerva` uses the package [crypt](https://pub.dev/packages/crypt). I decided to include this functionality in the framework because before I discovered the current package and a convenient package for hashing passwords, I tried more than one package.
 
 Password hashing in `Minerva` is available using the `Password Security` class.
 
