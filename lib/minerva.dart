@@ -12,7 +12,9 @@ export 'src/server.dart'
         ServerContext,
         MinervaSetting,
         Agent,
-        AgentData;
+        AgentData,
+        AgentConnector,
+        AgentConnectors;
 
 export 'src/routing.dart'
     show
