@@ -5,7 +5,7 @@ abstract class Logger {
 
   final LoggingSetting _setting = LoggingSetting();
 
-  Logger(this.name);
+  Logger({required this.name});
 
   FutureOr<void> initialize(AgentConnectors connectors) {}
 

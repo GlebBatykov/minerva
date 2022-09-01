@@ -12,7 +12,7 @@ class ConsoleLogger extends Logger {
 
   ConsoleLogger({String template = '[&time] [&level] &message'})
       : _template = template,
-        super('console');
+        super(name: 'console');
 
   @override
   void info(dynamic object, {String? template}) {

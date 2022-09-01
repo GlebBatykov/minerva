@@ -19,7 +19,7 @@ class FileLogger extends Logger {
       String template = '[&time] [&level] &message'})
       : _template = template,
         _agentName = agentName,
-        super('file');
+        super(name: 'file');
 
   @override
   FutureOr<void> initialize(AgentConnectors connectors) {
