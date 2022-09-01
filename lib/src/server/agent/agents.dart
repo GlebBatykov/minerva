@@ -38,6 +38,8 @@ class Agents {
             message:
                 'an error occurred in the agent with name: ${data.name}.\n${error!.stackTrace}');
       }
+
+      _connectors.add(AgentConnector(data.name, supervisor.isolatePort!));
     }
   }
 
