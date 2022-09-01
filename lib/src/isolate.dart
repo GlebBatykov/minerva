@@ -10,3 +10,4 @@ part 'isolate/isolate_supervisor.dart';
 part 'isolate/isolate_handler.dart';
 part 'isolate/isolate_action.dart';
 part 'isolate/isolate_event.dart';
+part 'isolate/isolate_error.dart';

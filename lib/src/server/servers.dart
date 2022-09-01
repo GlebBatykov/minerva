@@ -22,10 +22,26 @@ class Servers {
         .addAll(List.generate(instance, (index) => IsolateSupervisor()));
 
     await Future.wait(List.generate(
-        _supervisors.length,
-        (index) => _supervisors[index].initialize().then((value) =>
-            _supervisors[index].start(ServerTaskHandler(
-                index, setting, endpoints, apis, logPipeline, connectors)))));
+        _supervisors.length, (index) => _supervisors[index].initialize()));
+
+    for (var i = 0; i < _supervisors.length; i++) {
+      IsolateError? error;
+
+      var subscription = _supervisors[i].errors.listen((event) {
+        error ??= event;
+      });
+
+      await _supervisors[i].start(ServerTaskHandler(
+          i, setting, endpoints, apis, logPipeline, connectors));
+
+      subscription.cancel();
+
+      if (error != null) {
+        throw MinervaBindException(
+            message:
+                'an error occurred in the server instance: $i.\n${error!.stackTrace}');
+      }
+    }
   }
 
   Future<void> pause() async {

@@ -12,24 +12,33 @@ class Agents {
   Agents(List<AgentData> agentsData) : _agentsData = agentsData;
 
   Future<void> initialize() async {
-    await Future.wait(_agentsData.map((e) async {
-      var supervisor = await _createAgent(e.agent, e.data);
+    for (var data in _agentsData) {
+      _supervisors[data.name] = IsolateSupervisor();
+    }
 
-      _supervisors[e.name] = supervisor;
+    await Future.wait(_supervisors.values.map((e) => e.initialize()));
 
-      _connectors.add(AgentConnector(e.name, supervisor.isolatePort!));
-    }));
-  }
+    for (var i = 0; i < _agentsData.length; i++) {
+      var data = _agentsData[i];
 
-  Future<IsolateSupervisor> _createAgent(
-      Agent agent, Map<String, dynamic>? data) async {
-    var supervisor = IsolateSupervisor();
+      IsolateError? error;
 
-    await supervisor.initialize();
+      var supervisor = _supervisors[data.name]!;
 
-    await supervisor.start(AgentTaskHandler(agent, data ?? {}));
+      var subscription = supervisor.errors.listen((event) {
+        error ??= event;
+      });
 
-    return supervisor;
+      await supervisor.start(AgentTaskHandler(data.agent, data.data ?? {}));
+
+      subscription.cancel();
+
+      if (error != null) {
+        throw MinervaBindException(
+            message:
+                'an error occurred in the agent with name: ${data.name}.\n${error!.stackTrace}');
+      }
+    }
   }
 
   Future<void> pause() async {

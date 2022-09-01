@@ -11,11 +11,15 @@ class AgentTaskHandler extends IsolateTaskHandler {
 
   @override
   Future<void> onStart(IsolateContext context) async {
-    await _agent.initialize(_data);
+    try {
+      await _agent.initialize(_data);
 
-    context.receive<AgentCall>(_handleAgentCall);
+      context.receive<AgentCall>(_handleAgentCall);
 
-    context.receive<AgentCast>(_handleAgentCast);
+      context.receive<AgentCast>(_handleAgentCast);
+    } catch (error, stackTrace) {
+      context.send(IsolateError(error, stackTrace));
+    }
   }
 
   void _handleAgentCall(AgentCall action) async {

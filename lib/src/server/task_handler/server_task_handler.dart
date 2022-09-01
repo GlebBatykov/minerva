@@ -26,8 +26,12 @@ class ServerTaskHandler extends IsolateTaskHandler {
 
   @override
   Future<void> onStart(IsolateContext context) async {
-    _server = await Server.bind(
-        _instance, _setting, _endpoints, _apis, _logPipeline, _connectors);
+    try {
+      _server = await Server.bind(
+          _instance, _setting, _endpoints, _apis, _logPipeline, _connectors);
+    } catch (error, stackTrace) {
+      context.send(IsolateError(error, stackTrace));
+    }
   }
 
   @override

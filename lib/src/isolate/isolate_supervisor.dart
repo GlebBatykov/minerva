@@ -3,6 +3,9 @@ part of minerva_isolate;
 class IsolateSupervisor {
   final StreamController _messageController = StreamController.broadcast();
 
+  final StreamController<IsolateError> _errorController =
+      StreamController.broadcast();
+
   final StreamController<IsolateEvent> _eventController =
       StreamController.broadcast();
 
@@ -34,6 +37,8 @@ class IsolateSupervisor {
 
   Stream get messages => _messageController.stream;
 
+  Stream<IsolateError> get errors => _errorController.stream;
+
   SendPort? get isolatePort => _isolatePort;
 
   IsolateSupervisor() {
@@ -45,6 +50,8 @@ class IsolateSupervisor {
   void _handleMessage(dynamic message) {
     if (message is IsolateEvent) {
       _eventController.sink.add(message);
+    } else if (message is IsolateError) {
+      _errorController.sink.add(message);
     } else {
       _messageController.sink.add(message);
     }
@@ -141,12 +148,23 @@ class IsolateSupervisor {
   }
 
   Future<void> dispose() async {
-    await kill();
+    if (!_isDisposed) {
+      if (_isInitialized) {
+        _isolatePort!.send(IsolateDispose());
 
-    await _eventController.close();
-    await _messageController.close();
+        await _eventController.stream
+            .firstWhere((element) => element is IsolateDisposed);
+      }
 
-    _isDisposed = true;
-    _isStarted = false;
+      await kill();
+
+      await _eventController.close();
+      await _messageController.close();
+
+      _receivePort.close();
+
+      _isDisposed = true;
+      _isStarted = false;
+    }
   }
 }
