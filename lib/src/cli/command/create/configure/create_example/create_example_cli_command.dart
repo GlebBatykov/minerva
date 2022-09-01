@@ -10,25 +10,25 @@ class CreateExampleCLICommand extends CLICommand<void> {
     var mainFile = File.fromUri(Uri.file('$projectPath/lib/main.dart'));
 
     var endpointBuilderFile = File.fromUri(
-        Uri.file('$projectPath/lib/builder/endpoints_builder.dart'));
+        Uri.file('$projectPath/lib/builders/endpoints_builder.dart'));
 
     var serverBuilderFile =
-        File.fromUri(Uri.file('$projectPath/lib/builder/server_builder.dart'));
+        File.fromUri(Uri.file('$projectPath/lib/builders/server_builder.dart'));
 
     var apisBuilderFile =
-        File.fromUri(Uri.file('$projectPath/lib/builder/apis_builder.dart'));
+        File.fromUri(Uri.file('$projectPath/lib/builders/apis_builder.dart'));
 
-    var loggersBuilderFile =
-        File.fromUri(Uri.file('$projectPath/lib/builder/loggers_builder.dart'));
+    var loggersBuilderFile = File.fromUri(
+        Uri.file('$projectPath/lib/builders/loggers_builder.dart'));
 
-    var settingBuilderFile =
-        File.fromUri(Uri.file('$projectPath/lib/builder/setting_builder.dart'));
+    var settingBuilderFile = File.fromUri(
+        Uri.file('$projectPath/lib/builders/setting_builder.dart'));
 
     var middlewaresBuilderFile = File.fromUri(
-        Uri.file('$projectPath/lib/builder/middlewares_builder.dart'));
+        Uri.file('$projectPath/lib/builders/middlewares_builder.dart'));
 
     var agentsBuilderFile =
-        File.fromUri(Uri.file('$projectPath/lib/builder/agents_builder.dart'));
+        File.fromUri(Uri.file('$projectPath/lib/builders/agents_builder.dart'));
 
     await Future.wait([
       mainFile.create(recursive: true),
@@ -72,7 +72,7 @@ class ServerBuilder extends MinervaServerBuilder {
     var mainContent = '''
 import 'package:minerva/minerva.dart';
 
-import 'builder/setting_builder.dart';
+import 'builders/setting_builder.dart';
 
 void main(List<String> args) async {
   // Bind server

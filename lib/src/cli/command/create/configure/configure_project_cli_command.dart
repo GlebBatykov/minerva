@@ -14,8 +14,6 @@ class ConfigureProjectCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    await Directory.fromUri(Uri.directory('$projectPath/build')).create();
-
     var futures = <Future>[];
 
     futures.add(ConfigureAppSettingCLICommand(
