@@ -911,7 +911,7 @@ Example of creating a custom logger named `'custom'`:
 
 ```dart
 class CustomLogger extends Logger {
-  CustomLogger() : super('custom');
+  CustomLogger() : super(name: 'custom');
 
   @override
   void critical(object) {
