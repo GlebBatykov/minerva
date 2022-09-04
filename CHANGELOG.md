@@ -1,4 +1,10 @@
-# 0.1.8
+# 0.1.9
+
+- Update README files.
+- Update CLI tools.
+- Update error handling in server initialization.
+
+## 0.1.8
 
 - Update README files.
 
@@ -19,7 +25,7 @@
 
 ## 0.1.4
 
-- Update cli tools.
+- Update CLI tools.
 
 ## 0.1.3
 
