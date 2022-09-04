@@ -31,6 +31,8 @@ class ProjectClearCLICommand extends CLICommand<void> {
 
     futures.add(File.fromUri(Uri.file('$projectPath/CHANGELOG.md')).delete());
 
+    futures.add(File.fromUri(Uri.file('$projectPath/README.md')).delete());
+
     await Future.wait(futures);
   }
 }

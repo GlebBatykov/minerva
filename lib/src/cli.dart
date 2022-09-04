@@ -33,6 +33,7 @@ part 'cli/command/create/configure/configure_project_cli_command.dart';
 part 'cli/command/create/configure/configure_app_setting_cli_command.dart';
 part 'cli/command/create/configure/configure_git_ignore_cli_command.dart';
 part 'cli/command/create/configure/configure_pubspec_cli_command.dart';
+part 'cli/command/create/configure/configure_readme_cli_command.dart';
 part 'cli/command/create/configure/create_example/create_example_cli_command.dart';
 part 'cli/command/create/configure/create_example/create_example_test_cli_command.dart';
 

@@ -43,14 +43,28 @@ class CreateCommand extends Command {
 
     var dockerCompileType = argResults!['docker-compile-type'];
 
+    print('Creating Minerva project with name $projectName...');
+
+    stdout.writeln();
+
     var pipeline = CLIPipeline([
       ProjectClearCLICommand(projectPath),
       ConfigureProjectCLICommand(
           projectName, projectPath, debugCompileType, releaseCompileType),
       CreateDockerIgnoreCLICommand(projectPath),
-      CreateDockerFileCLICommand(projectPath, dockerCompileType)
+      CreateDockerFileCLICommand(projectPath, dockerCompileType),
+      GetDependenciesCLICommand(projectPath)
     ]);
 
     await pipeline.run();
+
+    stdout.writeln();
+
+    print('''
+Created project $projectName in $projectName! In order to get started, run the following commands:
+
+  cd $projectName
+  minerva run
+''');
   }
 }

@@ -22,6 +22,8 @@ class ConfigureProjectCLICommand extends CLICommand<void> {
 
     futures.add(ConfigurePubspecCLICommand(projectName, projectPath).run());
 
+    futures.add(ConfigureReadmeCLICommand(projectName, projectPath).run());
+
     futures.add(CreateExampleCLICommand(projectPath).run());
 
     futures.add(CreateExampleTestCLICommand(projectPath).run());

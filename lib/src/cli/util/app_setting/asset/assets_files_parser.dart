@@ -27,7 +27,7 @@ class AssetsFilesParser {
 
   Future<void> _parceAsset(String asset) async {
     if (asset[0] == '/') {
-      var directoryPath = '$_projectPath${asset.substring(1)}';
+      var directoryPath = '$_projectPath$asset';
 
       var directory = Directory.fromUri(
           Uri.directory(directoryPath, windows: Platform.isWindows));

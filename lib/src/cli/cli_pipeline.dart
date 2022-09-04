@@ -7,7 +7,12 @@ class CLIPipeline {
 
   Future<void> run() async {
     for (var command in _commands) {
-      await command.run();
+      try {
+        await command.run();
+      } catch (e, s) {
+        print(e);
+        print(s);
+      }
     }
   }
 }
