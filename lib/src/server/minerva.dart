@@ -61,11 +61,11 @@ class Minerva {
       MinervaApisBuilder? apisBuilder,
       MinervaEndpointsBuilder? endpointsBuilder,
       List<AgentData> agentsData) async {
-    var loggers = await loggersBuilder.build();
-
     _agents = Agents(agentsData);
 
     await _agents.initialize();
+
+    var loggers = await loggersBuilder.build();
 
     var connectors = AgentConnectors(_agents.connectors);
 

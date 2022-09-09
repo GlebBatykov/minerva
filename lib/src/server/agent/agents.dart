@@ -12,6 +12,10 @@ class Agents {
   Agents(List<AgentData> agentsData) : _agentsData = agentsData;
 
   Future<void> initialize() async {
+    if (_agentsData.map((e) => e.name).toSet().length != _agentsData.length) {
+      throw MinervaBindException(message: 'all agent names must be unique.');
+    }
+
     for (var data in _agentsData) {
       _supervisors[data.name] = IsolateSupervisor();
     }
