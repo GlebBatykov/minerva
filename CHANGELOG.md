@@ -1,7 +1,13 @@
-# 0.1.9
+# 0.2.0
 
-- Update README files.
-- Update CLI tools.
+- Update README files;
+- Update websockets handling;
+- Update error handling in server initialization.
+
+## 0.1.9
+
+- Update README files;
+- Update CLI tools;
 - Update error handling in server initialization.
 
 ## 0.1.8
@@ -29,7 +35,7 @@
 
 ## 0.1.3
 
-- Update README files.
+- Update README files;
 - Update Dockerfile generation.
 
 ## 0.1.2
