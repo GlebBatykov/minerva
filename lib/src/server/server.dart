@@ -5,7 +5,7 @@ class Server {
 
   final int _port;
 
-  final SecurityContext? _securityContext;
+  final ServerConfiguration _configuration;
 
   final MinervaServerBuilder? _builder;
 
@@ -25,14 +25,14 @@ class Server {
       dynamic address,
       int port,
       MinervaServerBuilder? builder,
-      SecurityContext? securityContext,
+      ServerConfiguration configuration,
       Endpoints endpoints,
       Apis apis,
       List<Middleware> middlewares)
       : _address = address,
         _port = port,
         _builder = builder,
-        _securityContext = securityContext,
+        _configuration = configuration,
         _endpoints = endpoints,
         _apis = apis,
         _pipeline = MiddlewarePipeline(middlewares);
@@ -47,7 +47,7 @@ class Server {
     var address = setting.address;
 
     var server = Server._(address.host, address.port, setting.builder,
-        setting.securityContext, endpoints, apis, setting.middlewares);
+        setting.configuration, endpoints, apis, setting.middlewares);
 
     await server._initialize(instance, logPipeline, connectors);
 
@@ -58,12 +58,7 @@ class Server {
       int instance, LogPipeline logPipeline, AgentConnectors connectors) async {
     await AppSetting.instance.initialize();
 
-    if (_securityContext == null) {
-      _server = await HttpServer.bind(_address, _port, shared: true);
-    } else {
-      _server = await HttpServer.bindSecure(_address, _port, _securityContext!,
-          shared: true);
-    }
+    await _bindServer();
 
     await logPipeline.initialize(connectors);
 
@@ -78,6 +73,30 @@ class Server {
     _handler = ServerRequestHandler(_endpoints, _context, _pipeline);
 
     _server.listen(_handler.handleHttpRequest);
+  }
+
+  Future<void> _bindServer() async {
+    if (_configuration is SecureServerConfiguration) {
+      var configuration = _configuration as SecureServerConfiguration;
+
+      _server = await HttpServer.bindSecure(
+          _address, _port, configuration.securityContext,
+          shared: true,
+          backlog: configuration.backlog,
+          v6Only: configuration.v6Only,
+          requestClientCertificate: configuration.requestClientCertificate);
+    } else {
+      _server = await HttpServer.bind(_address, _port,
+          shared: true,
+          backlog: _configuration.backlog,
+          v6Only: _configuration.v6Only);
+    }
+
+    var sessionTimeout = _configuration.sessionTimeout;
+
+    if (sessionTimeout != null) {
+      _server.sessionTimeout = sessionTimeout;
+    }
   }
 
   Future<void> dispose() async {

@@ -3,7 +3,7 @@ part of minerva_server;
 class MinervaSetting {
   final int instance;
 
-  final SecurityContext? securityContext;
+  final ServerConfiguration? configuration;
 
   final MinervaMiddlewaresBuilder middlewaresBuilder;
 
@@ -19,7 +19,7 @@ class MinervaSetting {
 
   MinervaSetting(
       {this.instance = 1,
-      this.securityContext,
+      this.configuration,
       required this.middlewaresBuilder,
       this.endpointsBuilder,
       this.apisBuilder,

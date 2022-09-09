@@ -22,7 +22,10 @@ class Minerva {
     var middlwares = await setting.middlewaresBuilder.build();
 
     var serverSetting = ServerSetting(
-        address, setting.securityContext, middlwares, setting.serverBuilder);
+        address,
+        setting.configuration ?? ServerConfiguration(),
+        middlwares,
+        setting.serverBuilder);
 
     var agentsData = await setting.agentsBuilder?.build();
 
