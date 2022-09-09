@@ -994,7 +994,7 @@ Salt generation is available using the `GenerateSalt` method of the `PasswordSec
 # Road map
 
 - ✅ Finish error handling;
-- 🔜 Make documentation;
+- 🚧 Make documentation;
 - 🚧 Make more examples;
 - 🔜 Cover with tests;
 - 🔜 Update README files;
