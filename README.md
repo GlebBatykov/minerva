@@ -441,8 +441,6 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 
 In `Minerva` you can create endpoints for processing websocket connections.
 
-Requests involving web socket connections are not processed in the request processing pipeline, but are immediately compared with endpoints.
-
 Example of creating an endpoint for processing a web socket connection:
 
 ```dart
