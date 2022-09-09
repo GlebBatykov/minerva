@@ -14,18 +14,10 @@ class ServerRequestHandler {
         _pipeline = pipeline;
 
   Future<void> handleHttpRequest(HttpRequest request) async {
-    if (!WebSocketTransformer.isUpgradeRequest(request)) {
-      await _handleRequest(request);
-    } else {
-      await _handleWebSocket(request);
-    }
-  }
-
-  Future<void> _handleRequest(HttpRequest request) async {
     var minervaRequest = MinervaRequest(request);
 
-    var context =
-        MiddlewareContext(minervaRequest, _endpoints.httpEndpoints, _context);
+    var context = MiddlewareContext(minervaRequest, _endpoints.httpEndpoints,
+        _endpoints.webSocketEndpoints, _context);
 
     var result = await _pipeline.handle(context);
 
@@ -37,6 +29,10 @@ class ServerRequestHandler {
       minervaResponse = await JsonResult(result).response;
     } else {
       minervaResponse = await OkResult(body: result).response;
+    }
+
+    if (minervaRequest.isUpgraded) {
+      return;
     }
 
     var response = request.response;
@@ -90,24 +86,6 @@ class ServerRequestHandler {
       } else {
         response.write(body);
       }
-    }
-  }
-
-  Future<void> _handleWebSocket(HttpRequest request) async {
-    var endpoints = _endpoints.webSocketEndpoints
-        .where((element) => element.path == request.uri.path)
-        .toList();
-
-    if (endpoints.isNotEmpty) {
-      var socket = await WebSocketTransformer.upgrade(request);
-
-      await endpoints.first.handler(_context, socket);
-    } else {
-      var response = request.response;
-
-      response.statusCode = 404;
-
-      await response.close();
     }
   }
 }

@@ -12,12 +12,25 @@ class EndpointMiddleware extends Middleware {
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
     var request = context.request;
 
-    var endpoints = context.endpoints
+    var serverContext = context.context;
+
+    if (request.isUpgradeRequest) {
+      return await _handleWebSocket(
+          serverContext, request, context.webSocketEndponts);
+    } else {
+      return await _handleHttpRequest(
+          serverContext, request, context.httpEndpoints);
+    }
+  }
+
+  Future<dynamic> _handleHttpRequest(ServerContext context,
+      MinervaRequest request, List<Endpoint> endpoints) async {
+    var selectedEndpoints = endpoints
         .where((element) => element.method.value == request.method)
         .toList();
 
-    if (endpoints.isNotEmpty) {
-      var endpoint = await _getEndpoint(endpoints, request);
+    if (selectedEndpoints.isNotEmpty) {
+      var endpoint = await _getEndpoint(selectedEndpoints, request);
 
       if (endpoint != null) {
         var authOptions = endpoint.authOptions;
@@ -26,7 +39,7 @@ class EndpointMiddleware extends Middleware {
           return UnauthorizedResult();
         } else {
           try {
-            var result = await endpoint.handler(context.context, request);
+            var result = await endpoint.handler(context, request);
 
             return result;
           } catch (object, stackTrace) {
@@ -34,8 +47,7 @@ class EndpointMiddleware extends Middleware {
               throw EndpointHandleException(object, stackTrace, request);
             } else {
               try {
-                return endpoint.errorHandler!
-                    .call(context.context, request, object);
+                return endpoint.errorHandler!.call(context, request, object);
               } catch (object, stackTrace) {
                 throw EndpointHandleException(object, stackTrace, request);
               }
@@ -89,6 +101,20 @@ class EndpointMiddleware extends Middleware {
       return null;
     } else {
       return matchedEndpoints.first;
+    }
+  }
+
+  Future<dynamic> _handleWebSocket(ServerContext context,
+      MinervaRequest request, List<WebSocketEndpoint> endpoints) async {
+    var selectedEndpoints =
+        endpoints.where((element) => element.path == request.uri.path).toList();
+
+    if (selectedEndpoints.isNotEmpty) {
+      var socket = await request.upgrade();
+
+      await selectedEndpoints.first.handler(context, socket);
+    } else {
+      return NotFoundResult();
     }
   }
 }

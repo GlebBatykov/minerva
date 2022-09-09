@@ -9,6 +9,8 @@ class MinervaRequest {
 
   final RequestBody _body;
 
+  bool _isUpgraded = false;
+
   AuthContext get authContext => _authContext;
 
   HttpSession get session => _request.session;
@@ -39,9 +41,25 @@ class MinervaRequest {
 
   Map<String, num> get pathParameters => Map.unmodifiable(_pathParameters);
 
+  bool get isUpgradeRequest => WebSocketTransformer.isUpgradeRequest(_request);
+
+  bool get isUpgraded => _isUpgraded;
+
   MinervaRequest(HttpRequest request)
       : _request = request,
         _body = RequestBody(request.asBroadcastStream(), request.headers);
+
+  Future<WebSocket> upgrade(
+      {dynamic Function(List<String>)? protocolSelector,
+      CompressionOptions compression =
+          CompressionOptions.compressionDefault}) async {
+    var socket = await WebSocketTransformer.upgrade(_request,
+        protocolSelector: protocolSelector, compression: compression);
+
+    _isUpgraded = true;
+
+    return socket;
+  }
 
   void addPathParameter(String key, num value) {
     _pathParameters[key] = value;
