@@ -993,9 +993,9 @@ Salt generation is available using the `GenerateSalt` method of the `PasswordSec
 
 # Road map
 
-- 🚧 Finish error handling. These are errors in case of incorrect server configuration, as well as server shutdown in case of errors during component initialization;
+- ✅ Finish error handling;
 - 🔜 Make documentation;
-- 🔜 Make more examples;
+- 🚧 Make more examples;
 - 🔜 Cover with tests;
 - 🔜 Update README files;
 - 🔜 Creating video tutorials;
