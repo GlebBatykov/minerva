@@ -1,11 +1,13 @@
 part of minerva_middleware;
 
-///
+/// It is used to handle errors that occur when processing requests in the request processing pipeline.
 class ErrorMiddleware extends Middleware {
+  /// Handler for error handling.
   ///
+  /// If it is not set, the default handler is used.
   final EndpointErrorHandler? handler;
 
-  ///
+  /// Determines whether stack trace is displayed in the response, in case of an unhandled error when processing the request.
   final bool trace;
 
   late final LogPipeline _logPipeline;

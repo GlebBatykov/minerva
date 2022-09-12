@@ -1,24 +1,25 @@
 part of minerva_middleware;
 
+///
 class StaticFilesMiddleware extends Middleware {
-  final String _directory;
+  ///
+  final String directory;
 
-  final String _path;
+  ///
+  final String path;
 
-  final String? _root;
+  ///
+  final String? root;
 
   late final String _directoryPath;
 
   StaticFilesMiddleware(
-      {required String directory, required String path, String? root})
-      : _directory = directory,
-        _path = path,
-        _root = root {
+      {required this.directory, required this.path, this.root}) {
     _initialize();
   }
 
   void _initialize() {
-    _directoryPath = '/${HostEnvironment.contentRootPath}$_directory';
+    _directoryPath = '/${HostEnvironment.contentRootPath}$directory';
   }
 
   @override
@@ -28,14 +29,14 @@ class StaticFilesMiddleware extends Middleware {
 
     var requestPath = request.uri.path;
 
-    if (requestPath.startsWith(_path)) {
-      var filePath = requestPath.substring(_path.length, requestPath.length);
+    if (requestPath.startsWith(path)) {
+      var filePath = requestPath.substring(path.length, requestPath.length);
 
       if (filePath != '/' && filePath.isNotEmpty) {
         return _handleFile(filePath);
       } else {
-        if (_root != null) {
-          return _handleFile(_root!);
+        if (root != null) {
+          return _handleFile(root!);
         } else {
           return NotFoundResult();
         }

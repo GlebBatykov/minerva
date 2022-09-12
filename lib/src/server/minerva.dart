@@ -1,5 +1,6 @@
 part of minerva_server;
 
+/// The class that is used to binds, pauses, resumes the server.
 class Minerva {
   final Servers _servers = Servers();
 
@@ -9,6 +10,7 @@ class Minerva {
 
   Minerva._();
 
+  /// Binds server with current [setting].
   static Future<Minerva> bind(
       {required List<String> args, required MinervaSetting setting}) async {
     if (!AppSetting.instance.isInitialized) {
@@ -86,18 +88,21 @@ class Minerva {
     _logPipeline.info('Server starting in http://$host:$port.');
   }
 
+  /// Pauses server.
   Future<void> pause() async {
     await _agents.pause();
 
     await _servers.pause();
   }
 
+  /// Resumes server.
   Future<void> resume() async {
     await _agents.resume();
 
     await _servers.resume();
   }
 
+  /// Disposes server.
   Future<void> dispose() async {
     await _servers.dispose();
 
