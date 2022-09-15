@@ -1,4 +1,9 @@
-# 0.2.0
+# 0.2.1
+
+- Fixs static file middleware for working with Windows paths;
+- Update README files.
+
+## 0.2.0
 
 - Update README files;
 - Update websockets handling;
