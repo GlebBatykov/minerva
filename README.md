@@ -4,7 +4,7 @@
 
 &nbsp;
 
-Server side framework for build multithreading REST API
+Backend framework for build multithreading REST API
 
 </div>
 

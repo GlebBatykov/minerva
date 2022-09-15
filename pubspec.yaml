@@ -1,5 +1,5 @@
 name: minerva
-description: Server side framework for Dart. Allows you to create multithreaded REST API.
+description: Backend framework for Dart. Allows you to create multithreaded REST API.
 version: 0.2.0
 homepage: https://github.com/GlebBatykov/minerva
 
