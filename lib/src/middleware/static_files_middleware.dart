@@ -19,7 +19,7 @@ class StaticFilesMiddleware extends Middleware {
   }
 
   void _initialize() {
-    _directoryPath = '/${HostEnvironment.contentRootPath}$directory';
+    _directoryPath = '${HostEnvironment.contentRootPath}$directory';
   }
 
   @override
@@ -55,7 +55,7 @@ class StaticFilesMiddleware extends Middleware {
       filePath = '/$filePath';
     }
 
-    var file = File.fromUri(Uri.file('$_directoryPath$filePath'));
+    var file = File.fromUri(Uri.parse('$_directoryPath$filePath'));
 
     if (await file.exists()) {
       var bytes = await file.readAsBytes();
