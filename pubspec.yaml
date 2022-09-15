@@ -1,5 +1,5 @@
 name: minerva
-description: Backend framework for Dart. Allows you to create multithreaded REST API.
+description: Dart backend framework. Supports multithreading, websockets. It contains a project build system, a request processing pipeline, authentication aids, and logging tools.
 version: 0.2.0
 homepage: https://github.com/GlebBatykov/minerva
 

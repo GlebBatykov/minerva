@@ -4,7 +4,7 @@
 
 &nbsp;
 
-Backend framework for build multithreading REST API
+Dart backend framework
 
 </div>
 
