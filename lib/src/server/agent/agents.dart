@@ -40,7 +40,7 @@ class Agents {
       if (error != null) {
         throw MinervaBindException(
             message:
-                'an error occurred in the agent with name: ${data.name}.\n${error!.stackTrace}');
+                'an error occurred in the agent with name: ${data.name}.\n\nAgent error:\n\n${error!.error}\n\nAgent stack trace:\n\n${error!.stackTrace}');
       }
 
       _connectors.add(AgentConnector(data.name, supervisor.isolatePort!));

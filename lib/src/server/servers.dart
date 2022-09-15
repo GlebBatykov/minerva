@@ -39,7 +39,7 @@ class Servers {
       if (error != null) {
         throw MinervaBindException(
             message:
-                'an error occurred in the server instance: $i.\n${error!.stackTrace}');
+                'an error occurred in the server instance: $i.\n\nInstance error:\n\n${error!.error}\n\nInstance stack trace:\n\n${error!.stackTrace}');
       }
     }
   }
