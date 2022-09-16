@@ -57,6 +57,8 @@ class BodyMatcher {
         return value is Map;
       case JsonFieldType.list:
         return value is List;
+      case JsonFieldType.num:
+        return value is num;
     }
   }
 

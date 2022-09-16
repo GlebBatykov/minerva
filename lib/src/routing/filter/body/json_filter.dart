@@ -1,6 +1,6 @@
 part of minerva_routing;
 
-enum JsonFieldType { int, double, string, bool, map, list }
+enum JsonFieldType { int, double, string, bool, map, list, num }
 
 class JsonField {
   final String name;
