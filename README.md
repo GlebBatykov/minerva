@@ -691,7 +691,7 @@ In the `Dart` ecosystem, there are good packages for implementing dependencies t
 
 In `Minerva`, multithreading of query execution is achieved by deploying a server instance in separate isolates.
 
-Agents are used to organize access to shared data from different server instances. These are entities executed in separate isolates, can have their own state, accept requests. It should be borne in mind that agents are deployed in separate isolators and when accessing them, we get performance losses on the forwarding of messages between isolates. Agents should be used only when the specifics of the logic we implement require a certain common state between different server instances.
+Agents are used to organize access to shared data from different server instances. These are entities executed in separate isolates, can have their own state, accept requests. It should be borne in mind that agents are deployed in separate isolates and when accessing them, we get performance losses on the forwarding of messages between isolates. Agents should be used only when the specifics of the logic we implement require a certain common state between different server instances.
 
 Each agent has its own unique name configured at server startup, by which you can later get a connector to this agent.
 
