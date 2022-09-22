@@ -1,6 +1,7 @@
 # 0.2.1
 
-- Fixs static file middleware for working with Windows paths;
+- Fix static file middleware for working with Windows paths;
+- Update request json filter;
 - Update README files.
 
 ## 0.2.0
