@@ -13,7 +13,7 @@ class Endpoints {
   void get(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.get, path, handler, errorHandler, authOptions, filter));
   }
@@ -21,7 +21,7 @@ class Endpoints {
   void post(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.post, path, handler, errorHandler, authOptions, filter));
   }
@@ -29,7 +29,7 @@ class Endpoints {
   void put(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.put, path, handler, errorHandler, authOptions, filter));
   }
@@ -37,7 +37,7 @@ class Endpoints {
   void head(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.head, path, handler, errorHandler, authOptions, filter));
   }
@@ -45,7 +45,7 @@ class Endpoints {
   void delete(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.delete, path, handler, errorHandler, authOptions, filter));
   }
@@ -53,7 +53,7 @@ class Endpoints {
   void patch(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.patch, path, handler, errorHandler, authOptions, filter));
   }
@@ -61,7 +61,7 @@ class Endpoints {
   void options(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.options, path, handler, errorHandler, authOptions, filter));
   }
@@ -69,7 +69,7 @@ class Endpoints {
   void trace(String path, EndpointHandler handler,
       {EndpointErrorHandler? errorHandler,
       AuthOptions? authOptions,
-      Filter? filter}) {
+      RequestFilter? filter}) {
     _httpEndpoints.add(Endpoint(
         HttpMethod.trace, path, handler, errorHandler, authOptions, filter));
   }

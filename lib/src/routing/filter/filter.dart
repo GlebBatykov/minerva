@@ -1,11 +1,11 @@
 part of minerva_routing;
 
-class Filter {
+class RequestFilter {
   final ContentTypeFilter? contentType;
 
   final QueryParametersFilter? queryParameters;
 
   final BodyFilter? body;
 
-  const Filter({this.contentType, this.queryParameters, this.body});
+  const RequestFilter({this.contentType, this.queryParameters, this.body});
 }

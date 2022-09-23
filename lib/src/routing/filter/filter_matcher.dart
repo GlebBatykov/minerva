@@ -6,7 +6,7 @@ class FilterMatcher {
 
   final BodyMatcher _bodyMatcher = BodyMatcher();
 
-  Future<bool> match(MinervaRequest request, Filter filter) async {
+  Future<bool> match(MinervaRequest request, RequestFilter filter) async {
     if (filter.contentType != null &&
         (request.headers.contentType == null ||
             !filter.contentType!.accepts
