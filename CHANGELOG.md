@@ -1,7 +1,8 @@
 # 0.2.1
 
 - Fix static file middleware for working with Windows paths;
-- Update request json filter;
+- Rename Filter to RequestFilter. This is done so that there are no name collisions with some popular packages;
+- Add JsonFieldType.num to JsonFilter;
 - Update README files.
 
 ## 0.2.0
