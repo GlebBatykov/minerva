@@ -429,7 +429,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 
       return 'User with id: $id.';
     },
-        filter: Filter(
+        filter: RequestFilter(
             queryParameters: QueryParametersFilter(parameters: [
           QueryParameter(name: 'id', type: QueryParameterType.int)
         ])));
