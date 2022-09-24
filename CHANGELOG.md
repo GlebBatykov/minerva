@@ -1,4 +1,9 @@
-# 0.2.1
+# 0.2.2
+
+- Add RequestFilter class to export library file;
+- Update cli tools.
+
+## 0.2.1
 
 - Fix static file middleware for working with Windows paths;
 - Rename Filter to RequestFilter. This is done so that there are no name collisions with some popular packages;
