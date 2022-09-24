@@ -21,7 +21,7 @@ export 'src/routing.dart'
         Endpoints,
         Endpoint,
         Api,
-        Filter,
+        RequestFilter,
         ContentTypeFilter,
         QueryParametersFilter,
         QueryParameter,
