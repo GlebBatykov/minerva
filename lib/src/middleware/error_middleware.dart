@@ -22,28 +22,28 @@ class ErrorMiddleware extends Middleware {
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
-    if (next != null) {
-      try {
-        return await next.handle(context);
-      } catch (object) {
-        if (handler == null) {
-          _logPipeline.error(object);
+    if (next == null) {
+      return NotFoundResult();
+    }
 
-          return _buildErrorResult(object);
-        } else {
-          try {
-            return handler!.call(context.context, context.request, object);
-          } catch (object, stackTrace) {
-            var exception = RequestHandleException(object, stackTrace);
+    try {
+      return await next.handle(context);
+    } catch (object) {
+      if (handler == null) {
+        _logPipeline.error(object);
 
-            _logPipeline.error(exception);
+        return _buildErrorResult(object);
+      } else {
+        try {
+          return handler!.call(context.context, context.request, object);
+        } catch (object, stackTrace) {
+          var exception = RequestHandleException(object, stackTrace);
 
-            return _buildErrorResult(exception);
-          }
+          _logPipeline.error(exception);
+
+          return _buildErrorResult(exception);
         }
       }
-    } else {
-      return NotFoundResult();
     }
   }
 

@@ -24,47 +24,47 @@ class EndpointMiddleware extends Middleware {
   }
 
   Future<dynamic> _handleHttpRequest(ServerContext context,
-      MinervaRequest request, List<Endpoint> endpoints) async {
+      MinervaRequest request, List<EndpointData> endpoints) async {
     var selectedEndpoints = endpoints
         .where((element) => element.method.value == request.method)
         .toList();
 
-    if (selectedEndpoints.isNotEmpty) {
-      var endpoint = await _getEndpoint(selectedEndpoints, request);
-
-      if (endpoint != null) {
-        var authOptions = endpoint.authOptions;
-
-        if (!_accessValidator.isHaveAccess(request, authOptions)) {
-          return UnauthorizedResult();
-        } else {
-          try {
-            var result = await endpoint.handler(context, request);
-
-            return result;
-          } catch (object, stackTrace) {
-            if (endpoint.errorHandler == null) {
-              throw EndpointHandleException(object, stackTrace, request);
-            } else {
-              try {
-                return endpoint.errorHandler!.call(context, request, object);
-              } catch (object, stackTrace) {
-                throw EndpointHandleException(object, stackTrace, request);
-              }
-            }
-          }
-        }
-      } else {
-        return NotFoundResult();
-      }
-    } else {
+    if (selectedEndpoints.isEmpty) {
       return NotFoundResult();
+    }
+
+    var endpoint = await _getEndpoint(selectedEndpoints, request);
+
+    if (endpoint == null) {
+      return NotFoundResult();
+    }
+
+    var authOptions = endpoint.authOptions;
+
+    if (!_accessValidator.isHaveAccess(request, authOptions)) {
+      return UnauthorizedResult();
+    }
+
+    try {
+      var result = await endpoint.handler(context, request);
+
+      return result;
+    } catch (object, stackTrace) {
+      if (endpoint.errorHandler == null) {
+        throw EndpointHandleException(object, stackTrace, request);
+      } else {
+        try {
+          return endpoint.errorHandler!.call(context, request, object);
+        } catch (object, stackTrace) {
+          throw EndpointHandleException(object, stackTrace, request);
+        }
+      }
     }
   }
 
-  Future<Endpoint?> _getEndpoint(
-      List<Endpoint> endpoints, MinervaRequest request) async {
-    var matchedEndpoints = <Endpoint>[];
+  Future<EndpointData?> _getEndpoint(
+      List<EndpointData> endpoints, MinervaRequest request) async {
+    var matchedEndpoints = <EndpointData>[];
 
     for (var i = 0; i < endpoints.length; i++) {
       var endpoint = endpoints[i];
@@ -105,7 +105,7 @@ class EndpointMiddleware extends Middleware {
   }
 
   Future<dynamic> _handleWebSocket(ServerContext context,
-      MinervaRequest request, List<WebSocketEndpoint> endpoints) async {
+      MinervaRequest request, List<WebSocketEndpointData> endpoints) async {
     var selectedEndpoints =
         endpoints.where((element) => element.path == request.uri.path).toList();
 
