@@ -24,7 +24,7 @@ class EndpointMiddleware extends Middleware {
   }
 
   Future<dynamic> _handleHttpRequest(ServerContext context,
-      MinervaRequest request, List<EndpointData> endpoints) async {
+      MinervaRequest request, List<Endpoint> endpoints) async {
     var selectedEndpoints = endpoints
         .where((element) => element.method.value == request.method)
         .toList();
@@ -62,9 +62,9 @@ class EndpointMiddleware extends Middleware {
     }
   }
 
-  Future<EndpointData?> _getEndpoint(
-      List<EndpointData> endpoints, MinervaRequest request) async {
-    var matchedEndpoints = <EndpointData>[];
+  Future<Endpoint?> _getEndpoint(
+      List<Endpoint> endpoints, MinervaRequest request) async {
+    var matchedEndpoints = <Endpoint>[];
 
     for (var i = 0; i < endpoints.length; i++) {
       var endpoint = endpoints[i];
@@ -105,7 +105,7 @@ class EndpointMiddleware extends Middleware {
   }
 
   Future<dynamic> _handleWebSocket(ServerContext context,
-      MinervaRequest request, List<WebSocketEndpointData> endpoints) async {
+      MinervaRequest request, List<WebSocketEndpoint> endpoints) async {
     var selectedEndpoints =
         endpoints.where((element) => element.path == request.uri.path).toList();
 
