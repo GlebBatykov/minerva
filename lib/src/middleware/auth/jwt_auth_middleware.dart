@@ -40,7 +40,7 @@ class JwtAuthMiddleware extends Middleware {
 
           context.request.authContext.jwt = jwtContext;
         } else {
-          UnauthorizedResult();
+          return UnauthorizedResult();
         }
       }
     }
