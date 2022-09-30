@@ -1,7 +1,11 @@
-# 0.2.2
+# 0.2.3
+
+- Fix JwtAuthMiddleware.
+
+## 0.2.2
 
 - Add RequestFilter class to export library file;
-- Update cli tools.
+- Update CLI tools.
 
 ## 0.2.1
 
