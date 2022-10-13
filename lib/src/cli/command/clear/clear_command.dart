@@ -37,7 +37,7 @@ class ClearCommand extends Command {
     var testAppSettingFile = File.fromUri(Uri.file(testAppSettingFilePath));
 
     if (await testAppSettingFile.exists()) {
-      await testAppSettingFile.delete();
+      await testAppSettingFile.delete(recursive: true);
     }
 
     print('The build cleanup is complete...');
