@@ -5,6 +5,14 @@ class FormData {
 
   Map<String, FormDataValue> get data => Map.unmodifiable(_data);
 
+  Iterable<MapEntry<String, FormDataString>> get fields => data.entries
+      .where((element) => element.value is FormDataString)
+      .cast<MapEntry<String, FormDataString>>();
+
+  Iterable<MapEntry<String, FormDataFile>> get files => data.entries
+      .where((element) => element.value is FormDataFile)
+      .cast<MapEntry<String, FormDataFile>>();
+
   FormData._(Map<String, FormDataValue> data) : _data = data;
 
   static Future<FormData> parse(
