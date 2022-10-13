@@ -12,10 +12,13 @@ class Minerva {
 
   /// Binds server with current [setting].
   static Future<Minerva> bind(
-      {required List<String> args, required MinervaSetting setting}) async {
+      {required List<String> args,
+      required MinervaSettingBuilder settingBuilder}) async {
     if (!AppSetting.instance.isInitialized) {
       await AppSetting.instance.initialize();
     }
+
+    var setting = await settingBuilder.build();
 
     var minerva = Minerva._();
 
