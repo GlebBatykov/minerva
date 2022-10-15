@@ -1,6 +1,6 @@
 <div align="center" width="200px">
 
-<img src="https://raw.githubusercontent.com/GlebBatykov/minerva/main/doc/images/logo.png" width="150px"/>
+<img src="https://raw.githubusercontent.com/GlebBatykov/minerva/main/doc/images/logo.png" width="600px"/>
 
 &nbsp;
 
@@ -63,7 +63,6 @@ Dart backend framework
 - [Configuration manager](#configuration-manager)
 - [Password hashing](#password-hashing)
 - [Road map](#road-map)
-- [Gratitude](#gratitude)
 
 # Introduction
 
@@ -1003,9 +1002,3 @@ Salt generation is available using the `GenerateSalt` method of the `PasswordSec
 - 🔜 Create documentation website.
 
 And of course the correction of errors that will be detected.
-
-# Gratitude
-
-I express my gratitude:
-
-- to my [friend](https://vk.com/rubro.official) for creating the logo.
