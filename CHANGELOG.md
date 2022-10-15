@@ -1,4 +1,8 @@
-# 0.2.4
+# 0.2.5
+
+- Update CLI tools.
+
+## 0.2.4
 
 - Replace setting parameter of bind method of Minerva class to settingBuilder. Now you have to pass an instance of the successor of the MinervaSettingBuilder class instead of the MinervaSetting instance;
 - Update CLI tools;
