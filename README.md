@@ -35,7 +35,7 @@ Dart backend framework
 - [Framework structure](#framework-structure)
   - [Components](#components)
 - [Routing](#routing)
-  - [Pipeline](#pipeline)
+  - [Request processing pipeline](#request-processing-pipeline)
   - [Endpoints](#endpoints)
     - [Api](#api)
     - [Request body](#request-body)
@@ -49,18 +49,23 @@ Dart backend framework
 - [Middlewares](#middlewares)
   - [Ready-made middlewares](#ready-made-middlewares)
   - [Custom middlewares](#custom-middlewares)
-- [Static files](#static-files)
+- [Files](#files)
+  - [Uploading files](#uploading-files)
+  - [Downloading files](#downloading-files)
+  - [Static files](#static-files)
 - [Dependency injection](#dependency-injection)
 - [Agents](#agents)
   - [Custom agents](#custom-agents)
 - [Logging](#logging)
-  - [Pipeline](#pipeline-1)
+  - [Pipeline](#pipeline)
   - [Ready-made loggers](#ready-made-loggers)
     - [Logging templates](#logging-templates)
     - [Logging to files](#logging-to-files)
   - [Logging configuration](#logging-configuration)
   - [Custom loggers](#custom-loggers)
 - [Configuration manager](#configuration-manager)
+- [Deployment](#deployment)
+  - [Docker container](#docker-container)
 - [Password hashing](#password-hashing)
 - [Road map](#road-map)
 
@@ -277,7 +282,7 @@ Request routing in `Minerva` can be represented as:
   <img src="https://raw.githubusercontent.com/GlebBatykov/minerva/main/doc/images/routing.png" width="75%"/>
 </div>
 
-## Pipeline
+## Request processing pipeline
 
 The request processing pipeline consists of middlewares. In this section, only some of them will be given, about the rest, as well as about the way to create your own middlewares, you can read [here](#middlewares).
 
@@ -617,7 +622,65 @@ class TestMiddleware extends Middleware {
 
 The middleware created in the example will print the message `'Hello, middleware world!'`, and also check whether the next middleware exists in the pipeline. If it exists, it delegates the processing of the request to it, and if it is missing, it will return the error `404`.
 
-# Static files
+# Files
+
+## Uploading files
+
+You can upload a file to the server at by sending the file to `FormData`. Further, when processing a request, you can use the acform method of an instance of the `RequestBody` class to get `FormData` data from an incoming request. Next, you can use the name of the field in Form Data to get an instance of the `FormDataFile` class. An instance of the `FormDataFile` class contains the file name, as well as the contents of the file in the form of bytes.
+
+Example of getting a file using `FormData`, writing a file to an arbitrary path using the `dart:io` library:
+
+```dart
+class EndpointsBuilder extends MinervaEndpointsBuilder {
+  @override
+  void build(Endpoints endpoints) {
+    endpoints.post('/uploadFile', (context, request) async {
+      var formData = await request.body.asForm();
+
+      var fileField = formData['file'] as FormDataFile;
+
+      var file = File.fromUri(Uri.file('somePath'));
+
+      await file.create();
+
+      await file.writeAsBytes(fileField.bytes);
+    });
+  }
+}
+```
+
+## Downloading files
+
+You can download the file either by configuring the response headers yourself, as well as by transferring the contents of the file to the response using the `Result` class. Or use ready-made results, such as: `FileResult`, `FilePathResult`.
+
+To send a file using `FileResult`, you must pass an instance of the `File` class from the `dart:io` library to it.
+
+To send a file using `FilePathResult`, you must specify the path to the file. The path to the file can be set either absolutely or relative to the project folder.
+
+Example of using `FileResult` to return to file downloads:
+
+```dart
+class EndpointsBuilder extends MinervaEndpointsBuilder {
+  @override
+  void build(Endpoints endpoints) {
+    endpoints.post('/downloadFile', (context, request) async {
+      var json = await request.body.asJson();
+
+      var path = json['filePath'];
+
+      var file = File.fromUri(Uri.parse(path));
+
+      if (await file.exists()) {
+        return FileResult(file);
+      } else {
+        return NotFoundResult();
+      }
+    });
+  }
+}
+```
+
+## Static files
 
 `Minerva` contains an middleware for organizing access to static files - `StaticFilesMiddleware`.
 
@@ -969,6 +1032,54 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   }
 }
 ```
+
+# Deployment
+
+Minerva contains 2 types of project builds: `debug` and `release`.
+
+You can build a project in `release` build using the command:
+
+```dart
+minerva build -m release
+```
+
+The project will be built according to the settings specified in the `appsetting.json` file in the project root.
+
+After the build in your project folder, in the `build` folder you will see the `release` folder. Next, you can use this folder and its contents to deploy the server.
+
+You can delete the `details.json` file  in the project's build folder, since it is useful only when developing a project, when reassembling a project.
+
+## Docker container
+
+When you create a Minerva project, a `Dockerfile` is created in the root of your project to build a `Docker image`.
+
+There are two templates of `Docker` files in Minerva: `AOT` and `JIT`. Templates for the corresponding compilation types, since their deployment in the `Docker container` is different.
+
+By default, Minerva creates a `Dockerfile` for `AOT` compilation, however, you can specify the required type of compilation `Dockerfile` when creating a project.
+
+During development, you can add arbitrary files to the build of your project using the `assets` parameter in the `appsetting.json` file.
+
+If you added any files to the `asset` folder (which is created in the template `Minerva` project), or added any other assets to the `appsetting.json` file, then before creating the `Docker image` you must - regenerate the `Dockerfile`.
+
+You can regenerate the `Dockerfile` using one command - the `docker` command in the `CLI` utility `Minerva` of the framework.
+
+This command will regenerate the `Dockerfile` and add the lines necessary to add all your assets to the final `Docker image`.
+
+By default, the command generates a `Dockerfile` for `AOT` compilation of the project, but you can specify the type of compilation you need.
+
+`Dockerfile` generation command for `AOT` compilation:
+
+```dart
+minerva docker -c AOT
+```
+
+`Dockerfile` generation command for `JIT` compilation:
+
+```dart
+minerva docker -c JIT
+```
+
+Next, after successfully creating a `Docker image`, you can safely deploy a `Docker container` with your application.
 
 # Password hashing
 
