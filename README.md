@@ -94,7 +94,7 @@ Write me your opinion about this framework, report errors or inaccuracies, illog
 - project build system;
 - multithreaded request processing;
 - routing requests, processing requests using middlewares;
-- logging capabilities, creating your own bloggers;
+- logging capabilities, creating your own loggers;
 - provides means for authentication by `JWT`, `cookies`;
 - tools for distributing static files;
 - working with `FormData`;
