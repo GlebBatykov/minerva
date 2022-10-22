@@ -851,7 +851,7 @@ Logging divided into the following levels `Minerva` is divided into the followin
 
 ## Pipeline
 
-The logging process in `Minerva` is organized in the form of a pipeline. When configuring the server, you can specify several bloggers who will participate in the logging process.
+The logging process in `Minerva` is organized in the form of a pipeline. When configuring the server, you can specify several loggers who will participate in the logging process.
 
 ## Ready-made loggers
 
@@ -881,7 +881,7 @@ This logger works in conjunction with a ready-made agent `FileLoggerAgent`. You 
 
 In order to use a logger to a file, we also need to use `FileLoggerAgent`.
 
-Consider an example of configuring bloggers, as well as agents to use `FileLogger`.
+Consider an example of configuring loggers, as well as agents to use `FileLogger`.
 
 Configuration of loggers:
 
@@ -917,12 +917,12 @@ class AgentsBuilder extends MinervaAgentsBuilder {
 
 In `Minerva` when configuring the project build, using `appsetting.json` you can configure logging. You can specify active logging levels for each specific logger, for each type of assembly.
 
-Every blogger in `Minerva` has his own name. For ready-made loggers , this is:
+Every logger in `Minerva` has his own name. For ready-made loggers , this is:
 
 - `ConsoleLogger` - `console`;
 - `FileLogger` - `file`.
 
-If the settings for any blogger are not specified in `appsetting.json`, this means that all logging levels are available for him.
+If the settings for any logger are not specified in `appsetting.json`, this means that all logging levels are available for him.
 
 Consider an example where we disable in the `release` build of the project only the `critical`, `error` levels for the `console` logger.
 
@@ -953,7 +953,7 @@ Contents of the `appsetting.json` file:
 
 In `Minerva` you can create your own loggers, the base class `Logger` is used for this.
 
-Every blogger should implement the methods:
+Every logger should implement the methods:
 
 - `info`;
 - `debug`;
