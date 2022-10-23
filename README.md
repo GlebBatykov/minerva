@@ -1085,7 +1085,7 @@ Next, after successfully creating a `Docker image`, you can safely deploy a `Doc
 
 `Minerva` contains functionality for hashing passwords with a given salt. Under the hood, `Minerva` uses the package [crypt](https://pub.dev/packages/crypt). I decided to include this functionality in the framework because before I discovered the current package and a convenient package for hashing passwords, I tried more than one package.
 
-Password hashing in `Minerva` is available using the `Password Security` class.
+Password hashing in `Minerva` is available using the `PasswordSecurity` class.
 
 Example of password hashing using the `PasswordSecurity` class:
 
@@ -1099,7 +1099,7 @@ var password = 'some_passowrd';
 var hash = security.hashPassword(password, salt: salt);
 ```
 
-Salt generation is available using the `GenerateSalt` method of the `PasswordSecurity` class.
+Salt generation is available using the `generateSalt` method of the `PasswordSecurity` class.
 
 # Road map
 
