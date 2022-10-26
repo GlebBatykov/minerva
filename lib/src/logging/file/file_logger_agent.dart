@@ -1,5 +1,8 @@
 part of minerva_logging;
 
+/// This agent is necessary for FileLogger to work.
+///
+/// It is necessary for synchronization of log entries to the file from different server instances.
 class FileLoggerAgent extends Agent {
   late final File _file;
 

@@ -6,6 +6,7 @@ typedef TokenVerifyCallback = FutureOr<bool> Function(
 typedef GetRolesCallback = FutureOr<Role> Function(
     ServerContext context, String token);
 
+/// Middleware which is used for JWT authentication.
 class JwtAuthMiddleware extends Middleware {
   final TokenVerifyCallback _tokenVerify;
 

@@ -1,5 +1,8 @@
 part of minerva_logging;
 
+/// Used for logging to a file.
+///
+/// To work, you need to add a FileLoggerAgent to the server. The FileLoggerAgent name and the agent name specified in FileLogger must match.
 class FileLogger extends Logger {
   final String _template;
 

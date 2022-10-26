@@ -1,14 +1,14 @@
 part of minerva_middleware;
 
-///
+/// Middleware that is used to distribute static files.
 class StaticFilesMiddleware extends Middleware {
-  ///
+  /// Path to the directory with static files.
   final String directory;
 
-  ///
+  /// The path that is used to access static files.
   final String path;
 
-  ///
+  /// The file that is used if the path to the file was not specified in the path.
   final String? root;
 
   late final String _directoryPath;

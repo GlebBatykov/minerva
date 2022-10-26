@@ -1,5 +1,6 @@
 part of minerva_logging;
 
+/// Logger for logging to the console.
 class ConsoleLogger extends Logger {
   final String _template;
 

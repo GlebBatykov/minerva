@@ -1,5 +1,6 @@
 part of minerva_middleware;
 
+/// Middleware which is used to redirect incoming requests.
 class RedirectionMiddleware extends Middleware {
   final AuthAccessValidator _accessValidator = AuthAccessValidator();
 

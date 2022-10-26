@@ -3,6 +3,7 @@ part of minerva_middleware;
 typedef CookieIsAuthorizedCallback = FutureOr<bool> Function(
     ServerContext context, List<Cookie> cookies);
 
+/// Middleware which is used for cookie authentication.
 class CookieAuthMiddleware extends Middleware {
   final CookieIsAuthorizedCallback _isAuthorized;
 

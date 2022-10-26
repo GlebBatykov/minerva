@@ -1,8 +1,10 @@
 part of minerva_core;
 
+/// Provides information about the environment in which the project is running.
 abstract class HostEnvironment {
   static String? _contentRootPath;
 
+  /// The path to the project folder.
   static String get contentRootPath {
     if (_contentRootPath == null) {
       var executablePath = Uri.parse(Platform.script.path);
