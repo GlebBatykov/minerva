@@ -40,13 +40,7 @@ export 'src/auth.dart'
     show AuthOptions, JwtAuthOptions, CookieAuthOptions, Role;
 
 export 'src/logging.dart'
-    show
-        Logger,
-        ConsoleLogger,
-        FileLogger,
-        FileLoggerAgent,
-        FileLoggerAgentData,
-        LogLevel;
+    show Logger, ConsoleLogger, FileLogger, FileLoggerAgent, LogLevel;
 
 export 'src/core.dart' show HostEnvironment, BuildManager, BuildType;
 
@@ -57,7 +51,6 @@ export 'src/middleware.dart'
         StaticFilesMiddleware,
         RedirectionMiddleware,
         RedirectionData,
-        RedirectionLocation,
         EndpointMiddleware,
         Middleware,
         ErrorMiddleware,
