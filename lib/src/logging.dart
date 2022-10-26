@@ -25,4 +25,3 @@ part 'logging/middleware/message_middleware.dart';
 part 'logging/middleware/date_time/date_middleware.dart';
 part 'logging/middleware/date_time/date_time_replacer.dart';
 part 'logging/middleware/date_time/time_middleware.dart';
-part 'logging/file/file_logger_agent_data.dart';
