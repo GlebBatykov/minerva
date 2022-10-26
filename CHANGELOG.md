@@ -1,4 +1,8 @@
-# 0.2.5
+# 0.2.6
+
+- Update README files.
+
+## 0.2.5
 
 - Update CLI tools.
 

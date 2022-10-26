@@ -851,7 +851,7 @@ Logging divided into the following levels `Minerva` is divided into the followin
 
 ## Pipeline
 
-The logging process in `Minerva` is organized in the form of a pipeline. When configuring the server, you can specify several bloggers who will participate in the logging process.
+The logging process in `Minerva` is organized in the form of a pipeline. When configuring the server, you can specify several loggers who will participate in the logging process.
 
 ## Ready-made loggers
 
@@ -881,7 +881,7 @@ This logger works in conjunction with a ready-made agent `FileLoggerAgent`. You 
 
 In order to use a logger to a file, we also need to use `FileLoggerAgent`.
 
-Consider an example of configuring bloggers, as well as agents to use `FileLogger`.
+Consider an example of configuring loggers, as well as agents to use `FileLogger`.
 
 Configuration of loggers:
 
@@ -917,12 +917,12 @@ class AgentsBuilder extends MinervaAgentsBuilder {
 
 In `Minerva` when configuring the project build, using `appsetting.json` you can configure logging. You can specify active logging levels for each specific logger, for each type of assembly.
 
-Every blogger in `Minerva` has his own name. For ready-made loggers , this is:
+Every logger in `Minerva` has his own name. For ready-made loggers , this is:
 
 - `ConsoleLogger` - `console`;
 - `FileLogger` - `file`.
 
-If the settings for any blogger are not specified in `appsetting.json`, this means that all logging levels are available for him.
+If the settings for any logger are not specified in `appsetting.json`, this means that all logging levels are available for him.
 
 Consider an example where we disable in the `release` build of the project only the `critical`, `error` levels for the `console` logger.
 
@@ -953,7 +953,7 @@ Contents of the `appsetting.json` file:
 
 In `Minerva` you can create your own loggers, the base class `Logger` is used for this.
 
-Every blogger should implement the methods:
+Every logger should implement the methods:
 
 - `info`;
 - `debug`;
@@ -1085,7 +1085,7 @@ Next, after successfully creating a `Docker image`, you can safely deploy a `Doc
 
 `Minerva` contains functionality for hashing passwords with a given salt. Under the hood, `Minerva` uses the package [crypt](https://pub.dev/packages/crypt). I decided to include this functionality in the framework because before I discovered the current package and a convenient package for hashing passwords, I tried more than one package.
 
-Password hashing in `Minerva` is available using the `Password Security` class.
+Password hashing in `Minerva` is available using the `PasswordSecurity` class.
 
 Example of password hashing using the `PasswordSecurity` class:
 
@@ -1099,7 +1099,7 @@ var password = 'some_passowrd';
 var hash = security.hashPassword(password, salt: salt);
 ```
 
-Salt generation is available using the `GenerateSalt` method of the `PasswordSecurity` class.
+Salt generation is available using the `generateSalt` method of the `PasswordSecurity` class.
 
 # Road map
 
