@@ -1,8 +1,11 @@
 part of minerva_routing;
 
+/// Json field types.
+///
+/// Used when filtering requests, to check for the presence of json field in the request body.
 enum JsonFieldType { int, double, string, bool, map, list, num }
 
-/// Used when filtering requests, to check for the presence of json field in the json request body.
+/// Used when filtering requests, to check for the presence of json field in the request body.
 class JsonField {
   /// Name of json field.
   final String name;

@@ -1,5 +1,6 @@
 part of minerva_server;
 
+/// Simple key-value store.
 class ServerStore {
   final Map<String, dynamic> _data = {};
 
@@ -33,20 +34,24 @@ class ServerStore {
     return object != null ? object as T : object;
   }
 
+  /// Add [value] by [key].
   void set(String key, dynamic value) {
     _data[key] = value;
   }
 
+  /// Removes value by [key].
   void remove(String key) {
     _data[key];
   }
 
+  /// Removes values by [keys].
   void removeMany(List<String> keys) {
     for (var key in keys) {
       _data.remove(key);
     }
   }
 
+  /// Clears all values.
   void clear() {
     _data.clear();
   }

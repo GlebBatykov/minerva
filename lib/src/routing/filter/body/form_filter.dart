@@ -1,13 +1,16 @@
 part of minerva_routing;
 
+/// Form field types.
+///
+/// Used when filtering requests, to check for the presence of form field in the request body.
 enum FormFieldType { string, file }
 
-/// Used when filtering requests, to check for the presence of form field in the form data request body.
+/// Used when filtering requests, to check for the presence of form field in the request body.
 class FormField {
-  ///
+  /// Name of form field.
   final String name;
 
-  ///
+  /// Type of form field.
   final FormFieldType? type;
 
   const FormField(this.name, this.type);
