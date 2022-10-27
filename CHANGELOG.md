@@ -1,4 +1,8 @@
-# 0.2.6
+# 0.2.7
+
+- Update documentation.
+
+## 0.2.6
 
 - Update README files.
 
