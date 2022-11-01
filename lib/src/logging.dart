@@ -18,6 +18,7 @@ part 'logging/logging_setting.dart';
 part 'logging/console_logger.dart';
 part 'logging/file/file_logger.dart';
 part 'logging/file/file_logger_agent.dart';
+part 'logging/file/file_logger_agent_data.dart';
 part 'logging/log.dart';
 part 'logging/middleware/logger_middleware.dart';
 part 'logging/middleware/log_level_middleware.dart';
