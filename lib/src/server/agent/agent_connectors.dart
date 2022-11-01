@@ -4,6 +4,9 @@ part of minerva_server;
 class AgentConnectors {
   final List<AgentConnector> _connectors;
 
+  /// All connectors.
+  List<AgentConnector> get connectors => List.unmodifiable(_connectors);
+
   AgentConnectors(List<AgentConnector> connectors) : _connectors = connectors;
 
   /// If an agent named [name] exists, it returns agent connector.
