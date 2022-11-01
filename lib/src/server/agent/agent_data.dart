@@ -11,5 +11,5 @@ class AgentData {
   /// Data that will be passed to the agent when the initialize() method is called.
   final Map<String, dynamic>? data;
 
-  AgentData(this.name, this.agent, {this.data});
+  const AgentData(this.name, this.agent, {this.data});
 }
