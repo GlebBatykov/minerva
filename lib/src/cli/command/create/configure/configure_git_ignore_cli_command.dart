@@ -14,6 +14,8 @@ class ConfigureGitIgnoreCLICommand extends CLICommand<void> {
     await gitIgnoreFile.writeAsString('''
 /build
 /.dart_tool
+.packages
+pubspec.lock
 test/test_app_setting.g.dart
 ''');
   }
