@@ -1,4 +1,11 @@
-# 0.2.7
+# 0.2.8
+
+- Update CLI tools;
+- Update README files;
+- Add const constructor to AgentData class;
+- Add class FileLoggerAgentData. It was removed in previous versions. Now added back.
+
+## 0.2.7
 
 - Update documentation.
 
