@@ -107,7 +107,8 @@ Various packages to simplify working with `Minerva`, as well as in general that 
 
 Currently existing my packages that may be useful to you:
 
-- [emerald](https://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type.
+- [emerald](https://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type;
+- [mcache](https://pub.dev/packages/mcache) - package for caching values. Supports deleting values after their expiration date.
 
 # Installing
 
