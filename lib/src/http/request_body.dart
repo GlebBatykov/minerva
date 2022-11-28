@@ -9,7 +9,7 @@ class RequestBody {
 
   String? _text;
 
-  Map<String, dynamic>? _json;
+  dynamic _json;
 
   FormData? _formData;
 
@@ -29,7 +29,7 @@ class RequestBody {
     return _text!;
   }
 
-  Future<Map<String, dynamic>> asJson() async {
+  Future<dynamic> asJson() async {
     _json ??=
         jsonDecode(await utf8.decodeStream(Stream.fromIterable(await data)));
 
