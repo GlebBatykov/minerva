@@ -1,4 +1,8 @@
-# 0.2.8
+# 0.2.9
+
+- Update how RequestBody works with JSON.
+
+## 0.2.8
 
 - Update CLI tools;
 - Update README files;
