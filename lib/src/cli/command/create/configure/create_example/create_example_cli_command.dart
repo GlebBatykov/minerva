@@ -49,7 +49,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   void build(Endpoints endpoints) {
     // Create route for GET requests with path '/hello'
     endpoints.get('/hello', (context, request) {
-      var message = context.store['message'];
+      final message = context.store['message'];
 
       return message;
     });
@@ -86,7 +86,7 @@ import 'package:minerva/minerva.dart';
 class ApisBuilder extends MinervaApisBuilder {
   @override
   List<Api> build() {
-    var apis = <Api>[];
+    final apis = <Api>[];
 
     return apis;
   }
@@ -99,7 +99,7 @@ import 'package:minerva/minerva.dart';
 class LoggersBuilder extends MinervaLoggersBuilder {
   @override
   List<Logger> build() {
-    var loggers = <Logger>[];
+    final loggers = <Logger>[];
 
     // Adds console logger to log pipeline
     loggers.add(ConsoleLogger());
@@ -115,7 +115,7 @@ import 'package:minerva/minerva.dart';
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   @override
   List<Middleware> build() {
-    var middlewares = <Middleware>[];
+    final middlewares = <Middleware>[];
 
     // Adds middleware for handling errors in middleware pipeline
     middlewares.add(ErrorMiddleware());
@@ -160,7 +160,7 @@ import 'package:minerva/minerva.dart';
 class AgentsBuilder extends MinervaAgentsBuilder {
   @override
   List<AgentData> build() {
-    var agents = <AgentData>[];
+    final agents = <AgentData>[];
 
     return agents;
   }
