@@ -33,7 +33,7 @@ class BodyMatcher {
         return false;
       }
 
-      var value = json[field.name];
+      final value = json[field.name];
 
       if (field.type != null && !_isJsonFieldMatch(value, field.type!)) {
         return false;
@@ -67,7 +67,7 @@ class BodyMatcher {
       return false;
     }
 
-    late FormData formData;
+    late final FormData formData;
 
     try {
       formData = await request.body.asForm();
@@ -80,7 +80,7 @@ class BodyMatcher {
         return false;
       }
 
-      var value = formData[field.name]!;
+      final value = formData[field.name]!;
 
       if (field.type != null && !_isFormFieldMatch(value, field.type!)) {
         return false;
