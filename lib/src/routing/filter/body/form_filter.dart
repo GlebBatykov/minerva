@@ -13,7 +13,7 @@ class FormField {
   /// Type of form field.
   final FormFieldType? type;
 
-  const FormField(this.name, this.type);
+  const FormField({required this.name, this.type});
 }
 
 /// The body filter is used to filter out requests that do not match it.

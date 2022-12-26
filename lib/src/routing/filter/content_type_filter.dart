@@ -5,5 +5,5 @@ class ContentTypeFilter {
   /// Accepted content types.
   final List<String> accepts;
 
-  const ContentTypeFilter(this.accepts);
+  const ContentTypeFilter({required this.accepts});
 }
