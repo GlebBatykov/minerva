@@ -1,4 +1,9 @@
-# 0.2.9
+# 0.3.0
+
+- Update filters constructor parameters;
+- Update library export file.
+
+## 0.2.9
 
 - Update how RequestBody works with JSON.
 
