@@ -23,7 +23,7 @@ environment:
   sdk: '>=2.17.5 <3.0.0'
 
 dependencies:
-  minerva: ^0.2.9
+  minerva: ^0.3.0
 
 dev_dependencies:
   lints: ^2.0.0
