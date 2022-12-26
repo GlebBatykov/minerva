@@ -1,4 +1,8 @@
-# 0.3.0
+# 0.3.1
+
+- Update JsonResult.
+
+## 0.3.0
 
 - Update filters constructor parameters;
 - Update library export file.
