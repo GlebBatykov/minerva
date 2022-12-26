@@ -3,7 +3,7 @@ part of minerva_http;
 class Result {
   final int statusCode;
 
-  final dynamic body;
+  final Object? body;
 
   final MinervaHttpHeaders? headers;
 
@@ -34,7 +34,7 @@ class InternalServerErrorResult extends Result {
 }
 
 class JsonResult extends Result {
-  JsonResult(Map<String, dynamic> json, {int? statusCode, super.headers})
+  JsonResult(Object? json, {int? statusCode, super.headers})
       : super(statusCode: statusCode ?? 200, body: jsonEncode(json));
 
   @override
