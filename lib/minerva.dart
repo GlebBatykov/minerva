@@ -32,7 +32,9 @@ export 'src/routing.dart'
         BodyFilter,
         FormField,
         FormFilter,
-        FormFieldType;
+        FormFieldType,
+        EndpointErrorHandler,
+        WebSocketHandler;
 
 export 'src/http.dart';
 
