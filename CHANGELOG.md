@@ -1,4 +1,8 @@
-# 0.3.1
+# 0.3.2
+
+- Update library export file.
+
+## 0.3.1
 
 - Update JsonResult.
 
