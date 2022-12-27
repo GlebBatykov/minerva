@@ -39,7 +39,14 @@ export 'src/routing.dart'
 export 'src/http.dart';
 
 export 'src/auth.dart'
-    show AuthOptions, JwtAuthOptions, CookieAuthOptions, Role;
+    show
+        AuthOptions,
+        JwtAuthOptions,
+        CookieAuthOptions,
+        Role,
+        AuthContext,
+        JwtAuthContext,
+        CookieAuthContext;
 
 export 'src/logging.dart'
     show Logger, ConsoleLogger, FileLogger, FileLoggerAgent, LogLevel;
