@@ -38,6 +38,7 @@ Dart backend framework
   - [Request processing pipeline](#request-processing-pipeline)
   - [Endpoints](#endpoints)
     - [Api](#api)
+    - [Controllers](#controllers)
     - [Request body](#request-body)
       - [FormData](#formdata)
     - [Path parameters](#path-parameters)
@@ -108,7 +109,8 @@ Various packages to simplify working with `Minerva`, as well as in general that 
 Currently existing my packages that may be useful to you:
 
 - [emerald](https://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type;
-- [mcache](https://pub.dev/packages/mcache) - package for caching values. Supports deleting values after their expiration date.
+- [mcache](https://pub.dev/packages/mcache) - package for caching values. Supports deleting values after their expiration date;
+- [minerva_controller_generator](https://pub.dev/packages/minerva_controller_generator ) - the package allows you to configure the server using controllers built on code generation.
 
 # Installing
 
@@ -365,6 +367,10 @@ class ApisBuilder extends MinervaApisBuilder {
   }
 }
 ```
+
+### Controllers
+
+Controllers are the preferred way to configure the server. You can find out more about them [here](https://pub.dev/packages/minerva_controller_generator).
 
 ### Request body
 
@@ -1105,11 +1111,11 @@ Salt generation is available using the `generateSalt` method of the `PasswordSec
 # Road map
 
 - ✅ Finish error handling;
-- 🚧 Make documentation;
-- 🚧 Make more examples;
-- 🔜 Cover with tests;
-- 🔜 Update README files;
-- 🔜 Creating video tutorials;
+- ✅ Make documentation;
+- ✅ Make more examples;
+- 🚧 Cover with tests;
+- 🚧 Update README files;
+- 🚧 Creating video tutorials;
 - 🔜 Add benchmarks;
 - 🔜 Create documentation website.
 
