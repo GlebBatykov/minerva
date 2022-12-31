@@ -1,6 +1,6 @@
 name: minerva
 description: Dart backend framework. Supports multithreading, websockets. It contains project build system, request processing pipeline, authentication aids, and logging tools.
-version: 0.3.2
+version: 0.3.3
 homepage: https://github.com/GlebBatykov/minerva
 
 environment:
