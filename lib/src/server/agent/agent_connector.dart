@@ -13,11 +13,11 @@ class AgentConnector {
   ///
   /// A request of this type implies a response to it.
   Future<T> call<T>(String action, {Map<String, dynamic>? data}) async {
-    var receivePort = ReceivePort();
+    final receivePort = ReceivePort();
 
     _agentPort.send(AgentCall(action, data ?? {}, receivePort.sendPort));
 
-    var callResult = await receivePort
+    final callResult = await receivePort
         .firstWhere((element) => element is AgentCallResult) as AgentCallResult;
 
     receivePort.close();

@@ -19,7 +19,7 @@ class FileLoggerAgent extends Agent {
 
   @override
   void cast(String action, Map<String, dynamic> data) {
-    var log = data['log'] as String;
+    final log = data['log'] as String;
 
     _queue.add(log);
 
@@ -28,7 +28,7 @@ class FileLoggerAgent extends Agent {
 
   void _handleQueue() {
     if (!_isRecording && _queue.isNotEmpty) {
-      var log = _queue.removeFirst();
+      final log = _queue.removeFirst();
 
       _isRecording = true;
 

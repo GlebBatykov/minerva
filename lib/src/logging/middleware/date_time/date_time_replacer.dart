@@ -14,17 +14,17 @@ class DateTimeInserter {
 
     while (true) {
       if (start <= template.length) {
-        var timeStartIndex = template.indexOf(_pattern, start);
+        final timeStartIndex = template.indexOf(_pattern, start);
 
         if (timeStartIndex != -1) {
-          var timeTemplateStartIndex = timeStartIndex + _pattern.length;
+          final timeTemplateStartIndex = timeStartIndex + _pattern.length;
 
           if (template[timeTemplateStartIndex] == '(') {
-            var timeTemplateEndIndex =
+            final timeTemplateEndIndex =
                 template.indexOf(')', timeTemplateStartIndex);
 
             if (timeTemplateEndIndex != -1) {
-              var timeTemplate = template.substring(
+              final timeTemplate = template.substring(
                   timeTemplateStartIndex + 1, timeTemplateEndIndex);
 
               template = template.replaceRange(

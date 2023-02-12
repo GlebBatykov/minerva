@@ -18,21 +18,21 @@ class Minerva {
       await AppSetting.instance.initialize();
     }
 
-    var setting = await settingBuilder.build();
+    final setting = await settingBuilder.build();
 
-    var minerva = Minerva._();
+    final minerva = Minerva._();
 
-    var address = _getAddress();
+    final address = _getAddress();
 
-    var middlwares = await setting.middlewaresBuilder.build();
+    final middlwares = await setting.middlewaresBuilder.build();
 
-    var serverSetting = ServerSetting(
+    final serverSetting = ServerSetting(
         address,
         setting.configuration ?? ServerConfiguration(),
         middlwares,
         setting.serverBuilder);
 
-    var agentsData = await setting.agentsBuilder?.build();
+    final agentsData = await setting.agentsBuilder?.build();
 
     await minerva._initialize(
         setting.instance,
@@ -48,7 +48,7 @@ class Minerva {
   static ServerAddress _getAddress() {
     if (AppSetting.instance.host != null && AppSetting.instance.port != null) {
       try {
-        var port = AppSetting.instance.port;
+        final port = AppSetting.instance.port;
 
         return ServerAddress(AppSetting.instance.host!, port!);
       } catch (_) {
@@ -73,9 +73,9 @@ class Minerva {
 
     await _agents.initialize();
 
-    var loggers = await loggersBuilder.build();
+    final loggers = await loggersBuilder.build();
 
-    var connectors = AgentConnectors(_agents.connectors);
+    final connectors = AgentConnectors(_agents.connectors);
 
     await _servers.initialize(instance, setting, apisBuilder, endpointsBuilder,
         LogPipeline(List.from(loggers)), connectors);
@@ -84,9 +84,9 @@ class Minerva {
 
     await _logPipeline.initialize(connectors);
 
-    var host = setting.address.host;
+    final host = setting.address.host;
 
-    var port = setting.address.port;
+    final port = setting.address.port;
 
     _logPipeline.info('Server starting in http://$host:$port.');
   }

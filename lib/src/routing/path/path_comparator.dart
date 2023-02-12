@@ -3,22 +3,22 @@ part of minerva_routing;
 class PathComparator {
   PathCompareResult compare(MinervaPath minervaPath, String path) {
     if (minervaPath.containsPathParameters) {
-      var pathParameters = <String, num>{};
+      final pathParameters = <String, num>{};
 
-      var pathSegments = path.split('/');
+      final pathSegments = path.split('/');
 
       pathSegments.removeWhere((element) => element.isEmpty);
 
-      var endpointSegments = minervaPath.segments;
+      final endpointSegments = minervaPath.segments;
 
       if (pathSegments.length != endpointSegments.length) {
         return PathCompareResult(false);
       }
 
       for (var i = 0; i < endpointSegments.length; i++) {
-        var endpointSegment = endpointSegments[i];
+        final endpointSegment = endpointSegments[i];
 
-        var pathSegment = pathSegments[i];
+        final pathSegment = pathSegments[i];
 
         if (endpointSegment is PathParameter) {
           if (_isMatch(endpointSegment, pathSegment)) {
@@ -50,7 +50,7 @@ class PathComparator {
   }
 
   bool _isMatch(PathParameter parameter, String segment) {
-    var regExp = parameter.regExp;
+    final regExp = parameter.regExp;
 
     if (regExp != null && regExp.hasMatch(segment)) {
       return false;

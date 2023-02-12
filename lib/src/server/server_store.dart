@@ -29,7 +29,7 @@ class ServerStore {
   ///
   /// If instanse is not exist return null.
   T? tryGet<T>(String instanceName) {
-    var object = _data[instanceName];
+    final object = _data[instanceName];
 
     return object != null ? object as T : object;
   }
@@ -46,7 +46,7 @@ class ServerStore {
 
   /// Removes values by [keys].
   void removeMany(List<String> keys) {
-    for (var key in keys) {
+    for (final key in keys) {
       _data.remove(key);
     }
   }

@@ -24,9 +24,9 @@ class PathParameter extends PathSegment {
 
     if (type == PathParameterType.int || type == PathParameterType.double) {
       if (segment.contains('(') && segment.contains(')')) {
-        var startRegExp = segment.indexOf('(');
+        final startRegExp = segment.indexOf('(');
 
-        var endRegExp = segment.indexOf(')');
+        final endRegExp = segment.indexOf(')');
 
         name = segment.substring(type.name.length + 1, startRegExp - 1);
 
@@ -36,15 +36,15 @@ class PathParameter extends PathSegment {
       }
     } else {
       if (segment.contains('(') && segment.contains(')')) {
-        var startRegExp = segment.indexOf('(');
+        final startRegExp = segment.indexOf('(');
 
-        var endRegExp = segment.indexOf(')');
+        final endRegExp = segment.indexOf(')');
 
         name = segment.substring(1, startRegExp);
 
         regExp = RegExp(segment.substring(startRegExp, endRegExp + 1));
       } else {
-        var start = segment.indexOf(':');
+        final start = segment.indexOf(':');
 
         name = segment.substring(start + 1, segment.length);
       }

@@ -53,7 +53,7 @@ class ConsoleLogger extends Logger {
   void _log(dynamic object, String template, LogLevel level) {
     var log = Log(template, level, object.toString());
 
-    for (var middleware in _middlewares) {
+    for (final middleware in _middlewares) {
       log = middleware.handle(log);
     }
 

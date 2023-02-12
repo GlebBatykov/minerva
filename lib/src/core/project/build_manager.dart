@@ -1,7 +1,5 @@
 part of minerva_core;
 
-enum BuildType { debug, release }
-
 /// Provides information about the current build of the project.
 abstract class BuildManager {
   /// Checks whether the current build of the project is debug.
@@ -12,7 +10,7 @@ abstract class BuildManager {
 
   /// Provides the type of the current project build.
   static BuildType get type {
-    var buildType = AppSetting.instance.buildType;
+    final buildType = AppSetting.instance.buildType;
 
     if (buildType == null) {
       throw BuildManagerException(

@@ -16,13 +16,13 @@ class MinervaPath {
 
     var containsPathParameters = false;
 
-    var segments = <PathSegment>[];
+    final segments = <PathSegment>[];
 
-    var pathSegments = path.split('/');
+    final pathSegments = path.split('/');
 
     pathSegments.removeWhere((element) => element.isEmpty);
 
-    for (var segment in pathSegments) {
+    for (final segment in pathSegments) {
       if (_isParameter(segment)) {
         segments.add(PathParameter.parse(segment));
 

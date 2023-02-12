@@ -2,7 +2,7 @@ part of minerva_logging;
 
 class LoggingSetting {
   bool isLevelEnabled(String loggerName, LogLevel level) {
-    var logging = AppSetting.instance.logging;
+    final logging = AppSetting.instance.logging;
 
     if (logging == null) {
       return true;
@@ -12,10 +12,8 @@ class LoggingSetting {
       return true;
     }
 
-    var levels = logging[loggerName]!
-        .cast<String>()
-        .map((e) => LogLevel.values.firstWhere((element) => element.name == e))
-        .toList();
+    final levels =
+        logging[loggerName]!.map((e) => LogLevel.fromName(e)).toList();
 
     if (levels.contains(level)) {
       return true;

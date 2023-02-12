@@ -3,12 +3,12 @@ part of minerva_routing;
 class QueryParametersMatcher {
   bool match(
       Map<String, String> queryParameters, QueryParametersFilter filter) {
-    for (var parameter in filter.parameters) {
+    for (final parameter in filter.parameters) {
       if (!queryParameters.keys.contains(parameter.name)) {
         return false;
       }
 
-      var value = queryParameters[parameter.name]!;
+      final value = queryParameters[parameter.name]!;
 
       if (parameter.type != null &&
           !_isParameterMatch(value, parameter.type!)) {

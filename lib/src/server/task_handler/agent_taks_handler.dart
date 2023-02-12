@@ -23,7 +23,7 @@ class AgentTaskHandler extends IsolateTaskHandler {
   }
 
   void _handleAgentCall(AgentCall action) async {
-    var result = await _agent.call(action.action, action.data);
+    final result = await _agent.call(action.action, action.data);
 
     action.feedbackPort.send(AgentCallResult(result));
   }

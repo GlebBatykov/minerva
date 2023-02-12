@@ -20,21 +20,21 @@ class JwtAuthMiddleware extends Middleware {
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
-    var header = context.request.headers[HttpHeaders.authorizationHeader];
+    final header = context.request.headers[HttpHeaders.authorizationHeader];
 
     if (header != null) {
-      var segments = header.first.split(' ');
+      final segments = header.first.split(' ');
 
       if (segments.length == 2 && segments.first == 'Bearer') {
-        var token = segments[1];
+        final token = segments[1];
 
-        var isVerified = await _tokenVerify(context.context, token);
+        final isVerified = await _tokenVerify(context.context, token);
 
         if (isVerified) {
-          var jwtContext = JwtAuthContext(token: token);
+          final jwtContext = JwtAuthContext(token: token);
 
           if (_getRole != null) {
-            var role = await _getRole!.call(context.context, token);
+            final role = await _getRole!.call(context.context, token);
 
             jwtContext.role = role;
           }

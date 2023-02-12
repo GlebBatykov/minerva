@@ -37,7 +37,7 @@ class ErrorMiddleware extends Middleware {
         try {
           return handler!.call(context.context, context.request, object);
         } catch (object, stackTrace) {
-          var exception = RequestHandleException(object, stackTrace);
+          final exception = RequestHandleException(object, stackTrace);
 
           _logPipeline.error(exception);
 

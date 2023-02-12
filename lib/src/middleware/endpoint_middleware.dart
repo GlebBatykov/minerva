@@ -10,9 +10,9 @@ class EndpointMiddleware extends Middleware {
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
-    var request = context.request;
+    final request = context.request;
 
-    var serverContext = context.context;
+    final serverContext = context.context;
 
     if (request.isUpgradeRequest) {
       return await _handleWebSocket(
@@ -25,7 +25,7 @@ class EndpointMiddleware extends Middleware {
 
   Future<dynamic> _handleHttpRequest(ServerContext context,
       MinervaRequest request, List<Endpoint> endpoints) async {
-    var selectedEndpoints = endpoints
+    final selectedEndpoints = endpoints
         .where((element) => element.method.value == request.method)
         .toList();
 
@@ -33,20 +33,20 @@ class EndpointMiddleware extends Middleware {
       return NotFoundResult();
     }
 
-    var endpoint = await _getEndpoint(selectedEndpoints, request);
+    final endpoint = await _getEndpoint(selectedEndpoints, request);
 
     if (endpoint == null) {
       return NotFoundResult();
     }
 
-    var authOptions = endpoint.authOptions;
+    final authOptions = endpoint.authOptions;
 
     if (!_accessValidator.isHaveAccess(request, authOptions)) {
       return UnauthorizedResult();
     }
 
     try {
-      var result = await endpoint.handler(context, request);
+      final result = await endpoint.handler(context, request);
 
       return result;
     } catch (object, stackTrace) {
@@ -64,19 +64,19 @@ class EndpointMiddleware extends Middleware {
 
   Future<Endpoint?> _getEndpoint(
       List<Endpoint> endpoints, MinervaRequest request) async {
-    var matchedEndpoints = <Endpoint>[];
+    final matchedEndpoints = <Endpoint>[];
 
     for (var i = 0; i < endpoints.length; i++) {
-      var endpoint = endpoints[i];
+      final endpoint = endpoints[i];
 
-      var result = _comparator.compare(endpoint.path, request.uri.path);
+      final result = _comparator.compare(endpoint.path, request.uri.path);
 
       if (!result.isEqual) {
         continue;
       }
 
       if (endpoint.filter != null) {
-        var isFilterMatch =
+        final isFilterMatch =
             await _filterMatcher.match(request, endpoint.filter!);
 
         if (!isFilterMatch) {
@@ -106,11 +106,11 @@ class EndpointMiddleware extends Middleware {
 
   Future<dynamic> _handleWebSocket(ServerContext context,
       MinervaRequest request, List<WebSocketEndpoint> endpoints) async {
-    var selectedEndpoints =
+    final selectedEndpoints =
         endpoints.where((element) => element.path == request.uri.path).toList();
 
     if (selectedEndpoints.isNotEmpty) {
-      var socket = await request.upgrade();
+      final socket = await request.upgrade();
 
       await selectedEndpoints.first.handler(context, socket);
     } else {

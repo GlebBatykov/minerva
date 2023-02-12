@@ -8,9 +8,9 @@ class TimeMiddleware extends LoggerMiddleware {
 
   @override
   Log handle(Log log) {
-    var dateTimeNow = DateTime.now();
+    final dateTimeNow = DateTime.now();
 
-    var time = DateTime(
+    final time = DateTime(
         0, 0, 0, dateTimeNow.hour, dateTimeNow.minute, dateTimeNow.second);
 
     log.template = _dateTimeInserter.insert(log.template, time);

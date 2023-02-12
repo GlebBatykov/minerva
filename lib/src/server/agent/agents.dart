@@ -16,20 +16,20 @@ class Agents {
       throw MinervaBindException(message: 'all agent names must be unique.');
     }
 
-    for (var data in _agentsData) {
+    for (final data in _agentsData) {
       _supervisors[data.name] = IsolateSupervisor();
     }
 
     await Future.wait(_supervisors.values.map((e) => e.initialize()));
 
     for (var i = 0; i < _agentsData.length; i++) {
-      var data = _agentsData[i];
+      final data = _agentsData[i];
 
       IsolateError? error;
 
-      var supervisor = _supervisors[data.name]!;
+      final supervisor = _supervisors[data.name]!;
 
-      var subscription = supervisor.errors.listen((event) {
+      final subscription = supervisor.errors.listen((event) {
         error ??= event;
       });
 

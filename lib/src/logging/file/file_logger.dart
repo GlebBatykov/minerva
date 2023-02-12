@@ -26,7 +26,7 @@ class FileLogger extends Logger {
 
   @override
   FutureOr<void> initialize(AgentConnectors connectors) {
-    var connector = connectors[_agentName];
+    final connector = connectors[_agentName];
 
     if (connector != null) {
       _connector = connector;
@@ -74,11 +74,11 @@ class FileLogger extends Logger {
   Future<void> _log(dynamic object, String template, LogLevel level) async {
     var log = Log(template, level, object.toString());
 
-    for (var middleware in _middlewares) {
+    for (final middleware in _middlewares) {
       log = middleware.handle(log);
     }
 
-    var data = {'log': log.template};
+    final data = {'log': log.template};
 
     _connector.cast('log', data: data);
   }

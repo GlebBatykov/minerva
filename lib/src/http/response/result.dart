@@ -39,7 +39,7 @@ class JsonResult extends Result {
 
   @override
   Future<MinervaResponse> get response async {
-    var minervaHeaders = headers ?? MinervaHttpHeaders();
+    final minervaHeaders = headers ?? MinervaHttpHeaders();
 
     minervaHeaders.contentType = ContentType.json;
 
@@ -61,9 +61,9 @@ class FileResult extends Result {
 
   @override
   Future<MinervaResponse> get response async {
-    var body = await file.readAsBytes();
+    final body = await file.readAsBytes();
 
-    var headers = MinervaHttpHeaders();
+    final headers = MinervaHttpHeaders();
 
     var header = 'attachment';
 
@@ -96,7 +96,7 @@ class FileContentResult extends Result {
 
   @override
   Future<MinervaResponse> get response async {
-    var body = await file.readAsString();
+    final body = await file.readAsString();
 
     return MinervaResponse(statusCode: statusCode, body: body);
   }

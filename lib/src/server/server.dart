@@ -44,9 +44,9 @@ class Server {
       Apis apis,
       LogPipeline logPipeline,
       AgentConnectors connectors) async {
-    var address = setting.address;
+    final address = setting.address;
 
-    var server = Server._(address.host, address.port, setting.builder,
+    final server = Server._(address.host, address.port, setting.builder,
         setting.configuration, endpoints, apis, setting.middlewares);
 
     await server._initialize(instance, logPipeline, connectors);
@@ -77,7 +77,7 @@ class Server {
 
   Future<void> _bindServer() async {
     if (_configuration is SecureServerConfiguration) {
-      var configuration = _configuration as SecureServerConfiguration;
+      final configuration = _configuration as SecureServerConfiguration;
 
       _server = await HttpServer.bindSecure(
           _address, _port, configuration.securityContext,
@@ -92,7 +92,7 @@ class Server {
           v6Only: _configuration.v6Only);
     }
 
-    var sessionTimeout = _configuration.sessionTimeout;
+    final sessionTimeout = _configuration.sessionTimeout;
 
     if (sessionTimeout != null) {
       _server.sessionTimeout = sessionTimeout;

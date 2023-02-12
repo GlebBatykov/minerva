@@ -19,7 +19,7 @@ class AppSetting {
 
   Map<String, dynamic>? get values => _data['values'];
 
-  Map<String, dynamic>? get logging => _data['logging'];
+  Map<String, List<String>>? get logging => _data['logging'];
 
   bool get isInitialized => _isInitialized;
 
@@ -42,7 +42,7 @@ class AppSetting {
     }
 
     try {
-      var data = jsonDecode(await _file.readAsString());
+      final data = jsonDecode(await _file.readAsString());
 
       _data.clear();
 
@@ -59,7 +59,7 @@ class AppSetting {
   Future<void> setValues(Map<String, dynamic> values) async {
     _data['values'] = values;
 
-    var json = jsonEncode(_data);
+    final json = jsonEncode(_data);
 
     await _save(json);
   }

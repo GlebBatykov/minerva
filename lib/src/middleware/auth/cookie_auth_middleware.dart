@@ -13,11 +13,11 @@ class CookieAuthMiddleware extends Middleware {
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
-    var isAuthorized =
+    final isAuthorized =
         await _isAuthorized(context.context, context.request.cookies);
 
     if (isAuthorized) {
-      var cookieContext = CookieAuthContext();
+      final cookieContext = CookieAuthContext();
 
       context.request.authContext.cookie = cookieContext;
     }

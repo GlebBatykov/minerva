@@ -59,12 +59,12 @@ class IsolateSupervisor {
 
   Future<void> initialize() async {
     if (!_isInitialized) {
-      var spawnMessage = IsolateSpawnMessage(_receivePort.sendPort);
+      final spawnMessage = IsolateSpawnMessage(_receivePort.sendPort);
 
       _isolate = await Isolate.spawn<IsolateSpawnMessage>(
           _isolateEntryPoint, spawnMessage);
 
-      var event = await _eventController.stream
+      final event = await _eventController.stream
               .firstWhere((element) => element is IsolateInitialized)
           as IsolateInitialized;
 
@@ -75,7 +75,7 @@ class IsolateSupervisor {
   }
 
   static void _isolateEntryPoint(IsolateSpawnMessage message) {
-    var handler = IsolateHandler(message.supervisorPort);
+    final handler = IsolateHandler(message.supervisorPort);
 
     handler.initialize();
   }

@@ -14,12 +14,12 @@ class ServerRequestHandler {
         _pipeline = pipeline;
 
   Future<void> handleHttpRequest(HttpRequest request) async {
-    var minervaRequest = MinervaRequest(request);
+    final minervaRequest = MinervaRequest(request);
 
-    var context = MiddlewareContext(minervaRequest, _endpoints.httpEndpoints,
+    final context = MiddlewareContext(minervaRequest, _endpoints.httpEndpoints,
         _endpoints.webSocketEndpoints, _context);
 
-    var result = await _pipeline.handle(context);
+    final result = await _pipeline.handle(context);
 
     late MinervaResponse minervaResponse;
 
@@ -35,7 +35,7 @@ class ServerRequestHandler {
       return;
     }
 
-    var response = request.response;
+    final response = request.response;
 
     _setHeaders(response.headers, minervaResponse.headers);
 
@@ -73,7 +73,7 @@ class ServerRequestHandler {
         headers.persistentConnection = minervaHeaders.persistentConnection!;
       }
 
-      for (var entry in minervaHeaders.headers.entries) {
+      for (final entry in minervaHeaders.headers.entries) {
         headers.add(entry.key, entry.value);
       }
     }

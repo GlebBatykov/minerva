@@ -7,7 +7,7 @@ abstract class HostEnvironment {
   /// The path to the project folder.
   static String get contentRootPath {
     if (_contentRootPath == null) {
-      var executablePath = Uri.parse(Platform.script.path);
+      final executablePath = Uri.parse(Platform.script.path);
 
       var segments = executablePath.pathSegments;
 
@@ -17,7 +17,7 @@ abstract class HostEnvironment {
 
       _contentRootPath = segments.join('/');
 
-      _contentRootPath = '/$contentRootPath';
+      _contentRootPath = '/$_contentRootPath';
     }
 
     return _contentRootPath!;

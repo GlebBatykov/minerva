@@ -4,16 +4,16 @@ class AuthAccessValidator {
   bool isHaveAccess(MinervaRequest request, AuthOptions? authOptions) {
     bool isHaveAccess = false;
 
-    var authContext = request.authContext;
+    final authContext = request.authContext;
 
     if (authOptions != null) {
-      var jwtOptions = authOptions.jwt;
+      final jwtOptions = authOptions.jwt;
 
-      var cookieOptions = authOptions.cookie;
+      final cookieOptions = authOptions.cookie;
 
-      var jwtContext = authContext.jwt;
+      final jwtContext = authContext.jwt;
 
-      var cookieContext = authContext.cookie;
+      final cookieContext = authContext.cookie;
 
       if (jwtOptions == null && cookieOptions == null) {
         isHaveAccess = true;
@@ -32,7 +32,7 @@ class AuthAccessValidator {
   bool _isJwtHaveAccess(JwtAuthOptions options, JwtAuthContext context) {
     var isHaveAccess = false;
 
-    var role = context.role;
+    final role = context.role;
 
     if ((options.permissionLevel != null &&
         (role != null &&

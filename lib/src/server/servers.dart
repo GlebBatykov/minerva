@@ -10,9 +10,9 @@ class Servers {
       MinervaEndpointsBuilder? endpointsBuilder,
       LogPipeline logPipeline,
       AgentConnectors connectors) async {
-    var endpoints = Endpoints();
+    final endpoints = Endpoints();
 
-    var apis = Apis(await apisBuilder?.build() ?? []);
+    final apis = Apis(await apisBuilder?.build() ?? []);
 
     await apis.build(endpoints);
 
@@ -27,7 +27,7 @@ class Servers {
     for (var i = 0; i < _supervisors.length; i++) {
       IsolateError? error;
 
-      var subscription = _supervisors[i].errors.listen((event) {
+      final subscription = _supervisors[i].errors.listen((event) {
         error ??= event;
       });
 

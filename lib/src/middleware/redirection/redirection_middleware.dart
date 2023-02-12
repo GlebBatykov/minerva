@@ -17,22 +17,22 @@ class RedirectionMiddleware extends Middleware {
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
-    var request = context.request;
+    final request = context.request;
 
-    var redirections = _redirections
+    final redirections = _redirections
         .where((element) => element.method.value == request.method)
         .toList();
 
     if (redirections.isNotEmpty) {
-      var redirection = _getRedirection(redirections, request);
+      final redirection = _getRedirection(redirections, request);
 
       if (redirection != null) {
-        var authOptions = redirection.authOptions;
+        final authOptions = redirection.authOptions;
 
         if (!_accessValidator.isHaveAccess(request, authOptions)) {
           return UnauthorizedResult();
         } else {
-          var location = _getLocation(redirection);
+          final location = _getLocation(redirection);
 
           return RedirectionResult(location);
         }
@@ -48,10 +48,11 @@ class RedirectionMiddleware extends Middleware {
 
   Redirection? _getRedirection(
       List<Redirection> redirections, MinervaRequest request) {
-    var matchedRedirection = <Redirection>[];
+    final matchedRedirection = <Redirection>[];
 
     for (var i = 0; i < redirections.length; i++) {
-      var result = _comparator.compare(redirections[i].path, request.uri.path);
+      final result =
+          _comparator.compare(redirections[i].path, request.uri.path);
 
       if (result.isEqual) {
         matchedRedirection.add(redirections[i]);
@@ -78,7 +79,7 @@ class RedirectionMiddleware extends Middleware {
   String _getLocation(Redirection redirection) {
     var location = redirection.location.toString();
 
-    for (var parameter in redirection.pathParameters.entries) {
+    for (final parameter in redirection.pathParameters.entries) {
       location =
           location.replaceAll(':${parameter.key}', parameter.value.toString());
     }

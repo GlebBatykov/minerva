@@ -25,12 +25,12 @@ class StaticFilesMiddleware extends Middleware {
   @override
   Future<dynamic> handle(
       MiddlewareContext context, MiddlewarePipelineNode? next) async {
-    var request = context.request;
+    final request = context.request;
 
-    var requestPath = request.uri.path;
+    final requestPath = request.uri.path;
 
     if (requestPath.startsWith(path)) {
-      var filePath = requestPath.substring(path.length, requestPath.length);
+      final filePath = requestPath.substring(path.length, requestPath.length);
 
       if (filePath != '/' && filePath.isNotEmpty) {
         return _handleFile(filePath);
@@ -55,16 +55,16 @@ class StaticFilesMiddleware extends Middleware {
       filePath = '/$filePath';
     }
 
-    var file = File.fromUri(Uri.parse('$_directoryPath$filePath'));
+    final file = File.fromUri(Uri.parse('$_directoryPath$filePath'));
 
     if (await file.exists()) {
-      var bytes = await file.readAsBytes();
+      final bytes = await file.readAsBytes();
 
-      var mimeType = lookupMimeType((basename(filePath))) ?? 'text/html';
+      final mimeType = lookupMimeType((basename(filePath))) ?? 'text/html';
 
-      var mimeSegments = mimeType.split('/');
+      final mimeSegments = mimeType.split('/');
 
-      var headers = MinervaHttpHeaders(
+      final headers = MinervaHttpHeaders(
           contentLength: bytes.length,
           contentType: ContentType(mimeSegments.first, mimeSegments.last,
               charset: 'utf-8'));

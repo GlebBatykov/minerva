@@ -28,7 +28,7 @@ class BodyMatcher {
       return false;
     }
 
-    for (var field in filter.fields) {
+    for (final field in filter.fields) {
       if (!json.keys.contains(field.name)) {
         return false;
       }
@@ -75,7 +75,7 @@ class BodyMatcher {
       return false;
     }
 
-    for (var field in filter.fields) {
+    for (final field in filter.fields) {
       if (!formData.data.keys.contains(field.name)) {
         return false;
       }

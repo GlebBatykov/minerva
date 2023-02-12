@@ -96,7 +96,7 @@ class MinervaRequest {
       {dynamic Function(List<String>)? protocolSelector,
       CompressionOptions compression =
           CompressionOptions.compressionDefault}) async {
-    var socket = await WebSocketTransformer.upgrade(_request,
+    final socket = await WebSocketTransformer.upgrade(_request,
         protocolSelector: protocolSelector, compression: compression);
 
     _isUpgraded = true;

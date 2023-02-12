@@ -17,22 +17,22 @@ class FormData {
 
   static Future<FormData> parse(
       List<Uint8List> bytes, HttpHeaders headers) async {
-    var data = <String, FormDataValue>{};
+    final data = <String, FormDataValue>{};
 
-    var boundary = headers.contentType!.parameters['boundary'];
+    final boundary = headers.contentType!.parameters['boundary'];
 
-    var transformer = MimeMultipartTransformer(boundary!);
+    final transformer = MimeMultipartTransformer(boundary!);
 
-    var bytesStream = Stream.fromIterable(bytes.map((e) => e.toList()));
+    final bytesStream = Stream.fromIterable(bytes.map((e) => e.toList()));
 
-    var parts = await transformer.bind(bytesStream).toList();
+    final parts = await transformer.bind(bytesStream).toList();
 
-    for (var part in parts) {
-      var values = part.headers['content-disposition']!.split(';');
+    for (final part in parts) {
+      final values = part.headers['content-disposition']!.split(';');
 
       String? name, filename;
 
-      for (var value in values) {
+      for (final value in values) {
         if (value.contains('filename') && filename == null) {
           filename = value.substring(value.indexOf('=') + 2, value.length - 1);
         } else if (value.contains('name') && name == null) {

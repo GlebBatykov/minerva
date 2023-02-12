@@ -39,7 +39,7 @@ class MiddlewarePipeline {
   }
 
   Future<void> dispose(ServerContext context) async {
-    for (var middleware in _middlewares) {
+    for (final middleware in _middlewares) {
       await middleware.dispose(context);
     }
   }
