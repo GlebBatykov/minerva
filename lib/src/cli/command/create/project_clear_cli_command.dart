@@ -9,21 +9,18 @@ class ProjectClearCLICommand extends CLICommand<void> {
   Future<void> run() async {
     const directoryNames = ['lib', 'test'];
 
-    var futures = <Future>[];
+    final futures = <Future>[];
 
-    for (var name in directoryNames) {
-      var directory = Directory.fromUri(Uri.directory('$projectPath/$name'));
+    for (final name in directoryNames) {
+      final directory = Directory.fromUri(Uri.directory('$projectPath/$name'));
 
-      for (var entity in await directory.list().toList()) {
+      for (final entity in await directory.list().toList()) {
         futures.add(entity.delete());
       }
     }
 
     futures.add(Directory.fromUri(Uri.directory('$projectPath/bin'))
         .delete(recursive: true));
-
-    futures
-        .add(Directory.fromUri(Uri.directory('$projectPath/assets')).create());
 
     futures.add(File.fromUri(Uri.file('$projectPath/.gitignore')).delete());
 

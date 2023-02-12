@@ -17,21 +17,23 @@ class RunCommand extends Command {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
     argParser.addOption('mode',
-        abbr: 'm', defaultsTo: 'debug', allowed: ['debug', 'release']);
+        abbr: 'm',
+        defaultsTo: BuildMode.debug.toString(),
+        allowed: BuildMode.values.map((e) => e.name));
   }
 
   @override
   Future<void> run() async {
-    var directoryPath = Directory.fromUri(Uri.directory(
+    final directoryPath = Directory.fromUri(Uri.directory(
             argResults!['directory'],
             windows: Platform.isWindows))
         .absolute
         .path;
 
-    var mode = argResults!['mode'];
+    final mode = BuildMode.fromName(argResults!['mode']);
 
     try {
-      var appProcess =
+      final appProcess =
           await RunApplicationCLICommand(directoryPath, mode).run();
 
       appProcess.stdout.listen((event) => stdout.add(event));

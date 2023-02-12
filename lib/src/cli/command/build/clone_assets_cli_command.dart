@@ -3,22 +3,25 @@ part of minerva_cli;
 class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
   final String projectPath;
 
-  final String mode;
+  final BuildMode mode;
 
-  final Map<String, dynamic> appSetting;
+  final AppSetting appSetting;
+
+  final CurrentBuildAppSetting buildAppSetting;
 
   final List<File> _files = [];
 
-  CloneAssetsCLICommand(this.projectPath, this.mode, this.appSetting);
+  CloneAssetsCLICommand(
+      this.projectPath, this.mode, this.appSetting, this.buildAppSetting);
 
   @override
   Future<List<FileLog>> run() async {
-    var fileLogs = <FileLog>[];
+    final fileLogs = <FileLog>[];
 
     late List<String> assets;
 
     try {
-      assets = AppSettingAssetsParser().parse(appSetting);
+      assets = AppSettingAssetsParser().parse(appSetting, buildAppSetting);
     } catch (object) {
       return fileLogs;
     }
@@ -35,13 +38,13 @@ class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
   }
 
   Future<void> _cloneFiles() async {
-    for (var file in _files) {
-      var relativePath =
+    for (final file in _files) {
+      final relativePath =
           file.path.substring(projectPath.length, file.path.length);
 
-      var buildFilePath = '$projectPath/build/$mode$relativePath';
+      final buildFilePath = '$projectPath/build/$mode$relativePath';
 
-      var buildFile =
+      final buildFile =
           File.fromUri(Uri.file(buildFilePath, windows: Platform.isWindows));
 
       await buildFile.create(recursive: true);

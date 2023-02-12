@@ -9,9 +9,9 @@ class ConfigureReadmeCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    var readmeFile = File.fromUri(Uri.file('$projectPath/README.md'));
+    final readmeFile = File.fromUri(Uri.file('$projectPath/README.md'));
 
-    await readmeFile.create();
+    await readmeFile.create(recursive: true);
 
     await readmeFile.writeAsString('''
 # $projectName

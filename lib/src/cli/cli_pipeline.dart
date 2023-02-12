@@ -6,12 +6,12 @@ class CLIPipeline {
   CLIPipeline(List<CLICommand> commands) : _commands = commands;
 
   Future<void> run() async {
-    for (var command in _commands) {
+    for (final command in _commands) {
       try {
         await command.run();
-      } catch (e, s) {
-        print(e);
-        print(s);
+      } catch (error, stackTrace) {
+        print(error);
+        print(stackTrace);
       }
     }
   }

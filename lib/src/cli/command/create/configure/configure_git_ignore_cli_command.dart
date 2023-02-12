@@ -7,15 +7,14 @@ class ConfigureGitIgnoreCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    var gitIgnoreFile = File.fromUri(Uri.file('$projectPath/.gitignore'));
+    final gitIgnoreFile = File.fromUri(Uri.file('$projectPath/.gitignore'));
 
-    await gitIgnoreFile.create();
+    await gitIgnoreFile.create(recursive: true);
 
     await gitIgnoreFile.writeAsString('''
 /build
 /.dart_tool
 .packages
-pubspec.lock
 test/test_app_setting.g.dart
 ''');
   }

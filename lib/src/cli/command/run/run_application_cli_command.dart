@@ -3,13 +3,13 @@ part of minerva_cli;
 class RunApplicationCLICommand extends CLICommand<Process> {
   final String projectPath;
 
-  final String mode;
+  final BuildMode mode;
 
   RunApplicationCLICommand(this.projectPath, this.mode);
 
   @override
   Future<Process> run() async {
-    var appSettingFile = File.fromUri(
+    final appSettingFile = File.fromUri(
         Uri.file('$projectPath/appsetting.json', windows: Platform.isWindows));
 
     if (!await appSettingFile.exists()) {
@@ -17,9 +17,12 @@ class RunApplicationCLICommand extends CLICommand<Process> {
           message: 'Current directory not exist appsetting.json file.');
     }
 
-    var setting = jsonDecode(await appSettingFile.readAsString())[mode];
+    final appSetting =
+        AppSetting.fromJson(jsonDecode(await appSettingFile.readAsString()));
 
-    if (setting == null) {
+    final buildSetting = _getBuildSetting(appSetting, mode);
+
+    if (buildSetting == null) {
       throw CLICommandException(
           message:
               'Setting for $mode mode is not exist in appsetting.json file.');
@@ -27,11 +30,11 @@ class RunApplicationCLICommand extends CLICommand<Process> {
 
     await _runBuild();
 
-    var compileType = setting['compile-type'] ?? 'AOT';
+    final compileType = buildSetting.compileType ?? CompileType.aot;
 
-    late Process appProcess;
+    late final Process appProcess;
 
-    if (compileType == 'AOT') {
+    if (compileType == CompileType.aot) {
       appProcess = await _runAOT();
     } else {
       appProcess = await _runJIT();
@@ -40,9 +43,17 @@ class RunApplicationCLICommand extends CLICommand<Process> {
     return appProcess;
   }
 
+  BuildAppSetting? _getBuildSetting(AppSetting appSetting, BuildMode mode) {
+    if (mode == BuildMode.debug) {
+      return appSetting.debug;
+    } else {
+      return appSetting.release;
+    }
+  }
+
   Future<void> _runBuild() async {
-    var buildProcess = await Process.start(
-        'minerva', ['build', '-d', projectPath, '-m', mode],
+    final buildProcess = await Process.start(
+        'minerva', ['build', '-d', projectPath, '-m', mode.toString()],
         runInShell: true);
 
     buildProcess.stdout.listen((event) => stdout.add(event));
@@ -54,11 +65,11 @@ class RunApplicationCLICommand extends CLICommand<Process> {
   }
 
   Future<Process> _runAOT() async {
-    var entryPointFilePath = Platform.isWindows
+    final entryPointFilePath = Platform.isWindows
         ? '$projectPath/build/$mode/bin/main.exe'
         : '$projectPath/build/$mode/bin/main';
 
-    var entryPointFile =
+    final entryPointFile =
         File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
 
     if (await entryPointFile.exists()) {
@@ -70,9 +81,9 @@ class RunApplicationCLICommand extends CLICommand<Process> {
   }
 
   Future<Process> _runJIT() async {
-    var entryPointFilePath = '$projectPath/build/$mode/bin/main.dill';
+    final entryPointFilePath = '$projectPath/build/$mode/bin/main.dill';
 
-    var entryPointFile =
+    final entryPointFile =
         File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
 
     if (await entryPointFile.exists()) {

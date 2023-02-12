@@ -7,9 +7,9 @@ class ClearDirectoryCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    var directory = Directory.fromUri(Uri.directory(directoryPath));
+    final directory = Directory.fromUri(Uri.directory(directoryPath));
 
-    var futures = <Future>[];
+    final futures = <Future>[];
 
     if (await directory.exists()) {
       var size = 0;
@@ -20,10 +20,10 @@ class ClearDirectoryCLICommand extends CLICommand<void> {
 
       childrens = childrens.whereType<File>().toList();
 
-      for (var entity in childrens) {
+      for (final entity in childrens) {
         fileCount++;
 
-        var stat = await entity.stat();
+        final stat = await entity.stat();
 
         size += stat.size;
 

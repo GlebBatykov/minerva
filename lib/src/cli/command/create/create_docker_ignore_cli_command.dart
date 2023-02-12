@@ -7,9 +7,9 @@ class CreateDockerIgnoreCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    var filePath = '$projectPath/.dockerignore';
+    final filePath = '$projectPath/.dockerignore';
 
-    var file = File.fromUri(Uri.file(filePath));
+    final file = File.fromUri(Uri.file(filePath));
 
     await file.create();
 

@@ -3,27 +3,27 @@ part of minerva_cli;
 class BuildCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  final String mode;
+  final BuildMode mode;
 
-  final String compileType;
+  final CompileType compileType;
 
   final File appSettingFile;
 
-  final Map<String, dynamic> appSetting;
+  final AppSetting appSetting;
 
-  final Map<String, dynamic> buildSetting;
+  final CurrentBuildAppSetting buildSetting;
 
   BuildCLICommand(this.projectPath, this.mode, this.compileType,
       this.appSettingFile, this.appSetting, this.buildSetting);
 
   @override
   Future<void> run() async {
-    var fileLogs = <FileLog>[];
+    final fileLogs = <FileLog>[];
 
-    var futures = <Future>[];
+    final futures = <Future>[];
 
-    var buildAppSetting =
-        BuildAppSettingBuilder(mode, appSetting, buildSetting).build();
+    final buildAppSetting =
+        FinalBuildAppSettingBuilder(mode, appSetting, buildSetting).build();
 
     futures.add(CompileCLICommand(projectPath, mode, compileType)
         .run()
@@ -33,16 +33,21 @@ class BuildCLICommand extends CLICommand<void> {
         CreateBuildAppSettingCLICommand(projectPath, mode, buildAppSetting)
             .run());
 
-    futures.add(CloneAssetsCLICommand(projectPath, mode, appSetting)
-        .run()
-        .then((value) => fileLogs.addAll(value)));
-
     futures.add(
-        GenerateTestAppSettingCLICommand(projectPath, buildAppSetting).run());
+        CloneAssetsCLICommand(projectPath, mode, appSetting, buildSetting)
+            .run()
+            .then((value) => fileLogs.addAll(value)));
+
+    if (appSetting.buildSetting.testSetting.createAppSetting) {
+      futures.add(
+          GenerateTestAppSettingCLICommand(projectPath, buildAppSetting).run());
+    } else {
+      futures.add(DeleteTestAppSettingCLICommand(projectPath).run());
+    }
 
     await Future.wait(futures);
 
-    var appSettingFileLog =
+    final appSettingFileLog =
         await FileLogCreater(projectPath).createAppSettingLog(appSettingFile);
 
     fileLogs.add(appSettingFileLog);
@@ -51,15 +56,15 @@ class BuildCLICommand extends CLICommand<void> {
   }
 
   Future<void> _createDetails(List<FileLog> fileLogs) async {
-    var detailsFile =
+    final detailsFile =
         File.fromUri(Uri.file('$projectPath/build/$mode/details.json'));
 
-    var details = <String, dynamic>{
-      'compile-type': compileType,
+    final details = <String, dynamic>{
+      'compile-type': compileType.toString(),
       'files': fileLogs.map((e) => e.toJson()).toList()
     };
 
-    var json = jsonEncode(details);
+    final json = jsonEncode(details);
 
     await detailsFile.writeAsString(json);
   }

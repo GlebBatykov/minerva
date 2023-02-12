@@ -7,7 +7,7 @@ class GetDependenciesCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    var pubGetProcess =
+    final pubGetProcess =
         await Process.start('dart', ['pub', 'get', '-C', projectPath]);
 
     pubGetProcess.stdout.listen((event) => stdout.add(event));

@@ -18,7 +18,7 @@ class DebugCommand extends Command {
 
   late final String _directoryPath;
 
-  late final String _mode;
+  late final BuildMode _mode;
 
   late final bool _isPauseIsolatesOnStart;
 
@@ -28,7 +28,9 @@ class DebugCommand extends Command {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
     argParser.addOption('mode',
-        abbr: 'm', defaultsTo: 'debug', allowed: ['debug', 'release']);
+        abbr: 'm',
+        defaultsTo: BuildMode.debug.toString(),
+        allowed: BuildMode.values.map((e) => e.name));
     argParser.addFlag('pause-isolates-on-start', abbr: 'p');
     argParser.addFlag('enable-asserts', abbr: 'e');
   }
@@ -38,7 +40,7 @@ class DebugCommand extends Command {
     _directoryPath =
         Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
 
-    _mode = argResults!['mode'];
+    _mode = BuildMode.fromName(argResults!['mode']);
 
     _isPauseIsolatesOnStart = argResults!['pause-isolates-on-start'];
 
@@ -62,28 +64,28 @@ class DebugCommand extends Command {
       usageException(object.message!);
     }
 
-    var appSetting = appSettingParseResult.data;
+    final appSetting = appSettingParseResult.data;
 
-    late Map<String, dynamic> currentBuildSetting;
+    late final CurrentBuildAppSetting currentBuildSetting;
 
     try {
       currentBuildSetting =
-          BuildSettingParser().parseCurrent(appSetting, _mode);
+          CurrentBuildSettingParser().parseCurrent(appSetting, _mode);
     } on BuildSettingParserException catch (object) {
       usageException(object.message!);
     }
 
-    var compileType = currentBuildSetting['compile-type'] as String?;
+    final compileType = currentBuildSetting.compileType;
 
-    if (compileType == null || compileType != 'JIT') {
+    if (compileType == null || compileType != CompileType.jit) {
       usageException(
           'To start debugging, the build compilation type must be JIT.');
     }
   }
 
   Future<void> _runBuild() async {
-    var buildProcess = await Process.start(
-        'minerva', ['build', '-d', _directoryPath, '-m', _mode]);
+    final buildProcess = await Process.start(
+        'minerva', ['build', '-d', _directoryPath, '-m', _mode.toString()]);
 
     buildProcess.stdout.listen((event) => stdout.add(event));
     buildProcess.stderr.listen((event) => stderr.add(event));
@@ -92,9 +94,9 @@ class DebugCommand extends Command {
   }
 
   Future<void> _runDebug() async {
-    var entryPointPath = '$_directoryPath/build/$_mode/bin/main.dill';
+    final entryPointPath = '$_directoryPath/build/$_mode/bin/main.dill';
 
-    var appProcess = await Process.start('dart', [
+    final appProcess = await Process.start('dart', [
       'run',
       '--observe',
       if (_isPauseIsolatesOnStart) '--pause-isolates-on-start',

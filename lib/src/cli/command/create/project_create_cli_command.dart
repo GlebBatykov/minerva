@@ -7,7 +7,7 @@ class ProjectCreateCommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    var createProcess =
+    final createProcess =
         await Process.start('dart', ['create', '-t', 'console', projectName]);
 
     await createProcess.exitCode;

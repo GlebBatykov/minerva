@@ -3,73 +3,53 @@ part of minerva_cli;
 class CreateExampleCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  CreateExampleCLICommand(this.projectPath);
+  final ProjectTemplate projectTemplate;
+
+  CreateExampleCLICommand(this.projectPath, this.projectTemplate);
 
   @override
   Future<void> run() async {
-    var mainFile = File.fromUri(Uri.file('$projectPath/lib/main.dart'));
+    switch (projectTemplate) {
+      case ProjectTemplate.controllers:
+        await _createControllersExample();
+        break;
+      case ProjectTemplate.endpoints:
+        await _createEndpointsExample();
+    }
+  }
 
-    var endpointBuilderFile = File.fromUri(
-        Uri.file('$projectPath/lib/builders/endpoints_builder.dart'));
+  Future<void> _createControllersExample() async {
+    final mainFile = File.fromUri(Uri.file('$projectPath/lib/main.dart'));
 
-    var serverBuilderFile =
-        File.fromUri(Uri.file('$projectPath/lib/builders/server_builder.dart'));
-
-    var apisBuilderFile =
+    final apisBuilderFile =
         File.fromUri(Uri.file('$projectPath/lib/builders/apis_builder.dart'));
 
-    var loggersBuilderFile = File.fromUri(
+    final loggersBuilderFile = File.fromUri(
         Uri.file('$projectPath/lib/builders/loggers_builder.dart'));
 
-    var settingBuilderFile = File.fromUri(
+    final settingBuilderFile = File.fromUri(
         Uri.file('$projectPath/lib/builders/setting_builder.dart'));
 
-    var middlewaresBuilderFile = File.fromUri(
+    final middlewaresBuilderFile = File.fromUri(
         Uri.file('$projectPath/lib/builders/middlewares_builder.dart'));
 
-    var agentsBuilderFile =
-        File.fromUri(Uri.file('$projectPath/lib/builders/agents_builder.dart'));
+    final weatherForecastControllerFile = File.fromUri(Uri.file(
+        '$projectPath/lib/controllers/weather_forecast_controller.dart'));
+
+    final weatherForecastFile =
+        File.fromUri(Uri.file('$projectPath/lib/models/weather_forecast.dart'));
 
     await Future.wait([
       mainFile.create(recursive: true),
-      endpointBuilderFile.create(recursive: true),
-      serverBuilderFile.create(recursive: true),
       apisBuilderFile.create(recursive: true),
       loggersBuilderFile.create(recursive: true),
       settingBuilderFile.create(recursive: true),
       middlewaresBuilderFile.create(recursive: true),
-      agentsBuilderFile.create(recursive: true)
+      weatherForecastControllerFile.create(recursive: true),
+      weatherForecastFile.create(recursive: true)
     ]);
 
-    var endpointsBuilderContent = '''
-import 'package:minerva/minerva.dart';
-
-class EndpointsBuilder extends MinervaEndpointsBuilder {
-  @override
-  void build(Endpoints endpoints) {
-    // Create route for GET requests with path '/hello'
-    endpoints.get('/hello', (context, request) {
-      final message = context.store['message'];
-
-      return message;
-    });
-  }
-}
-''';
-
-    var serverBuilderContent = '''
-import 'package:minerva/minerva.dart';
-
-class ServerBuilder extends MinervaServerBuilder {
-  @override
-  void build(ServerContext context) {
-    // Inject dependency or resource
-    context.store['message'] = 'Hello, world!';
-  }
-}
-''';
-
-    var mainContent = '''
+    final mainContent = '''
 import 'package:minerva/minerva.dart';
 
 import 'builders/setting_builder.dart';
@@ -80,20 +60,7 @@ void main(List<String> args) async {
 }
 ''';
 
-    var apisBuilderContent = '''
-import 'package:minerva/minerva.dart';
-
-class ApisBuilder extends MinervaApisBuilder {
-  @override
-  List<Api> build() {
-    final apis = <Api>[];
-
-    return apis;
-  }
-}
-''';
-
-    var loggersBuilderContent = '''
+    final loggersBuilderContent = '''
 import 'package:minerva/minerva.dart';
 
 class LoggersBuilder extends MinervaLoggersBuilder {
@@ -109,7 +76,20 @@ class LoggersBuilder extends MinervaLoggersBuilder {
 }
 ''';
 
-    var middlewaresBuilderContent = '''
+    final apisBuilderContent = '''
+import 'package:minerva/minerva.dart';
+
+import '../controllers/weather_forecast_controller.dart';
+
+class ApisBuilder extends MinervaApisBuilder {
+  @override
+  List<Api> build() {
+    return [WeatherForecastApi()];
+  }
+}
+''';
+
+    final middlewaresBuilderContent = '''
 import 'package:minerva/minerva.dart';
 
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
@@ -128,7 +108,187 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 }
 ''';
 
-    var settingBuilderContent = '''
+    final weatherForecastControllerContent = '''
+import 'dart:math';
+
+import 'package:minerva/minerva.dart';
+import 'package:minerva_controller_annotation/minerva_controller_annotation.dart';
+
+import '../models/weather_forecast.dart';
+
+part 'weather_forecast_controller.g.dart';
+
+@Controller()
+class WeatherForecastController extends ControllerBase {
+  final Random _random = Random();
+
+  static const _summaries = [
+    'Freezing',
+    'Bracing',
+    'Chilly',
+    'Cool',
+    'Mild',
+    'Warm',
+    'Balmy',
+    'Hot',
+    'Sweltering',
+    'Scorching'
+  ];
+
+  @Get()
+  JsonResult get() {
+    final weatherForecasts = List.generate(
+        _random.nextInt(5) + 1,
+        (index) => WeatherForecast(
+            date: DateTime.now().add(Duration(days: index)),
+            temperature: _random.nextInt(75) - 20,
+            summary: _summaries[_random.nextInt(_summaries.length)]));
+
+    final json = weatherForecasts.map((e) => e.toJson()).toList();
+
+    return JsonResult(json);
+  }
+}
+''';
+
+    final weatherForecastContent = '''
+class WeatherForecast {
+  final DateTime date;
+
+  final int temperature;
+
+  final String summary;
+
+  WeatherForecast(
+      {required this.date, required this.temperature, required this.summary});
+
+  Map<String, dynamic> toJson() => {
+        'date': date.toIso8601String(),
+        'temperature': temperature,
+        'summary': summary
+      };
+}
+''';
+
+    final settingBuilderContent = '''
+import 'dart:io';
+
+import 'package:minerva/minerva.dart';
+
+import 'apis_builder.dart';
+import 'middlewares_builder.dart';
+import 'loggers_builder.dart';
+
+class SettingBuilder extends MinervaSettingBuilder {
+  @override
+  MinervaSetting build() {
+    // Creates server setting
+    return MinervaSetting(
+        instance: Platform.numberOfProcessors,
+        loggersBuilder: LoggersBuilder(),
+        apisBuilder: ApisBuilder(),
+        middlewaresBuilder: MiddlewaresBuilder());
+  }
+}
+''';
+
+    await Future.wait([
+      mainFile.writeAsString(mainContent),
+      apisBuilderFile.writeAsString(apisBuilderContent),
+      loggersBuilderFile.writeAsString(loggersBuilderContent),
+      settingBuilderFile.writeAsString(settingBuilderContent),
+      middlewaresBuilderFile.writeAsString(middlewaresBuilderContent),
+      weatherForecastControllerFile
+          .writeAsString(weatherForecastControllerContent),
+      weatherForecastFile.writeAsString(weatherForecastContent)
+    ]);
+  }
+
+  Future<void> _createEndpointsExample() async {
+    final mainFile = File.fromUri(Uri.file('$projectPath/lib/main.dart'));
+
+    final endpointBuilderFile = File.fromUri(
+        Uri.file('$projectPath/lib/builders/endpoints_builder.dart'));
+
+    final loggersBuilderFile = File.fromUri(
+        Uri.file('$projectPath/lib/builders/loggers_builder.dart'));
+
+    final settingBuilderFile = File.fromUri(
+        Uri.file('$projectPath/lib/builders/setting_builder.dart'));
+
+    final middlewaresBuilderFile = File.fromUri(
+        Uri.file('$projectPath/lib/builders/middlewares_builder.dart'));
+
+    await Future.wait([
+      mainFile.create(recursive: true),
+      endpointBuilderFile.create(recursive: true),
+      loggersBuilderFile.create(recursive: true),
+      settingBuilderFile.create(recursive: true),
+      middlewaresBuilderFile.create(recursive: true)
+    ]);
+
+    final endpointsBuilderContent = '''
+import 'package:minerva/minerva.dart';
+
+class EndpointsBuilder extends MinervaEndpointsBuilder {
+  @override
+  void build(Endpoints endpoints) {
+    endpoints.get('/hello', (context, request) {
+      return 'Hello, world!';
+    });
+  }
+}
+''';
+
+    final mainContent = '''
+import 'package:minerva/minerva.dart';
+
+import 'builders/setting_builder.dart';
+
+void main(List<String> args) async {
+  // Bind server
+  await Minerva.bind(args: args, settingBuilder: SettingBuilder());
+}
+''';
+
+    final loggersBuilderContent = '''
+import 'package:minerva/minerva.dart';
+
+class LoggersBuilder extends MinervaLoggersBuilder {
+  @override
+  List<Logger> build() {
+    final loggers = <Logger>[];
+
+    // Adds console logger to log pipeline
+    loggers.add(ConsoleLogger());
+
+    return loggers;
+  }
+}
+''';
+
+    final middlewaresBuilderContent = '''
+import 'package:minerva/minerva.dart';
+
+class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
+  @override
+  List<Middleware> build() {
+    final middlewares = <Middleware>[];
+
+    // Adds middleware for handling errors in middleware pipeline
+    middlewares.add(ErrorMiddleware());
+
+    // Adds middleware for query mappings to endpoints in middleware pipeline
+    middlewares.add(EndpointMiddleware());
+
+    return middlewares;
+  }
+}
+''';
+
+    final settingBuilderContent = '''
+import 'dart:io';
+
 import 'package:minerva/minerva.dart';
 
 import 'agents_builder.dart';
@@ -143,39 +303,20 @@ class SettingBuilder extends MinervaSettingBuilder {
   MinervaSetting build() {
     // Creates server setting
     return MinervaSetting(
-        instance: 1,
+        instance: Platform.numberOfProcessors,
         loggersBuilder: LoggersBuilder(),
         endpointsBuilder: EndpointsBuilder(),
-        serverBuilder: ServerBuilder(),
-        apisBuilder: ApisBuilder(),
-        agentsBuilder: AgentsBuilder(),
         middlewaresBuilder: MiddlewaresBuilder());
-  }
-}
-''';
-
-    var agentsBuilderContent = '''
-import 'package:minerva/minerva.dart';
-
-class AgentsBuilder extends MinervaAgentsBuilder {
-  @override
-  List<AgentData> build() {
-    final agents = <AgentData>[];
-
-    return agents;
   }
 }
 ''';
 
     await Future.wait([
       endpointBuilderFile.writeAsString(endpointsBuilderContent),
-      serverBuilderFile.writeAsString(serverBuilderContent),
       mainFile.writeAsString(mainContent),
-      apisBuilderFile.writeAsString(apisBuilderContent),
       loggersBuilderFile.writeAsString(loggersBuilderContent),
       settingBuilderFile.writeAsString(settingBuilderContent),
-      middlewaresBuilderFile.writeAsString(middlewaresBuilderContent),
-      agentsBuilderFile.writeAsString(agentsBuilderContent)
+      middlewaresBuilderFile.writeAsString(middlewaresBuilderContent)
     ]);
   }
 }

@@ -17,17 +17,19 @@ class DockerCommand extends Command {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
     argParser.addOption('compile-type',
-        abbr: 'c', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
+        abbr: 'c',
+        defaultsTo: CompileType.aot.toString(),
+        allowed: CompileType.values.map((e) => e.name));
   }
 
   @override
   Future<void> run() async {
-    var directoryPath =
+    final directoryPath =
         Directory.fromUri(Uri.directory(argResults!['directory']))
             .absolute
             .path;
 
-    var compileType = argResults!['compile-type'];
+    final compileType = argResults!['compile-type'];
 
     await CreateDockerFileCLICommand(directoryPath, compileType).run();
   }

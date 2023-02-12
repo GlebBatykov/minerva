@@ -3,17 +3,17 @@ part of minerva_cli;
 class RebuildCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  final String mode;
+  final BuildMode mode;
 
-  final String compileType;
+  final CompileType compileType;
 
   final File appSettingFile;
 
-  final Map<String, dynamic> appSetting;
+  final AppSetting appSetting;
 
-  final Map<String, dynamic> buildSetting;
+  final CurrentBuildAppSetting buildSetting;
 
-  final String buildCompileType;
+  final CompileType buildCompileType;
 
   final List<FileLog> fileLogs;
 
@@ -31,7 +31,7 @@ class RebuildCLICommand extends CLICommand<void> {
 
   @override
   Future<void> run() async {
-    var futures = <Future>[
+    final futures = <Future>[
       _recreateAppSetting(),
       _recloneAssets(),
       _recompile()
@@ -43,36 +43,42 @@ class RebuildCLICommand extends CLICommand<void> {
   }
 
   Future<void> _recreateAppSetting() async {
-    var buildAppSettingPath = '$projectPath/build/$mode/appsetting.json';
+    final buildAppSettingPath = '$projectPath/build/$mode/appsetting.json';
 
-    var buildAppSettingFile = File.fromUri(Uri.file(buildAppSettingPath));
+    final buildAppSettingFile = File.fromUri(Uri.file(buildAppSettingPath));
 
-    var isNeedRecreate = await _isNeedRecreateAppSetting(buildAppSettingFile);
+    final isNeedRecreate = await _isNeedRecreateAppSetting(buildAppSettingFile);
 
     if (isNeedRecreate) {
-      var buildAppSetting =
-          BuildAppSettingBuilder(mode, appSetting, buildSetting).build();
+      final buildAppSetting =
+          FinalBuildAppSettingBuilder(mode, appSetting, buildSetting).build();
 
-      var futures = <Future>[];
+      final futures = <Future>[];
 
       futures.add(_createAppSetting(buildAppSettingFile, buildAppSetting));
 
-      futures.add(
-          GenerateTestAppSettingCLICommand(projectPath, buildAppSetting).run());
+      if (appSetting.buildSetting.testSetting.createAppSetting) {
+        futures.add(
+            GenerateTestAppSettingCLICommand(projectPath, buildAppSetting)
+                .run());
+      } else {
+        futures.add(DeleteTestAppSettingCLICommand(projectPath).run());
+      }
 
       await Future.wait(futures);
     }
   }
 
   Future<void> _createAppSetting(
-      File buildAppSettingFile, Map<String, dynamic> buildAppSetting) async {
+      File buildAppSettingFile, FinalBuildAppSetting buildAppSetting) async {
     if (await buildAppSettingFile.exists()) {
       await buildAppSettingFile.delete();
     }
 
     await buildAppSettingFile.create(recursive: true);
 
-    await buildAppSettingFile.writeAsString(jsonEncode(buildAppSetting));
+    await buildAppSettingFile
+        .writeAsString(jsonEncode(buildAppSetting.toJson()));
 
     fileLogs.removeWhere((element) => element.type == FileLogType.appsetting);
 
@@ -85,9 +91,9 @@ class RebuildCLICommand extends CLICommand<void> {
       return true;
     }
 
-    var buildAppSettingFileStat = await buildAppSettingFile.stat();
+    final buildAppSettingFileStat = await buildAppSettingFile.stat();
 
-    var appSettingFileStat = await appSettingFile.stat();
+    final appSettingFileStat = await appSettingFile.stat();
 
     if (appSettingFileStat.modified.isAfter(buildAppSettingFileStat.modified)) {
       return true;
@@ -99,21 +105,21 @@ class RebuildCLICommand extends CLICommand<void> {
   Future<void> _recloneAssets() async {
     _buildDirectory = '$projectPath/build/$mode';
 
-    var buildAssetsPaths = _getBuildAssetsPaths();
+    final buildAssetsPaths = _getBuildAssetsPaths();
 
-    var buildAssetsFiles = buildAssetsPaths
+    final buildAssetsFiles = buildAssetsPaths
         .map((e) => File.fromUri(Uri.file(e, windows: Platform.isWindows)))
         .toList();
 
     late List<String> assets;
 
     try {
-      assets = AppSettingAssetsParser().parse(appSetting);
+      assets = AppSettingAssetsParser().parse(appSetting, buildSetting);
     } catch (_) {
       assets = [];
     }
 
-    var assetsFiles = await AssetsFilesParser(projectPath).parseMany(assets);
+    final assetsFiles = await AssetsFilesParser(projectPath).parseMany(assets);
 
     if (assets.isNotEmpty) {
       await _removeUnnecessaryBuildAssets(buildAssetsFiles, assetsFiles);
@@ -133,12 +139,12 @@ class RebuildCLICommand extends CLICommand<void> {
 
   Future<void> _removeUnnecessaryBuildAssets(
       List<File> buildAssetsFiles, List<File> assetsFiles) async {
-    for (var buildAssetFile in buildAssetsFiles) {
+    for (final buildAssetFile in buildAssetsFiles) {
       if (await buildAssetFile.exists()) {
-        var buildAssetRelativePath =
+        final buildAssetRelativePath =
             relative(buildAssetFile.path, from: _buildDirectory);
 
-        var filtred = assetsFiles.where((element) =>
+        final filtred = assetsFiles.where((element) =>
             relative(element.path, from: projectPath) ==
             buildAssetRelativePath);
 
@@ -154,15 +160,15 @@ class RebuildCLICommand extends CLICommand<void> {
   }
 
   Future<bool> _isOutdated(File buildAssetFile, File assetFile) async {
-    var buildAssetFileStat = await buildAssetFile.stat();
+    final buildAssetFileStat = await buildAssetFile.stat();
 
-    var assetFileStat = await assetFile.stat();
+    final assetFileStat = await assetFile.stat();
 
     return assetFileStat.modified.isAfter(buildAssetFileStat.modified);
   }
 
   Future<void> _clearBuildAssets(List<File> assetsFiles) async {
-    for (var assetFile in assetsFiles) {
+    for (final assetFile in assetsFiles) {
       await _deleteFile(assetFile);
     }
   }
@@ -174,13 +180,13 @@ class RebuildCLICommand extends CLICommand<void> {
   }
 
   Future<void> _cloneAssets(List<File> files) async {
-    for (var file in files) {
-      var relativePath =
+    for (final file in files) {
+      final relativePath =
           file.path.substring(projectPath.length, file.path.length);
 
-      var buildFilePath = '$projectPath/build/$mode$relativePath';
+      final buildFilePath = '$projectPath/build/$mode$relativePath';
 
-      var buildFile =
+      final buildFile =
           File.fromUri(Uri.file(buildFilePath, windows: Platform.isWindows));
 
       if (!await buildFile.exists()) {
@@ -201,18 +207,18 @@ class RebuildCLICommand extends CLICommand<void> {
 
     await buildFile.writeAsBytes(await file.readAsBytes());
 
-    var fileLog = await FileLogCreater(projectPath).createAssetLog(file);
+    final fileLog = await FileLogCreater(projectPath).createAssetLog(file);
 
     fileLogs.add(fileLog);
   }
 
   Future<void> _recompile() async {
-    var sourceFilesLogs = _getSourceLogs();
+    final sourceFilesLogs = _getSourceLogs();
 
-    var isNeedRecompile = await _isNeedRecompile(sourceFilesLogs);
+    final isNeedRecompile = await _isNeedRecompile(sourceFilesLogs);
 
     if (isNeedRecompile) {
-      var rebuildSourceFileLog =
+      final rebuildSourceFileLog =
           await CompileCLICommand(projectPath, mode, compileType).run();
 
       fileLogs.removeWhere((element) => element.type == FileLogType.source);
@@ -230,7 +236,7 @@ class RebuildCLICommand extends CLICommand<void> {
 
     late String executableFilePath;
 
-    if (compileType == 'AOT') {
+    if (compileType == CompileType.aot) {
       executableFilePath = Platform.isWindows
           ? '$projectPath/build/$mode/bin/main.exe'
           : '$projectPath/build/$mode/bin/main';
@@ -238,14 +244,14 @@ class RebuildCLICommand extends CLICommand<void> {
       executableFilePath = '$projectPath/build/$mode/bin/main.dill';
     }
 
-    var executableFile = File.fromUri(Uri.file(executableFilePath));
+    final executableFile = File.fromUri(Uri.file(executableFilePath));
 
     if (!await executableFile.exists()) {
       return true;
     }
 
-    for (var sourceLog in sourceFilesLogs) {
-      var sourceFile = File.fromUri(Uri.file(
+    for (final sourceLog in sourceFilesLogs) {
+      final sourceFile = File.fromUri(Uri.file(
           absolute(projectPath, sourceLog.path),
           windows: Platform.isWindows));
 
@@ -253,7 +259,7 @@ class RebuildCLICommand extends CLICommand<void> {
         return true;
       }
 
-      var sourceFileStat = await sourceFile.stat();
+      final sourceFileStat = await sourceFile.stat();
 
       if (sourceFileStat.modified.isAfter(sourceLog.modificationTime)) {
         return true;
@@ -270,15 +276,15 @@ class RebuildCLICommand extends CLICommand<void> {
   }
 
   Future<void> _recreateDetails(List<FileLog> fileLogs) async {
-    var detailsFile =
+    final detailsFile =
         File.fromUri(Uri.file('$projectPath/build/$mode/details.json'));
 
-    var details = <String, dynamic>{
-      'compile-type': compileType,
+    final details = <String, dynamic>{
+      'compile-type': compileType.toString(),
       'files': fileLogs.map((e) => e.toJson()).toList()
     };
 
-    var json = jsonEncode(details);
+    final json = jsonEncode(details);
 
     await detailsFile.writeAsString(json);
   }

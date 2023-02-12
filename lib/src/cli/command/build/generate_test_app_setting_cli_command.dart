@@ -3,22 +3,22 @@ part of minerva_cli;
 class GenerateTestAppSettingCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  final Map<String, dynamic> buildAppSetting;
+  final FinalBuildAppSetting buildAppSetting;
 
   GenerateTestAppSettingCLICommand(this.projectPath, this.buildAppSetting);
 
   @override
   Future<void> run() async {
-    var testAppSettingPath = '$projectPath/test/test_app_setting.g.dart';
+    final testAppSettingPath = '$projectPath/test/test_app_setting.g.dart';
 
-    var testAppSettingFile =
+    final testAppSettingFile =
         File.fromUri(Uri.file(testAppSettingPath, windows: Platform.isWindows));
 
     await testAppSettingFile.create(recursive: true);
 
-    var host = buildAppSetting['host'] as String;
+    final host = buildAppSetting.host;
 
-    var port = buildAppSetting['port'];
+    final port = buildAppSetting.port;
 
     await testAppSettingFile.writeAsString('''
 // GENERATED CODE - DO NOT MODIFY BY HAND

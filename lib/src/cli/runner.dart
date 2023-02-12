@@ -2,8 +2,8 @@ part of minerva_cli;
 
 class Runner {
   Future<void> run(List<String> args) async {
-    var runner = CommandRunner(
-        'minerva', 'Server side framework for Dart. Version 0.3.3.');
+    final runner = CommandRunner('minerva',
+        'Server side framework for Dart. Version ${CLIConfiguration.minervaVersion}.');
 
     runner.addCommand(CreateCommand());
     runner.addCommand(RunCommand());

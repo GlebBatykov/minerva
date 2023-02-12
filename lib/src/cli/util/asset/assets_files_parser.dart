@@ -10,7 +10,7 @@ class AssetsFilesParser {
   Future<List<File>> parseMany(List<String> assets) async {
     _files.clear();
 
-    for (var asset in assets) {
+    for (final asset in assets) {
       await _parceAsset(asset);
     }
 
@@ -27,9 +27,9 @@ class AssetsFilesParser {
 
   Future<void> _parceAsset(String asset) async {
     if (asset[0] == '/') {
-      var directoryPath = '$_projectPath$asset';
+      final directoryPath = '$_projectPath$asset';
 
-      var directory = Directory.fromUri(
+      final directory = Directory.fromUri(
           Uri.directory(directoryPath, windows: Platform.isWindows));
 
       if (!await directory.exists()) {
@@ -40,9 +40,10 @@ class AssetsFilesParser {
 
       await _decomposeFileSystemEntry(directory);
     } else {
-      var filePath = '$_projectPath/$asset';
+      final filePath = '$_projectPath/$asset';
 
-      var file = File.fromUri(Uri.file(filePath, windows: Platform.isWindows));
+      final file =
+          File.fromUri(Uri.file(filePath, windows: Platform.isWindows));
 
       if (!await file.exists()) {
         throw CLICommandException(
@@ -57,7 +58,7 @@ class AssetsFilesParser {
     if (entity is File) {
       _files.add(entity);
     } else if (entity is Directory) {
-      for (var child in await entity.list().toList()) {
+      for (final child in await entity.list().toList()) {
         await _decomposeFileSystemEntry(child);
       }
     }

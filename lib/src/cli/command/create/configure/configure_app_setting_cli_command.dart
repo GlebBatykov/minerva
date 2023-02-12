@@ -3,36 +3,39 @@ part of minerva_cli;
 class ConfigureAppSettingCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  final String debugCompileType;
+  final CompileType debugCompileType;
 
-  final String releaseCompileType;
+  final CompileType releaseCompileType;
 
   ConfigureAppSettingCLICommand(
       this.projectPath, this.debugCompileType, this.releaseCompileType);
 
   @override
   Future<void> run() async {
-    var appSettingFile = File.fromUri(Uri.file('$projectPath/appsetting.json'));
+    final appSettingFile =
+        File.fromUri(Uri.file('$projectPath/appsetting.json'));
 
-    await appSettingFile.create();
+    await appSettingFile.create(recursive: true);
 
-    var appSetting = <String, dynamic>{};
+    final appSetting = <String, dynamic>{};
 
     appSetting['debug'] = <String, dynamic>{
-      'compile-type': debugCompileType,
+      'compile-type': debugCompileType.toString(),
       'host': '127.0.0.1',
       'port': 5000,
     };
 
     appSetting['release'] = <String, dynamic>{
-      'compile-type': releaseCompileType,
+      'compile-type': releaseCompileType.toString(),
       'host': '0.0.0.0',
       'port': 8080
     };
 
-    appSetting['assets'] = <String>['/assets'];
+    appSetting['build'] = {
+      'test': {'createAppSetting': true}
+    };
 
-    var json = jsonEncode(appSetting);
+    final json = jsonEncode(appSetting);
 
     await appSettingFile.writeAsString(json);
   }

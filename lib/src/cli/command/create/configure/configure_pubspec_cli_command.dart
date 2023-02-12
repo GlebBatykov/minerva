@@ -5,15 +5,24 @@ class ConfigurePubspecCLICommand extends CLICommand<void> {
 
   final String projectPath;
 
-  ConfigurePubspecCLICommand(this.projectName, this.projectPath);
+  final ProjectTemplate projectTemplate;
+
+  ConfigurePubspecCLICommand(
+      this.projectName, this.projectPath, this.projectTemplate);
 
   @override
   Future<void> run() async {
-    var pubSpecFile = File.fromUri(Uri.file('$projectPath/pubspec.yaml'));
+    final pubSpecFile = File.fromUri(Uri.file('$projectPath/pubspec.yaml'));
 
-    await pubSpecFile.create();
+    await pubSpecFile.create(recursive: true);
 
-    await pubSpecFile.writeAsString('''
+    await pubSpecFile.writeAsString(_getContent());
+  }
+
+  String _getContent() {
+    switch (projectTemplate) {
+      case ProjectTemplate.controllers:
+        return '''
 publish_to: none
 name: $projectName
 description: Minerva application.
@@ -23,12 +32,33 @@ environment:
   sdk: '>=2.17.5 <3.0.0'
 
 dependencies:
-  minerva: ^0.3.3
+  minerva: ^${CLIConfiguration.minervaVersion}
+  minerva_controller_generator: ^${CLIConfiguration.minervaControllerGeneratorVersion}
+  build_runner: ^${CLIConfiguration.buildRunnerVersion}
 
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
   dio: ^4.0.6
-''');
+''';
+      case ProjectTemplate.endpoints:
+        return '''
+publish_to: none
+name: $projectName
+description: Minerva application.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.17.5 <3.0.0'
+
+dependencies:
+  minerva: ^${CLIConfiguration.minervaVersion}
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0
+  dio: ^4.0.6
+''';
+    }
   }
 }

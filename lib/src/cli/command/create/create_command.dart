@@ -10,47 +10,71 @@ class CreateCommand extends Command {
   @override
   String get usage => '''
     -n,   --name                  required parameter specifying the name of the project.
+    -t,   --template              specifies project template.
+
+       [controllers](default)     project that uses controllers to configure endpoints.
+       [endpoints]                simple project, endpoints are created manually.
+
     -d,   --debug-compile-type    specifies compile type of debug build of project. Possible values: AOT, JIT (default).
     -r,   --release-compile-type  specifies compile type of release build of project. Possible values: AOT (default), JIT.
-    -o,   --docker-compile-type   specifies the compilation type to be used in the docker container. Possible values: AOT (default), JIT.
+    -o,   --docker-compile-type   specifies the compilation type to be used in the docker container. Possible values: AOT (default), JIT.                  
   ''';
+
+  String? _projectName;
+
+  late final ProjectTemplate _projectTemplate;
 
   CreateCommand() {
     argParser.addOption('name', abbr: 'n');
     argParser.addOption('debug-compile-type',
-        abbr: 'c', defaultsTo: 'JIT', allowed: ['AOT', 'JIT']);
+        abbr: 'c',
+        defaultsTo: CompileType.jit.toString(),
+        allowed: CompileType.values.map((e) => e.name));
     argParser.addOption('release-compile-type',
-        abbr: 'r', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
+        abbr: 'r',
+        defaultsTo: CompileType.aot.toString(),
+        allowed: CompileType.values.map((e) => e.name));
     argParser.addOption('docker-compile-type',
-        abbr: 'o', defaultsTo: 'AOT', allowed: ['AOT', 'JIT']);
+        abbr: 'o',
+        defaultsTo: CompileType.aot.toString(),
+        allowed: CompileType.values.map((e) => e.name));
+    argParser.addOption('template',
+        abbr: 't',
+        defaultsTo: 'controllers',
+        allowed: ['controllers', 'endpoints']);
   }
 
   @override
   Future<void> run() async {
-    var projectName = argResults!['name'];
+    _projectName = argResults!['name'];
 
-    if (projectName == null) {
+    if (_projectName == null) {
       usageException('Project name must be specified.');
     }
 
-    await ProjectCreateCommand(projectName).run();
+    //await ProjectCreateCommand(_projectName!).run();
 
-    var projectPath = '${Directory.current.path}/$projectName';
+    final projectPath = '${Directory.current.path}/$_projectName';
 
-    var debugCompileType = argResults!['debug-compile-type'];
+    final debugCompileType =
+        CompileType.fromName(argResults!['debug-compile-type']);
 
-    var releaseCompileType = argResults!['release-compile-type'];
+    final releaseCompileType =
+        CompileType.fromName(argResults!['release-compile-type']);
 
-    var dockerCompileType = argResults!['docker-compile-type'];
+    final dockerCompileType =
+        CompileType.fromName(argResults!['docker-compile-type']);
 
-    print('Creating Minerva project with name $projectName...');
+    _projectTemplate = ProjectTemplate.fromName(argResults!['template']);
+
+    print('Creating Minerva project with name $_projectName...');
 
     stdout.writeln();
 
-    var pipeline = CLIPipeline([
-      ProjectClearCLICommand(projectPath),
-      ConfigureProjectCLICommand(
-          projectName, projectPath, debugCompileType, releaseCompileType),
+    final pipeline = CLIPipeline([
+      //ProjectClearCLICommand(projectPath),
+      ConfigureProjectCLICommand(_projectName!, projectPath, debugCompileType,
+          releaseCompileType, _projectTemplate),
       CreateDockerIgnoreCLICommand(projectPath),
       CreateDockerFileCLICommand(projectPath, dockerCompileType),
       GetDependenciesCLICommand(projectPath)
@@ -60,11 +84,25 @@ class CreateCommand extends Command {
 
     stdout.writeln();
 
-    print('''
-Created project $projectName in $projectName! In order to get started, run the following commands:
+    print(_getSuccessCreateMessage());
+  }
 
-  cd $projectName
+  String _getSuccessCreateMessage() {
+    if (_projectTemplate == ProjectTemplate.controllers) {
+      return '''
+Created project $_projectName in $_projectName! In order to get started, run the following commands:
+
+  cd $_projectName
+  dart pub run build_runner build
   minerva run
-''');
+''';
+    } else {
+      return '''
+Created project $_projectName in $_projectName! In order to get started, run the following commands:
+
+  cd $_projectName
+  minerva run
+''';
+    }
   }
 }

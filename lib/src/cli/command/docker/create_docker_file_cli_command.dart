@@ -3,11 +3,11 @@ part of minerva_cli;
 class CreateDockerFileCLICommand extends CLICommand<void> {
   final String projectPath;
 
-  final String compileType;
+  final CompileType compileType;
 
-  late Map<String, dynamic> _appSetting;
+  late AppSetting _appSetting;
 
-  late Map<String, dynamic> _buildSetting;
+  late CurrentBuildAppSetting _buildSetting;
 
   late final List<String> _assets;
 
@@ -17,15 +17,13 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
   Future<void> run() async {
     await _parseAssets();
 
-    var filePath = '$projectPath/Dockerfile';
+    final filePath = '$projectPath/Dockerfile';
 
-    var dockerFile = File.fromUri(Uri.file(filePath));
+    final dockerFile = File.fromUri(Uri.file(filePath));
 
     await dockerFile.create();
 
-    _buildSetting = BuildSettingParser().parseCurrent(_appSetting, 'release');
-
-    if (compileType == 'AOT') {
+    if (compileType == CompileType.aot) {
       await _writeAOTFile(dockerFile);
     } else {
       await _writeJTIFile(dockerFile);
@@ -43,8 +41,11 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
 
     _appSetting = appSettingParseResult.data;
 
+    _buildSetting = CurrentBuildSettingParser()
+        .parseCurrent(_appSetting, BuildMode.release);
+
     try {
-      _assets = AppSettingAssetsParser().parse(_appSetting);
+      _assets = AppSettingAssetsParser().parse(_appSetting, _buildSetting);
     } on CLICommandException catch (_) {
       rethrow;
     }
@@ -80,7 +81,7 @@ COPY --from=build /app/build/release/bin /app/bin
 COPY --from=build /app/build/release/appsetting.json /app${await _generateCopyAssets()}
 
 # Start server.
-EXPOSE ${_buildSetting['port']}
+EXPOSE ${_buildSetting.port}
 CMD ["app/bin/main"]
 ''');
   }
@@ -114,7 +115,7 @@ COPY --from=build /app/build/release/bin /app/bin
 COPY --from=build /app/build/release/appsetting.json /app${await _generateCopyAssets()}
 
 # Start server.
-EXPOSE ${_buildSetting['port']}
+EXPOSE ${_buildSetting.port}
 CMD ["usr/lib/dart/bin/dart", "app/bin/main.dill"]
 ''');
   }
@@ -127,20 +128,20 @@ CMD ["usr/lib/dart/bin/dart", "app/bin/main.dill"]
     }
 
     for (var i = 0; i < _assets.length; i++) {
-      var asset = _assets[i];
+      final asset = _assets[i];
 
-      var files = await AssetsFilesParser(projectPath).parseOne(asset);
+      final files = await AssetsFilesParser(projectPath).parseOne(asset);
 
       if (files.isNotEmpty) {
         if (asset.startsWith('/')) {
           value +=
               'COPY --from=build /app/build/release$asset /app/${asset.substring(1)}';
         } else {
-          var segments = asset.split('/');
+          final segments = asset.split('/');
 
           segments.removeLast();
 
-          var path = segments.join('/');
+          final path = segments.join('/');
 
           value += 'COPY --from=build app/build/release/$asset /app/$path';
         }

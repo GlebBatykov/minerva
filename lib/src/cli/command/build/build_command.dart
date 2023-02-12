@@ -13,15 +13,15 @@ class BuildCommand extends Command {
     -m  --mode      sets the project build mode. Possible values: debug (default), release.
   ''';
 
-  late String _directoryPath;
+  late final String _directoryPath;
 
-  late String _mode;
+  late final BuildMode _mode;
 
-  late String _compileType;
+  late final CompileType _compileType;
 
-  late File _appSettingFile;
+  late final File _appSettingFile;
 
-  late Map<String, dynamic> _appSetting;
+  late final AppSetting _appSetting;
 
   final Map<String, dynamic> _details = {};
 
@@ -29,7 +29,9 @@ class BuildCommand extends Command {
     argParser.addOption('directory',
         abbr: 'd', defaultsTo: Directory.current.path);
     argParser.addOption('mode',
-        abbr: 'm', defaultsTo: 'debug', allowed: ['debug', 'release']);
+        abbr: 'm',
+        defaultsTo: BuildMode.debug.toString(),
+        allowed: BuildMode.values.map((e) => e.name));
   }
 
   @override
@@ -39,7 +41,7 @@ class BuildCommand extends Command {
         .absolute
         .path;
 
-    _mode = argResults!['mode'];
+    _mode = BuildMode.fromName(argResults!['mode']);
 
     late AppSettingParseResult appSettingParseResult;
 
@@ -53,28 +55,36 @@ class BuildCommand extends Command {
 
     _appSettingFile = appSettingParseResult.file;
 
-    var currentBuildSetting =
-        BuildSettingParser().parseCurrent(_appSetting, _mode);
+    final currentBuildSetting =
+        CurrentBuildSettingParser().parseCurrent(_appSetting, _mode);
 
-    _compileType = currentBuildSetting['compile-type'] ?? 'JIT';
+    _compileType = _getCompileType(currentBuildSetting);
 
-    var isNeedScratchBuild = await _isNeedBuildFromScratch(_compileType);
+    final isNeedScratchBuild = await _isNeedBuildFromScratch();
 
     if (isNeedScratchBuild) {
       await _clearBuild();
 
-      await _build(currentBuildSetting, _compileType);
+      await _build(currentBuildSetting);
     } else {
       await _rebuild(currentBuildSetting);
     }
   }
 
-  Future<bool> _isNeedBuildFromScratch(String compileType) async {
-    var detailsFile = File.fromUri(Uri.file(
+  CompileType _getCompileType(CurrentBuildAppSetting buildSetting) {
+    if (buildSetting.compileType != null) {
+      return buildSetting.compileType!;
+    } else {
+      return CompileType.jit;
+    }
+  }
+
+  Future<bool> _isNeedBuildFromScratch() async {
+    final detailsFile = File.fromUri(Uri.file(
         '$_directoryPath/build/$_mode/details.json',
         windows: Platform.isWindows));
 
-    var detailsFileExists = await detailsFile.exists();
+    final detailsFileExists = await detailsFile.exists();
 
     if (!detailsFileExists) {
       return true;
@@ -97,9 +107,9 @@ class BuildCommand extends Command {
   }
 
   Future<void> _clearBuild() async {
-    var buildDirectoryPath = '$_directoryPath/build/$_mode';
+    final buildDirectoryPath = '$_directoryPath/build/$_mode';
 
-    var buildDirectory = Directory.fromUri(Uri.directory(
+    final buildDirectory = Directory.fromUri(Uri.directory(
         '$_directoryPath/build/$_mode',
         windows: Platform.isWindows));
 
@@ -112,11 +122,10 @@ class BuildCommand extends Command {
     }
   }
 
-  Future<void> _build(
-      Map<String, dynamic> buildSetting, String compileType) async {
+  Future<void> _build(CurrentBuildAppSetting buildSetting) async {
     try {
-      await BuildCLICommand(_directoryPath, _mode, compileType, _appSettingFile,
-              _appSetting, buildSetting)
+      await BuildCLICommand(_directoryPath, _mode, _compileType,
+              _appSettingFile, _appSetting, buildSetting)
           .run();
     } on CLICommandException catch (object) {
       usageException(object.message!);
@@ -125,12 +134,12 @@ class BuildCommand extends Command {
     }
   }
 
-  Future<void> _rebuild(Map<String, dynamic> buildSetting) async {
+  Future<void> _rebuild(CurrentBuildAppSetting buildSetting) async {
     try {
-      var fileLogs =
+      final fileLogs =
           (_details['files'] as List).map((e) => FileLog.fromJson(e)).toList();
 
-      var buildCompileType = _details['compile-type'] as String;
+      final buildCompileType = CompileType.fromName(_details['compile-type']);
 
       await RebuildCLICommand(
               _directoryPath,

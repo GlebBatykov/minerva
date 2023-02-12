@@ -3,9 +3,9 @@ part of minerva_cli;
 class CompileCLICommand extends CLICommand<List<FileLog>> {
   final String projectPath;
 
-  final String mode;
+  final BuildMode mode;
 
-  final String compileType;
+  final CompileType compileType;
 
   CompileCLICommand(this.projectPath, this.mode, this.compileType);
 
@@ -13,9 +13,9 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   Future<List<FileLog>> run() async {
     print('Compilation of the project...');
 
-    var entryPointFilePath = '$projectPath/lib/main.dart';
+    final entryPointFilePath = '$projectPath/lib/main.dart';
 
-    var entryPointFile =
+    final entryPointFile =
         File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
 
     if (await entryPointFile.exists()) {
@@ -33,9 +33,9 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   }
 
   Future<void> _compile(String entryPointFilePath) async {
-    var compileDirectoryPath = '$projectPath/build/$mode/bin';
+    final compileDirectoryPath = '$projectPath/build/$mode/bin';
 
-    var compileDirectory = Directory.fromUri(
+    final compileDirectory = Directory.fromUri(
         Uri.directory(compileDirectoryPath, windows: Platform.isWindows));
 
     if (await compileDirectory.exists()) {
@@ -46,7 +46,7 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
 
     late Process process;
 
-    if (compileType == 'AOT') {
+    if (compileType == CompileType.aot) {
       process = await _startCompileExecutableFile(
           entryPointFilePath, compileDirectoryPath);
     } else {
@@ -85,10 +85,10 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   }
 
   Future<List<FileLog>> _createFileLogs() async {
-    var libDirectory = Directory.fromUri(
+    final libDirectory = Directory.fromUri(
         Uri.directory('$projectPath/lib', windows: Platform.isWindows));
 
-    var fileLogs =
+    final fileLogs =
         await FileLogCreater(projectPath).createSourceLogs(libDirectory);
 
     return fileLogs;
