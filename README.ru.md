@@ -19,7 +19,6 @@ Dart фреймворк для создания серверов
 
 </div>
 
-- [Введение](#введение)
 - [Про Minerva](#про-minerva)
 - [Экосистема](#экосистема)
 - [Установка](#установка)
@@ -67,24 +66,7 @@ Dart фреймворк для создания серверов
 - [Менеджер конфигурации](#менеджер-конфигурации)
 - [Развертывание](#развертывание)
   - [Docker контейнер](#docker-контейнер)
-- [Хэширование паролей](#хэширование-паролей)
 - [Дорожная карта](#дорожная-карта)
-
-# Введение
-
-Я решил занятся написанием собственного серверного фреймворка по причине того что в Dart большинство крупных серверных фреймворков перестали поддерживаться (`Aqueduct`, `Angel` и другие).
-
-При создании фреймворка я хотел чтобы он работал как с `JIT` так и с `AOT` типом компиляции, то есть он не должен был использовать `dart:mirrors`, что сильно повлияло на реализацию многих вещей. Я не исключаю в дальнейшем написания отдельных пакетов для экосистеме этого фреймворка, которые будут базироваться на `dart:mirros` или на `build_runner`. Но если они будут базироваться на `dart:mirros`, они будут выступать в качестве отдельных пакетов, а не входить в основной фреймворк.
-
-В других серверных фреймворках мне нравилось наличие в проекте конфигурационных файлов, а так же системы сборки (от части я вдохновлялся ASP.NET). Поэтому в этом фреймворке присутствует система сборки проекта, и несколько режимов сборки: `debug` и `release`. Так же в рамках каждой сборки вы можете выбрать тип компиляции: `JIT` или `AOT`. Вместе с пакетом поставляется `CLI` утилита для этого.
-
-В поставляемой `CLI` утилите так же присутствует возможность генерации `docker` файла, что мне показалось удобной вещью.
-
-Я создавал этот фреймворк с расчетом на то чтобы выжать максимум пользы от использования изолятов при обработке запросов. Так же я попытался решить проблемы, с которыми можно столкнутся при использовании изолятов при построении сервера.
-
-Многие компоненты фреймворк, такик как промежуточные обработчики запросов, средства для журналирования и другие компоненты, допускают написание собственных, пользовательских компонентов под ваши нужды.
-
-Пишите мне свое мнение по поводу этого фреймворка, сообщайте об ошибках или неточностях, нелогичностях. Я очень хочу знать ваше мнение.
 
 # Про Minerva
 
@@ -128,6 +110,8 @@ dart pub global activate minerva
 minerva create -n my_application
 
 cd my_application
+
+dart pub run build_runner build
 
 minerva run
 ```
@@ -359,7 +343,7 @@ class HelloApi extends Api {
 class ApisBuilder extends MinervaApisBuilder {
   @override
   List<Api> build() {
-    var apis = <Api>[];
+    final apis = <Api>[];
 
     apis.add(HelloApi());
 
@@ -408,7 +392,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user/int:id', (context, request) {
-      var id = request.pathParameters['id'];
+      final id = request.pathParameters['id'];
 
       return 'User with id: $id.';
     });
@@ -436,7 +420,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user', (context, request) {
-      var id = request.uri.queryParameters['id'] as int;
+      final id = request.uri.queryParameters['id'] as int;
 
       return 'User with id: $id.';
     },
@@ -489,7 +473,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user/:id', (context, request) {
-      var id = request.pathParameters['id'];
+      final id = request.pathParameters['id'];
 
       return 'User with id: $id.';
     }, authOptions: AuthOptions(jwt: JwtAuthOptions(roles: ['User'])));
@@ -511,7 +495,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   @override
   List<Middleware> build() {
-    var middlewares = <Middleware>[];
+    final middlewares = <Middleware>[];
 
     middlewares.add(ErrorMiddleware());
 
@@ -551,7 +535,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user/:id', (context, request) {
-      var id = request.pathParameters['id'];
+      final id = request.pathParameters['id'];
 
       return 'User with id: $id.';
     }, authOptions: AuthOptions(cookie: CookieAuthOptions()));
@@ -569,7 +553,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   @override
   List<Middleware> build() {
-    var middlewares = <Middleware>[];
+    final middlewares = <Middleware>[];
 
     middlewares.add(ErrorMiddleware());
 
@@ -642,11 +626,11 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.post('/uploadFile', (context, request) async {
-      var formData = await request.body.asForm();
+      final formData = await request.body.asForm();
 
-      var fileField = formData['file'] as FormDataFile;
+      final fileField = formData['file'] as FormDataFile;
 
-      var file = File.fromUri(Uri.file('somePath'));
+      final file = File.fromUri(Uri.file('somePath'));
 
       await file.create();
 
@@ -671,11 +655,11 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.post('/downloadFile', (context, request) async {
-      var json = await request.body.asJson();
+      final json = await request.body.asJson();
 
-      var path = json['filePath'];
+      final path = json['filePath'];
 
-      var file = File.fromUri(Uri.parse(path));
+      final file = File.fromUri(Uri.parse(path));
 
       if (await file.exists()) {
         return FileResult(file);
@@ -705,7 +689,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   @override
   List<Middleware> build() {
-    var middlewares = <Middleware>[];
+    final middlewares = <Middleware>[];
 
     middlewares.add(ErrorMiddleware());
 
@@ -814,7 +798,7 @@ class CounterAgent extends Agent {
 class AgentsBuilder extends MinervaAgentsBuilder {
   @override
   List<AgentData> build() {
-    var agents = <AgentData>[];
+    final agents = <AgentData>[];
 
     agents.add(AgentData('counter', CounterAgent()));
 
@@ -830,7 +814,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/counter/get', (context, request) async {
-      var counter = await context.connectors['counter']!.call('get');
+      final counter = await context.connectors['counter']!.call('get');
 
       return 'Counter state: $counter.';
     });
@@ -896,7 +880,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 class LoggersBuilder extends MinervaLoggersBuilder {
   @override
   List<Logger> build() {
-    var loggers = <Logger>[];
+    final loggers = <Logger>[];
 
     loggers.add(FileLogger());
 
@@ -911,7 +895,7 @@ class LoggersBuilder extends MinervaLoggersBuilder {
 class AgentsBuilder extends MinervaAgentsBuilder {
   @override
   List<AgentData> build() {
-    var agents = <AgentData>[];
+    final agents = <AgentData>[];
 
     agents.add(FileLoggerAgentData());
 
@@ -1030,7 +1014,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/hello', (context, request) async {
-      var configuration = ConfigurationManager();
+      final configuration = ConfigurationManager();
 
       await configuration.load();
 
@@ -1088,35 +1072,15 @@ minerva docker -c JIT
 
 Далее, после успешного создания `Docker image`, вы можете спокойно развернуть `Docker контейнер` с вашим приложением.
 
-# Хэширование паролей
-
-`Minerva` содержит функционал для хэширования паролей с заданной солью. Под капотом `Minerva` использует пакет [crypt](https://pub.dev/packages/crypt). Я решил включить этот функционал в фреймворк т.к прежде чем обнаружить актуальный пакет и удобный пакет для хэширования паролей попробовал не один пакет.
-
-Хэширование паролей в `Minerva` доступно при помощи класса `PasswordSecurity`.
-
-Пример хэширования пароля при помощи класса `PasswordSecurity`:
-
-```dart
-var security = PasswordSecurity();
-
-var salt = 'cB9anFtmU9OCGl5n';
-
-var password = 'some_passowrd';
-
-var hash = security.hashPassword(password, salt: salt);
-```
-
-Генерация соли доступна при помощи метода `generateSalt` класса `PasswordSecurity`.
-
 # Дорожная карта
 
 - ✅ Доделать обработку ошибок;
 - ✅ Сделать документацию;
 - ✅ Сделать больше примеров;
+- 🚧 Добавить Swagger, генерацию OpenAPI спецификации;
 - 🚧 Покрыть тестами;
-- 🚧 Дополнить README файлы;
-- 🚧 Создание обучающих видео;
-- 🔜 Добавить тесты производительности;
-- 🔜 Создать сайт с документацией.
+- 🔜 Создать обучающие видео;
+- 🔜 Создать сайт с документацией;
+- 🔜 Добавить тесты производительности.
 
 Ну и конечно же исправление ошибок что будут обнаружены.

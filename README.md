@@ -19,7 +19,6 @@ Dart backend framework
 
 </div>
 
-- [Introduction](#introduction)
 - [About Minerva](#about-minerva)
 - [Ecosystem](#ecosystem)
 - [Installing](#installing)
@@ -67,28 +66,11 @@ Dart backend framework
 - [Configuration manager](#configuration-manager)
 - [Deployment](#deployment)
   - [Docker container](#docker-container)
-- [Password hashing](#password-hashing)
 - [Road map](#road-map)
-
-# Introduction
-
-I decided to start writing my own server framework due to the fact that most of the major server frameworks in Dart are no longer supported (`Aqueduct`, `Angel` and others).
-
-When creating the framework, I wanted it to work with both `JIT` and `AOT` compilation types, that is, it should not have used `dart:mirrors`, which greatly affected the implementation of many things. I do not rule out writing separate packages for the ecosystem of this framework in the future, which will be based on `dart:mirros` or on `build_runner`. But if they are based on `dart:mirros`, they will act as separate packages, and not be part of the main framework.
-
-In other server frameworks, I liked the presence of configuration files in the project, as well as the build system (i was inspired by part of it ASP.NET). Therefore, this framework has a project build system, and several build modes: `debug` and `release`. Also, within each build, you can choose the type of compilation: `JIT` or `AOT`. Along with the package comes a `CLI` utility for this.
-
-The utility supplied by the `CLI` also has the ability to generate a `docker` file, which seemed to me a convenient thing.
-
-I created this framework with the expectation of getting the most out of using isolates when processing requests. I also tried to solve the problems that can be encountered when using isolates when building a server.
-
-Many components of the framework, such as middlewares, logging tools and other components, allow you to write your own, custom components for your needs.
-
-Write me your opinion about this framework, report errors or inaccuracies, illogicalities. I really want to know your opinion.
 
 # About Minerva
 
-`Minerva` is a framework for creating a multithreaded REST API.
+`Minerva` is framework for creating multithreaded REST API.
 
 `Minerva` provides:
 
@@ -99,7 +81,7 @@ Write me your opinion about this framework, report errors or inaccuracies, illog
 - provides means for authentication by `JWT`, `cookies`;
 - tools for distributing static files;
 - working with `FormData`;
-- ability to generate a `Dockerfile`;
+- ability to generate `Dockerfile`;
 - and another.
 
 # Ecosystem
@@ -128,6 +110,8 @@ Create project and run example:
 minerva create -n my_application
 
 cd my_application
+
+dart pub run build_runner build
 
 minerva run
 ```
@@ -359,7 +343,7 @@ class HelloApi extends Api {
 class ApisBuilder extends MinervaApisBuilder {
   @override
   List<Api> build() {
-    var apis = <Api>[];
+    final apis = <Api>[];
 
     apis.add(HelloApi());
 
@@ -408,7 +392,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user/int:id', (context, request) {
-      var id = request.pathParameters['id'];
+      final id = request.pathParameters['id'];
 
       return 'User with id: $id.';
     });
@@ -436,7 +420,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user', (context, request) {
-      var id = request.uri.queryParameters['id'] as int;
+      final id = request.uri.queryParameters['id'] as int;
 
       return 'User with id: $id.';
     },
@@ -489,7 +473,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user/:id', (context, request) {
-      var id = request.pathParameters['id'];
+      final id = request.pathParameters['id'];
 
       return 'User with id: $id.';
     }, authOptions: AuthOptions(jwt: JwtAuthOptions(roles: ['User'])));
@@ -511,7 +495,7 @@ Example of adding `EndpointMiddleware` to the request processing pipeline:
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   @override
   List<Middleware> build() {
-    var middlewares = <Middleware>[];
+    final middlewares = <Middleware>[];
 
     middlewares.add(ErrorMiddleware());
 
@@ -551,7 +535,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/user/:id', (context, request) {
-      var id = request.pathParameters['id'];
+      final id = request.pathParameters['id'];
 
       return 'User with id: $id.';
     }, authOptions: AuthOptions(cookie: CookieAuthOptions()));
@@ -569,7 +553,7 @@ Example of adding `CookieAuthMiddleware` to the request processing pipeline:
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   @override
   List<Middleware> build() {
-    var middlewares = <Middleware>[];
+    final middlewares = <Middleware>[];
 
     middlewares.add(ErrorMiddleware());
 
@@ -642,11 +626,11 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.post('/uploadFile', (context, request) async {
-      var formData = await request.body.asForm();
+      final formData = await request.body.asForm();
 
-      var fileField = formData['file'] as FormDataFile;
+      final fileField = formData['file'] as FormDataFile;
 
-      var file = File.fromUri(Uri.file('somePath'));
+      final file = File.fromUri(Uri.file('somePath'));
 
       await file.create();
 
@@ -671,11 +655,11 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.post('/downloadFile', (context, request) async {
-      var json = await request.body.asJson();
+      final json = await request.body.asJson();
 
-      var path = json['filePath'];
+      final path = json['filePath'];
 
-      var file = File.fromUri(Uri.parse(path));
+      final file = File.fromUri(Uri.parse(path));
 
       if (await file.exists()) {
         return FileResult(file);
@@ -705,7 +689,7 @@ Contents of `MiddlewaresBuilder`:
 class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
   @override
   List<Middleware> build() {
-    var middlewares = <Middleware>[];
+    final middlewares = <Middleware>[];
 
     middlewares.add(ErrorMiddleware());
 
@@ -814,7 +798,7 @@ Configuring agents, creating agent named `'counter'`:
 class AgentsBuilder extends MinervaAgentsBuilder {
   @override
   List<AgentData> build() {
-    var agents = <AgentData>[];
+    final agents = <AgentData>[];
 
     agents.add(AgentData('counter', CounterAgent()));
 
@@ -830,7 +814,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/counter/get', (context, request) async {
-      var counter = await context.connectors['counter']!.call('get');
+      final counter = await context.connectors['counter']!.call('get');
 
       return 'Counter state: $counter.';
     });
@@ -896,7 +880,7 @@ Configuration of loggers:
 class LoggersBuilder extends MinervaLoggersBuilder {
   @override
   List<Logger> build() {
-    var loggers = <Logger>[];
+    final loggers = <Logger>[];
 
     loggers.add(FileLogger());
 
@@ -911,7 +895,7 @@ Agents Configuration:
 class AgentsBuilder extends MinervaAgentsBuilder {
   @override
   List<AgentData> build() {
-    var agents = <AgentData>[];
+    final agents = <AgentData>[];
 
     agents.add(FileLoggerAgentData());
 
@@ -1030,7 +1014,7 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
     endpoints.get('/hello', (context, request) async {
-      var configuration = ConfigurationManager();
+      final configuration = ConfigurationManager();
 
       await configuration.load();
 
@@ -1088,35 +1072,15 @@ minerva docker -c JIT
 
 Next, after successfully creating a `Docker image`, you can safely deploy a `Docker container` with your application.
 
-# Password hashing
-
-`Minerva` contains functionality for hashing passwords with a given salt. Under the hood, `Minerva` uses the package [crypt](https://pub.dev/packages/crypt). I decided to include this functionality in the framework because before I discovered the current package and a convenient package for hashing passwords, I tried more than one package.
-
-Password hashing in `Minerva` is available using the `PasswordSecurity` class.
-
-Example of password hashing using the `PasswordSecurity` class:
-
-```dart
-var security = PasswordSecurity();
-
-var salt = 'cB9anFtmU9OCGl5n';
-
-var password = 'some_passowrd';
-
-var hash = security.hashPassword(password, salt: salt);
-```
-
-Salt generation is available using the `generateSalt` method of the `PasswordSecurity` class.
-
 # Road map
 
 - ✅ Finish error handling;
 - ✅ Make documentation;
 - ✅ Make more examples;
+- 🚧 Add Swagger, OpenAPI specification generation;
 - 🚧 Cover with tests;
-- 🚧 Update README files;
-- 🚧 Creating video tutorials;
-- 🔜 Add benchmarks;
-- 🔜 Create documentation website.
+- 🔜 Create training videos;
+- 🔜 Create website with documentation;
+- 🔜 Add performance tests.
 
 And of course the correction of errors that will be detected.
