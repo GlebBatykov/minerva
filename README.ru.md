@@ -419,15 +419,24 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
-    endpoints.get('/user', (context, request) {
-      final id = request.uri.queryParameters['id'] as int;
+    endpoints.get(
+      '/user',
+      (context, request) {
+        final id = request.uri.queryParameters['id'] as int;
 
-      return 'User with id: $id.';
-    },
-        filter: RequestFilter(
-            queryParameters: QueryParametersFilter(parameters: [
-          QueryParameter(name: 'id', type: QueryParameterType.int)
-        ])));
+        return 'User with id: $id.';
+      },
+      filter: RequestFilter(
+        queryParameters: QueryParametersFilter(
+          parameters: [
+            QueryParameter(
+              name: 'id',
+              type: QueryParameterType.int,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 ```
@@ -472,11 +481,19 @@ class EndpointsBuilder extends MinervaEndpointsBuilder {
 class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
-    endpoints.get('/user/:id', (context, request) {
-      final id = request.pathParameters['id'];
+    endpoints.get(
+      '/user/:id',
+      (context, request) {
+        final id = request.pathParameters['id'];
 
-      return 'User with id: $id.';
-    }, authOptions: AuthOptions(jwt: JwtAuthOptions(roles: ['User'])));
+        return 'User with id: $id.';
+      },
+      authOptions: AuthOptions(
+        jwt: JwtAuthOptions(
+          roles: ['User'],
+        ),
+      ),
+    );
   }
 }
 ```
@@ -534,11 +551,17 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
 class EndpointsBuilder extends MinervaEndpointsBuilder {
   @override
   void build(Endpoints endpoints) {
-    endpoints.get('/user/:id', (context, request) {
-      final id = request.pathParameters['id'];
+    endpoints.get(
+      '/user/:id',
+      (context, request) {
+        final id = request.pathParameters['id'];
 
-      return 'User with id: $id.';
-    }, authOptions: AuthOptions(cookie: CookieAuthOptions()));
+        return 'User with id: $id.';
+      },
+      authOptions: AuthOptions(
+        cookie: CookieAuthOptions(),
+      ),
+    );
   }
 }
 ```
@@ -694,7 +717,10 @@ class MiddlewaresBuilder extends MinervaMiddlewaresBuilder {
     middlewares.add(ErrorMiddleware());
 
     middlewares.add(StaticFilesMiddleware(
-        directory: '/wwwroot', path: '/wwwroot', root: 'index.html'));
+      directory: '/wwwroot',
+      path: '/wwwroot',
+      root: 'index.html',
+    ));
 
     middlewares.add(EndpointMiddleware());
 
