@@ -11,31 +11,50 @@ class ConfigureProjectCLICommand extends CLICommand<void> {
 
   final ProjectTemplate projectTemplate;
 
-  ConfigureProjectCLICommand(this.projectName, this.projectPath,
-      this.debugCompileType, this.releaseCompileType, this.projectTemplate);
+  ConfigureProjectCLICommand({
+    required this.projectName,
+    required this.projectPath,
+    required this.debugCompileType,
+    required this.releaseCompileType,
+    required this.projectTemplate,
+  });
 
   @override
   Future<void> run() async {
     final futures = <Future>[];
 
     futures.add(ConfigureAppSettingCLICommand(
-            projectPath, debugCompileType, releaseCompileType)
-        .run());
+      projectPath: projectPath,
+      debugCompileType: debugCompileType,
+      releaseCompileType: releaseCompileType,
+    ).run());
 
     futures.add(ConfigureAnalysisOptionsCLICommand(
-            projectName, projectPath, projectTemplate)
-        .run());
+      projectName: projectName,
+      projectPath: projectPath,
+      projectTemplate: projectTemplate,
+    ).run());
 
-    futures.add(
-        ConfigurePubspecCLICommand(projectName, projectPath, projectTemplate)
-            .run());
+    futures.add(ConfigurePubspecCLICommand(
+      projectName: projectName,
+      projectPath: projectPath,
+      projectTemplate: projectTemplate,
+    ).run());
 
-    futures.add(ConfigureReadmeCLICommand(projectName, projectPath).run());
+    futures.add(ConfigureReadmeCLICommand(
+      projectName,
+      projectPath,
+    ).run());
 
-    futures.add(CreateExampleCLICommand(projectPath, projectTemplate).run());
+    futures.add(CreateExampleCLICommand(
+      projectPath,
+      projectTemplate,
+    ).run());
 
-    futures
-        .add(CreateExampleTestCLICommand(projectPath, projectTemplate).run());
+    futures.add(CreateExampleTestCLICommand(
+      projectPath,
+      projectTemplate,
+    ).run());
 
     futures.add(ConfigureGitIgnoreCLICommand(projectPath).run());
 

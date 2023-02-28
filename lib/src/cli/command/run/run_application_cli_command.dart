@@ -5,12 +5,17 @@ class RunApplicationCLICommand extends CLICommand<Process> {
 
   final BuildMode mode;
 
-  RunApplicationCLICommand(this.projectPath, this.mode);
+  RunApplicationCLICommand(
+    this.projectPath,
+    this.mode,
+  );
 
   @override
   Future<Process> run() async {
-    final appSettingFile = File.fromUri(
-        Uri.file('$projectPath/appsetting.json', windows: Platform.isWindows));
+    final appSettingFile = File.fromUri(Uri.file(
+      '$projectPath/appsetting.json',
+      windows: Platform.isWindows,
+    ));
 
     if (!await appSettingFile.exists()) {
       throw CLICommandException(
@@ -20,7 +25,10 @@ class RunApplicationCLICommand extends CLICommand<Process> {
     final appSetting =
         AppSetting.fromJson(jsonDecode(await appSettingFile.readAsString()));
 
-    final buildSetting = _getBuildSetting(appSetting, mode);
+    final buildSetting = _getBuildSetting(
+      appSetting,
+      mode,
+    );
 
     if (buildSetting == null) {
       throw CLICommandException(
@@ -43,7 +51,10 @@ class RunApplicationCLICommand extends CLICommand<Process> {
     return appProcess;
   }
 
-  BuildAppSetting? _getBuildSetting(AppSetting appSetting, BuildMode mode) {
+  BuildAppSetting? _getBuildSetting(
+    AppSetting appSetting,
+    BuildMode mode,
+  ) {
     if (mode == BuildMode.debug) {
       return appSetting.debug;
     } else {
@@ -56,8 +67,8 @@ class RunApplicationCLICommand extends CLICommand<Process> {
         'minerva', ['build', '-d', projectPath, '-m', mode.toString()],
         runInShell: true);
 
-    buildProcess.stdout.listen((event) => stdout.add(event));
-    buildProcess.stderr.listen((event) => stdout.add(event));
+    buildProcess.stdout.listen((e) => stdout.add(e));
+    buildProcess.stderr.listen((e) => stdout.add(e));
 
     await buildProcess.exitCode;
 
@@ -69,8 +80,10 @@ class RunApplicationCLICommand extends CLICommand<Process> {
         ? '$projectPath/build/$mode/bin/main.exe'
         : '$projectPath/build/$mode/bin/main';
 
-    final entryPointFile =
-        File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
+    final entryPointFile = File.fromUri(Uri.file(
+      entryPointFilePath,
+      windows: Platform.isWindows,
+    ));
 
     if (await entryPointFile.exists()) {
       return await Process.start(entryPointFilePath, []);
@@ -83,8 +96,10 @@ class RunApplicationCLICommand extends CLICommand<Process> {
   Future<Process> _runJIT() async {
     final entryPointFilePath = '$projectPath/build/$mode/bin/main.dill';
 
-    final entryPointFile =
-        File.fromUri(Uri.file(entryPointFilePath, windows: Platform.isWindows));
+    final entryPointFile = File.fromUri(Uri.file(
+      entryPointFilePath,
+      windows: Platform.isWindows,
+    ));
 
     if (await entryPointFile.exists()) {
       return await Process.start('dart', [entryPointFilePath]);

@@ -25,14 +25,25 @@ class DebugCommand extends Command {
   late final bool _isEnalbeAsserts;
 
   DebugCommand() {
-    argParser.addOption('directory',
-        abbr: 'd', defaultsTo: Directory.current.path);
+    argParser.addOption(
+      'directory',
+      abbr: 'd',
+      defaultsTo: Directory.current.path,
+    );
     argParser.addOption('mode',
         abbr: 'm',
         defaultsTo: BuildMode.debug.toString(),
-        allowed: BuildMode.values.map((e) => e.name));
-    argParser.addFlag('pause-isolates-on-start', abbr: 'p');
-    argParser.addFlag('enable-asserts', abbr: 'e');
+        allowed: BuildMode.values.map(
+          (e) => e.name,
+        ));
+    argParser.addFlag(
+      'pause-isolates-on-start',
+      abbr: 'p',
+    );
+    argParser.addFlag(
+      'enable-asserts',
+      abbr: 'e',
+    );
   }
 
   @override
@@ -69,8 +80,10 @@ class DebugCommand extends Command {
     late final CurrentBuildAppSetting currentBuildSetting;
 
     try {
-      currentBuildSetting =
-          CurrentBuildSettingParser().parseCurrent(appSetting, _mode);
+      currentBuildSetting = CurrentBuildSettingParser().parseCurrent(
+        appSetting,
+        _mode,
+      );
     } on BuildSettingParserException catch (object) {
       usageException(object.message!);
     }
@@ -84,11 +97,16 @@ class DebugCommand extends Command {
   }
 
   Future<void> _runBuild() async {
-    final buildProcess = await Process.start(
-        'minerva', ['build', '-d', _directoryPath, '-m', _mode.toString()]);
+    final buildProcess = await Process.start('minerva', [
+      'build',
+      '-d',
+      _directoryPath,
+      '-m',
+      _mode.toString(),
+    ]);
 
-    buildProcess.stdout.listen((event) => stdout.add(event));
-    buildProcess.stderr.listen((event) => stderr.add(event));
+    buildProcess.stdout.listen((e) => stdout.add(e));
+    buildProcess.stderr.listen((e) => stderr.add(e));
 
     await buildProcess.exitCode;
   }
@@ -101,11 +119,11 @@ class DebugCommand extends Command {
       '--observe',
       if (_isPauseIsolatesOnStart) '--pause-isolates-on-start',
       if (_isEnalbeAsserts) '--enable-asserts',
-      entryPointPath
+      entryPointPath,
     ]);
 
-    appProcess.stdout.listen((event) => stdout.add(event));
-    appProcess.stderr.listen((event) => stdout.add(event));
+    appProcess.stdout.listen((e) => stdout.add(e));
+    appProcess.stderr.listen((e) => stdout.add(e));
 
     await appProcess.exitCode;
   }

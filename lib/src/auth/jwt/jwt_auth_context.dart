@@ -8,5 +8,8 @@ class JwtAuthContext {
   /// Role of the user.
   Role? role;
 
-  JwtAuthContext({required this.token, this.role});
+  JwtAuthContext({
+    required this.token,
+    this.role,
+  });
 }

@@ -2,7 +2,9 @@ part of minerva_cli;
 
 class AppSettingAssetsParser {
   List<String> parse(
-      AppSetting appSetting, CurrentBuildAppSetting buildAppSetting) {
+    AppSetting appSetting,
+    CurrentBuildAppSetting buildAppSetting,
+  ) {
     final assets = <String>[];
 
     if (appSetting.assets != null) {

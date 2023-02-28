@@ -2,8 +2,10 @@ part of minerva_cli;
 
 class AppSettingParcer {
   Future<AppSettingParseResult> parse(String projectPath) async {
-    final file = File.fromUri(
-        Uri.file('$projectPath/appsetting.json', windows: Platform.isWindows));
+    final file = File.fromUri(Uri.file(
+      '$projectPath/appsetting.json',
+      windows: Platform.isWindows,
+    ));
 
     if (!await file.exists()) {
       throw AppSettingParserException(
@@ -14,7 +16,10 @@ class AppSettingParcer {
 
     final data = AppSetting.fromJson(json);
 
-    final result = AppSettingParseResult(file, data);
+    final result = AppSettingParseResult(
+      file,
+      data,
+    );
 
     return result;
   }
@@ -25,5 +30,8 @@ class AppSettingParseResult {
 
   final AppSetting data;
 
-  AppSettingParseResult(this.file, this.data);
+  AppSettingParseResult(
+    this.file,
+    this.data,
+  );
 }

@@ -11,7 +11,7 @@ abstract class HostEnvironment {
 
       var segments = executablePath.pathSegments;
 
-      segments = segments.where((element) => element.isNotEmpty).toList();
+      segments = segments.where((e) => e.isNotEmpty).toList();
 
       segments = segments.getRange(0, segments.length - 2).toList();
 

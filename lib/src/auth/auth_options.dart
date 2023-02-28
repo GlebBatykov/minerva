@@ -8,5 +8,8 @@ class AuthOptions {
   /// Cookie authentication options.
   final CookieAuthOptions? cookie;
 
-  const AuthOptions({this.jwt, this.cookie});
+  const AuthOptions({
+    this.jwt,
+    this.cookie,
+  });
 }

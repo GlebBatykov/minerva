@@ -5,5 +5,8 @@ class IsolateError {
 
   final StackTrace stackTrace;
 
-  IsolateError(this.error, this.stackTrace);
+  IsolateError(
+    this.error,
+    this.stackTrace,
+  );
 }

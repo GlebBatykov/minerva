@@ -7,7 +7,11 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
 
   final CompileType compileType;
 
-  CompileCLICommand(this.projectPath, this.mode, this.compileType);
+  CompileCLICommand({
+    required this.projectPath,
+    required this.mode,
+    required this.compileType,
+  });
 
   @override
   Future<List<FileLog>> run() async {
@@ -35,23 +39,33 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   Future<void> _compile(String entryPointFilePath) async {
     final compileDirectoryPath = '$projectPath/build/$mode/bin';
 
-    final compileDirectory = Directory.fromUri(
-        Uri.directory(compileDirectoryPath, windows: Platform.isWindows));
+    final compileDirectory = Directory.fromUri(Uri.directory(
+      compileDirectoryPath,
+      windows: Platform.isWindows,
+    ));
 
     if (await compileDirectory.exists()) {
-      await compileDirectory.delete(recursive: true);
+      await compileDirectory.delete(
+        recursive: true,
+      );
     }
 
-    await compileDirectory.create(recursive: true);
+    await compileDirectory.create(
+      recursive: true,
+    );
 
     late Process process;
 
     if (compileType == CompileType.aot) {
       process = await _startCompileExecutableFile(
-          entryPointFilePath, compileDirectoryPath);
+        entryPointFilePath,
+        compileDirectoryPath,
+      );
     } else {
-      process =
-          await _startCompileSnapshot(entryPointFilePath, compileDirectoryPath);
+      process = await _startCompileSnapshot(
+        entryPointFilePath,
+        compileDirectoryPath,
+      );
     }
 
     process.stdout.listen((event) => stdout.add(event));
@@ -61,7 +75,9 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   }
 
   Future<Process> _startCompileExecutableFile(
-      String entryPointFilePath, String compileDirectoryPath) async {
+    String entryPointFilePath,
+    String compileDirectoryPath,
+  ) async {
     return await Process.start('dart', [
       'compile',
       'exe',
@@ -74,7 +90,9 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   }
 
   Future<Process> _startCompileSnapshot(
-      String entryPointFilePath, String compileDirectoryPath) async {
+    String entryPointFilePath,
+    String compileDirectoryPath,
+  ) async {
     return await Process.start('dart', [
       'compile',
       'kernel',
@@ -85,8 +103,10 @@ class CompileCLICommand extends CLICommand<List<FileLog>> {
   }
 
   Future<List<FileLog>> _createFileLogs() async {
-    final libDirectory = Directory.fromUri(
-        Uri.directory('$projectPath/lib', windows: Platform.isWindows));
+    final libDirectory = Directory.fromUri(Uri.directory(
+      '$projectPath/lib',
+      windows: Platform.isWindows,
+    ));
 
     final fileLogs =
         await FileLogCreater(projectPath).createSourceLogs(libDirectory);

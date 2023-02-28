@@ -9,7 +9,9 @@ class ConfigureGitIgnoreCLICommand extends CLICommand<void> {
   Future<void> run() async {
     final gitIgnoreFile = File.fromUri(Uri.file('$projectPath/.gitignore'));
 
-    await gitIgnoreFile.create(recursive: true);
+    await gitIgnoreFile.create(
+      recursive: true,
+    );
 
     await gitIgnoreFile.writeAsString('''
 /build

@@ -13,6 +13,12 @@ class CurrentBuildAppSetting {
 
   final Map<String, List<String>>? logging;
 
-  CurrentBuildAppSetting(this.host, this.port, this.compileType,
-      {this.values, this.assets, this.logging});
+  CurrentBuildAppSetting(
+    this.host,
+    this.port,
+    this.compileType, {
+    this.values,
+    this.assets,
+    this.logging,
+  });
 }

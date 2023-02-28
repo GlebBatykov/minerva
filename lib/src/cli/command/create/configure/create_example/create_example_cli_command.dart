@@ -5,7 +5,10 @@ class CreateExampleCLICommand extends CLICommand<void> {
 
   final ProjectTemplate projectTemplate;
 
-  CreateExampleCLICommand(this.projectPath, this.projectTemplate);
+  CreateExampleCLICommand(
+    this.projectPath,
+    this.projectTemplate,
+  );
 
   @override
   Future<void> run() async {
@@ -40,13 +43,27 @@ class CreateExampleCLICommand extends CLICommand<void> {
         File.fromUri(Uri.file('$projectPath/lib/models/weather_forecast.dart'));
 
     await Future.wait([
-      mainFile.create(recursive: true),
-      apisBuilderFile.create(recursive: true),
-      loggersBuilderFile.create(recursive: true),
-      settingBuilderFile.create(recursive: true),
-      middlewaresBuilderFile.create(recursive: true),
-      weatherForecastControllerFile.create(recursive: true),
-      weatherForecastFile.create(recursive: true)
+      mainFile.create(
+        recursive: true,
+      ),
+      apisBuilderFile.create(
+        recursive: true,
+      ),
+      loggersBuilderFile.create(
+        recursive: true,
+      ),
+      settingBuilderFile.create(
+        recursive: true,
+      ),
+      middlewaresBuilderFile.create(
+        recursive: true,
+      ),
+      weatherForecastControllerFile.create(
+        recursive: true,
+      ),
+      weatherForecastFile.create(
+        recursive: true,
+      )
     ]);
 
     final mainContent = '''
@@ -220,11 +237,21 @@ class SettingBuilder extends MinervaSettingBuilder {
         Uri.file('$projectPath/lib/builders/middlewares_builder.dart'));
 
     await Future.wait([
-      mainFile.create(recursive: true),
-      endpointBuilderFile.create(recursive: true),
-      loggersBuilderFile.create(recursive: true),
-      settingBuilderFile.create(recursive: true),
-      middlewaresBuilderFile.create(recursive: true)
+      mainFile.create(
+        recursive: true,
+      ),
+      endpointBuilderFile.create(
+        recursive: true,
+      ),
+      loggersBuilderFile.create(
+        recursive: true,
+      ),
+      settingBuilderFile.create(
+        recursive: true,
+      ),
+      middlewaresBuilderFile.create(
+        recursive: true,
+      )
     ]);
 
     final endpointsBuilderContent = '''

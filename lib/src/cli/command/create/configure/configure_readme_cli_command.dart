@@ -5,13 +5,18 @@ class ConfigureReadmeCLICommand extends CLICommand<void> {
 
   final String projectPath;
 
-  ConfigureReadmeCLICommand(this.projectName, this.projectPath);
+  ConfigureReadmeCLICommand(
+    this.projectName,
+    this.projectPath,
+  );
 
   @override
   Future<void> run() async {
     final readmeFile = File.fromUri(Uri.file('$projectPath/README.md'));
 
-    await readmeFile.create(recursive: true);
+    await readmeFile.create(
+      recursive: true,
+    );
 
     await readmeFile.writeAsString('''
 # $projectName

@@ -13,8 +13,14 @@ class BuildAppSetting {
 
   final Map<String, List<String>>? logging;
 
-  BuildAppSetting(this.host, this.port, this.compileType,
-      {this.values, this.assets, this.logging});
+  BuildAppSetting(
+    this.host,
+    this.port,
+    this.compileType, {
+    this.values,
+    this.assets,
+    this.logging,
+  });
 
   BuildAppSetting.fromJson(Map<String, dynamic> json)
       : host = json['host'],

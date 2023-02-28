@@ -25,23 +25,37 @@ class CreateCommand extends Command {
   late final ProjectTemplate _projectTemplate;
 
   CreateCommand() {
-    argParser.addOption('name', abbr: 'n');
-    argParser.addOption('debug-compile-type',
-        abbr: 'c',
-        defaultsTo: CompileType.jit.toString(),
-        allowed: CompileType.values.map((e) => e.name));
-    argParser.addOption('release-compile-type',
-        abbr: 'r',
-        defaultsTo: CompileType.aot.toString(),
-        allowed: CompileType.values.map((e) => e.name));
-    argParser.addOption('docker-compile-type',
-        abbr: 'o',
-        defaultsTo: CompileType.aot.toString(),
-        allowed: CompileType.values.map((e) => e.name));
-    argParser.addOption('template',
-        abbr: 't',
-        defaultsTo: 'controllers',
-        allowed: ['controllers', 'endpoints']);
+    argParser.addOption(
+      'name',
+      abbr: 'n',
+    );
+    argParser.addOption(
+      'debug-compile-type',
+      abbr: 'c',
+      defaultsTo: CompileType.jit.toString(),
+      allowed: CompileType.values.map((e) => e.name),
+    );
+    argParser.addOption(
+      'release-compile-type',
+      abbr: 'r',
+      defaultsTo: CompileType.aot.toString(),
+      allowed: CompileType.values.map((e) => e.name),
+    );
+    argParser.addOption(
+      'docker-compile-type',
+      abbr: 'o',
+      defaultsTo: CompileType.aot.toString(),
+      allowed: CompileType.values.map((e) => e.name),
+    );
+    argParser.addOption(
+      'template',
+      abbr: 't',
+      defaultsTo: 'controllers',
+      allowed: [
+        'controllers',
+        'endpoints',
+      ],
+    );
   }
 
   @override
@@ -51,8 +65,6 @@ class CreateCommand extends Command {
     if (_projectName == null) {
       usageException('Project name must be specified.');
     }
-
-    //await ProjectCreateCommand(_projectName!).run();
 
     final projectPath = '${Directory.current.path}/$_projectName';
 
@@ -72,12 +84,19 @@ class CreateCommand extends Command {
     stdout.writeln();
 
     final pipeline = CLIPipeline([
-      //ProjectClearCLICommand(projectPath),
-      ConfigureProjectCLICommand(_projectName!, projectPath, debugCompileType,
-          releaseCompileType, _projectTemplate),
+      ConfigureProjectCLICommand(
+        projectName: _projectName!,
+        projectPath: projectPath,
+        debugCompileType: debugCompileType,
+        releaseCompileType: releaseCompileType,
+        projectTemplate: _projectTemplate,
+      ),
       CreateDockerIgnoreCLICommand(projectPath),
-      CreateDockerFileCLICommand(projectPath, dockerCompileType),
-      GetDependenciesCLICommand(projectPath)
+      CreateDockerFileCLICommand(
+        projectPath,
+        dockerCompileType,
+      ),
+      GetDependenciesCLICommand(projectPath),
     ]);
 
     await pipeline.run();

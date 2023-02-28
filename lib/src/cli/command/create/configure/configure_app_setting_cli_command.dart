@@ -7,15 +7,20 @@ class ConfigureAppSettingCLICommand extends CLICommand<void> {
 
   final CompileType releaseCompileType;
 
-  ConfigureAppSettingCLICommand(
-      this.projectPath, this.debugCompileType, this.releaseCompileType);
+  ConfigureAppSettingCLICommand({
+    required this.projectPath,
+    required this.debugCompileType,
+    required this.releaseCompileType,
+  });
 
   @override
   Future<void> run() async {
     final appSettingFile =
         File.fromUri(Uri.file('$projectPath/appsetting.json'));
 
-    await appSettingFile.create(recursive: true);
+    await appSettingFile.create(
+      recursive: true,
+    );
 
     final appSetting = <String, dynamic>{};
 
@@ -28,11 +33,13 @@ class ConfigureAppSettingCLICommand extends CLICommand<void> {
     appSetting['release'] = <String, dynamic>{
       'compile-type': releaseCompileType.toString(),
       'host': '0.0.0.0',
-      'port': 8080
+      'port': 8080,
     };
 
     appSetting['build'] = {
-      'test': {'createAppSetting': true}
+      'test': {
+        'createAppSetting': true,
+      }
     };
 
     final json = jsonEncode(appSetting);

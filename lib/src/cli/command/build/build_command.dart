@@ -26,20 +26,25 @@ class BuildCommand extends Command {
   final Map<String, dynamic> _details = {};
 
   BuildCommand() {
-    argParser.addOption('directory',
-        abbr: 'd', defaultsTo: Directory.current.path);
-    argParser.addOption('mode',
-        abbr: 'm',
-        defaultsTo: BuildMode.debug.toString(),
-        allowed: BuildMode.values.map((e) => e.name));
+    argParser.addOption(
+      'directory',
+      abbr: 'd',
+      defaultsTo: Directory.current.path,
+    );
+    argParser.addOption(
+      'mode',
+      abbr: 'm',
+      defaultsTo: BuildMode.debug.toString(),
+      allowed: BuildMode.values.map((e) => e.name),
+    );
   }
 
   @override
   Future<void> run() async {
-    _directoryPath = Directory.fromUri(Uri.directory(argResults!['directory'],
-            windows: Platform.isWindows))
-        .absolute
-        .path;
+    _directoryPath = Directory.fromUri(Uri.directory(
+      argResults!['directory'],
+      windows: Platform.isWindows,
+    )).absolute.path;
 
     _mode = BuildMode.fromName(argResults!['mode']);
 
@@ -81,8 +86,9 @@ class BuildCommand extends Command {
 
   Future<bool> _isNeedBuildFromScratch() async {
     final detailsFile = File.fromUri(Uri.file(
-        '$_directoryPath/build/$_mode/details.json',
-        windows: Platform.isWindows));
+      '$_directoryPath/build/$_mode/details.json',
+      windows: Platform.isWindows,
+    ));
 
     final detailsFileExists = await detailsFile.exists();
 
@@ -110,8 +116,9 @@ class BuildCommand extends Command {
     final buildDirectoryPath = '$_directoryPath/build/$_mode';
 
     final buildDirectory = Directory.fromUri(Uri.directory(
-        '$_directoryPath/build/$_mode',
-        windows: Platform.isWindows));
+      '$_directoryPath/build/$_mode',
+      windows: Platform.isWindows,
+    ));
 
     if (await buildDirectory.exists()) {
       print('The $_mode build folder is being cleared...');
@@ -124,9 +131,14 @@ class BuildCommand extends Command {
 
   Future<void> _build(CurrentBuildAppSetting buildSetting) async {
     try {
-      await BuildCLICommand(_directoryPath, _mode, _compileType,
-              _appSettingFile, _appSetting, buildSetting)
-          .run();
+      await BuildCLICommand(
+        projectPath: _directoryPath,
+        mode: _mode,
+        compileType: _compileType,
+        appSettingFile: _appSettingFile,
+        appSetting: _appSetting,
+        buildSetting: buildSetting,
+      ).run();
     } on CLICommandException catch (object) {
       usageException(object.message!);
     } catch (object) {
@@ -142,15 +154,15 @@ class BuildCommand extends Command {
       final buildCompileType = CompileType.fromName(_details['compile-type']);
 
       await RebuildCLICommand(
-              _directoryPath,
-              _mode,
-              _compileType,
-              _appSettingFile,
-              _appSetting,
-              buildSetting,
-              buildCompileType,
-              fileLogs)
-          .run();
+        projectPath: _directoryPath,
+        mode: _mode,
+        compileType: _compileType,
+        appSettingFile: _appSettingFile,
+        appSetting: _appSetting,
+        buildSetting: buildSetting,
+        buildCompileType: buildCompileType,
+        fileLogs: fileLogs,
+      ).run();
     } on CLICommandException catch (object) {
       usageException(object.message!);
     } catch (object) {

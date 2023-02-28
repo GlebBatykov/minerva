@@ -19,6 +19,4 @@ part 'core/project/file_path_parser.dart';
 part 'core/project/app_setting.dart';
 part 'core/project/build_manager.dart';
 
-part 'core/random_string_generator.dart';
-
 part 'core/enums/enums.dart';

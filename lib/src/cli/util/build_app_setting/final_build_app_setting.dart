@@ -11,14 +11,19 @@ class FinalBuildAppSetting {
 
   final Map<String, List<String>>? logging;
 
-  FinalBuildAppSetting(this.host, this.port, this.buildType,
-      {this.values, this.logging});
+  FinalBuildAppSetting(
+    this.host,
+    this.port,
+    this.buildType, {
+    this.values,
+    this.logging,
+  });
 
   Map<String, dynamic> toJson() => {
         'host': host,
         'port': port,
         'build-type': buildType.toString(),
         if (values != null) 'values': values,
-        if (logging != null) 'logging': logging
+        if (logging != null) 'logging': logging,
       };
 }

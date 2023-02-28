@@ -14,30 +14,36 @@ class RunCommand extends Command {
   ''';
 
   RunCommand() {
-    argParser.addOption('directory',
-        abbr: 'd', defaultsTo: Directory.current.path);
-    argParser.addOption('mode',
-        abbr: 'm',
-        defaultsTo: BuildMode.debug.toString(),
-        allowed: BuildMode.values.map((e) => e.name));
+    argParser.addOption(
+      'directory',
+      abbr: 'd',
+      defaultsTo: Directory.current.path,
+    );
+    argParser.addOption(
+      'mode',
+      abbr: 'm',
+      defaultsTo: BuildMode.debug.toString(),
+      allowed: BuildMode.values.map((e) => e.name),
+    );
   }
 
   @override
   Future<void> run() async {
     final directoryPath = Directory.fromUri(Uri.directory(
-            argResults!['directory'],
-            windows: Platform.isWindows))
-        .absolute
-        .path;
+      argResults!['directory'],
+      windows: Platform.isWindows,
+    )).absolute.path;
 
     final mode = BuildMode.fromName(argResults!['mode']);
 
     try {
-      final appProcess =
-          await RunApplicationCLICommand(directoryPath, mode).run();
+      final appProcess = await RunApplicationCLICommand(
+        directoryPath,
+        mode,
+      ).run();
 
-      appProcess.stdout.listen((event) => stdout.add(event));
-      appProcess.stderr.listen((event) => stdout.add(event));
+      appProcess.stdout.listen((e) => stdout.add(e));
+      appProcess.stderr.listen((e) => stdout.add(e));
 
       await appProcess.exitCode;
     } on CLICommandException catch (object) {

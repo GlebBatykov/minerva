@@ -7,5 +7,9 @@ class MinervaResponse {
 
   final MinervaHttpHeaders? headers;
 
-  MinervaResponse({required this.statusCode, this.body, this.headers});
+  MinervaResponse({
+    required this.statusCode,
+    this.body,
+    this.headers,
+  });
 }

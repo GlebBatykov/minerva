@@ -29,8 +29,10 @@ class AssetsFilesParser {
     if (asset[0] == '/') {
       final directoryPath = '$_projectPath$asset';
 
-      final directory = Directory.fromUri(
-          Uri.directory(directoryPath, windows: Platform.isWindows));
+      final directory = Directory.fromUri(Uri.directory(
+        directoryPath,
+        windows: Platform.isWindows,
+      ));
 
       if (!await directory.exists()) {
         throw CLICommandException(
@@ -42,8 +44,10 @@ class AssetsFilesParser {
     } else {
       final filePath = '$_projectPath/$asset';
 
-      final file =
-          File.fromUri(Uri.file(filePath, windows: Platform.isWindows));
+      final file = File.fromUri(Uri.file(
+        filePath,
+        windows: Platform.isWindows,
+      ));
 
       if (!await file.exists()) {
         throw CLICommandException(

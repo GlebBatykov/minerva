@@ -15,16 +15,19 @@ class ClearCommand extends Command {
   late final String _directoryPath;
 
   ClearCommand() {
-    argParser.addOption('directory',
-        abbr: 'd', defaultsTo: Directory.current.path);
+    argParser.addOption(
+      'directory',
+      abbr: 'd',
+      defaultsTo: Directory.current.path,
+    );
   }
 
   @override
   Future<void> run() async {
-    _directoryPath = Directory.fromUri(Uri.directory(argResults!['directory'],
-            windows: Platform.isWindows))
-        .absolute
-        .path;
+    _directoryPath = Directory.fromUri(Uri.directory(
+      argResults!['directory'],
+      windows: Platform.isWindows,
+    )).absolute.path;
 
     final buildDirectoryPath = '$_directoryPath/build';
 

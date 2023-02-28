@@ -14,31 +14,41 @@ class TestCommand extends Command {
   ''';
 
   TestCommand() {
-    argParser.addOption('directory',
-        abbr: 'd', defaultsTo: Directory.current.path);
-    argParser.addOption('mode',
-        abbr: 'm',
-        defaultsTo: BuildMode.debug.toString(),
-        allowed: BuildMode.values.map((e) => e.name));
+    argParser.addOption(
+      'directory',
+      abbr: 'd',
+      defaultsTo: Directory.current.path,
+    );
+    argParser.addOption(
+      'mode',
+      abbr: 'm',
+      defaultsTo: BuildMode.debug.toString(),
+      allowed: BuildMode.values.map((e) => e.name),
+    );
   }
 
   @override
   Future<void> run() async {
     final directoryPath = Directory.fromUri(Uri.directory(
-            argResults!['directory'],
-            windows: Platform.isWindows))
-        .absolute
-        .path;
+      argResults!['directory'],
+      windows: Platform.isWindows,
+    )).absolute.path;
 
     final mode = BuildMode.fromName(argResults!['mode']);
 
-    final appProcess =
-        await RunApplicationCLICommand(directoryPath, mode).run();
+    final appProcess = await RunApplicationCLICommand(
+      directoryPath,
+      mode,
+    ).run();
 
-    final testProcess = await Process.start('dart', ['test'], runInShell: true);
+    final testProcess = await Process.start(
+      'dart',
+      ['test'],
+      runInShell: true,
+    );
 
-    testProcess.stdout.listen((event) => stdout.add(event));
-    testProcess.stderr.listen((event) => stdout.add(event));
+    testProcess.stdout.listen((e) => stdout.add(e));
+    testProcess.stderr.listen((e) => stdout.add(e));
 
     await testProcess.exitCode;
 

@@ -7,14 +7,19 @@ class ConfigurePubspecCLICommand extends CLICommand<void> {
 
   final ProjectTemplate projectTemplate;
 
-  ConfigurePubspecCLICommand(
-      this.projectName, this.projectPath, this.projectTemplate);
+  ConfigurePubspecCLICommand({
+    required this.projectName,
+    required this.projectPath,
+    required this.projectTemplate,
+  });
 
   @override
   Future<void> run() async {
     final pubSpecFile = File.fromUri(Uri.file('$projectPath/pubspec.yaml'));
 
-    await pubSpecFile.create(recursive: true);
+    await pubSpecFile.create(
+      recursive: true,
+    );
 
     await pubSpecFile.writeAsString(_getContent());
   }

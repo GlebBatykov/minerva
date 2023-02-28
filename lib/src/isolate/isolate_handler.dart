@@ -40,7 +40,11 @@ class IsolateHandler {
   }
 
   void _start(IsolateStart action) async {
-    _context = IsolateContext(_receiveStream, _supervisorPort, action.data);
+    _context = IsolateContext(
+      _receiveStream,
+      _supervisorPort,
+      action.data,
+    );
 
     _taskHandler = action.handler;
 

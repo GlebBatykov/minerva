@@ -14,14 +14,15 @@ abstract class BuildManager {
 
     if (buildType == null) {
       throw BuildManagerException(
-          message: 'Build type info not exist in appsetting.json file.');
+        message: 'Build type info not exist in appsetting.json file.',
+      );
     } else {
       if (buildType != 'debug' && buildType != 'release') {
         throw BuildManagerException(
-            message: 'Build type is incorrect in appsetting.json file');
+          message: 'Build type is incorrect in appsetting.json file',
+        );
       } else {
-        return BuildType.values
-            .firstWhere((element) => element.name == buildType);
+        return BuildType.values.firstWhere((e) => e.name == buildType);
       }
     }
   }

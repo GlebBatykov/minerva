@@ -7,17 +7,20 @@ class FileLog {
 
   final DateTime modificationTime;
 
-  FileLog(this.type, this.path, this.modificationTime);
+  FileLog({
+    required this.type,
+    required this.path,
+    required this.modificationTime,
+  });
 
   FileLog.fromJson(Map<String, dynamic> json)
-      : type = FileLogType.values
-            .firstWhere((element) => element.name == json['type']),
+      : type = FileLogType.values.firstWhere((e) => e.name == json['type']),
         path = json['path'],
         modificationTime = DateTime.parse(json['modificationTime']);
 
   Map<String, dynamic> toJson() => {
         'type': type.name,
         'path': path,
-        'modificationTime': modificationTime.toString()
+        'modificationTime': modificationTime.toString(),
       };
 }

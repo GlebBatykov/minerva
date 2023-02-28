@@ -9,33 +9,53 @@ class Result {
 
   FutureOr<MinervaResponse> get response async {
     return MinervaResponse(
-        statusCode: statusCode, body: body, headers: headers);
+      statusCode: statusCode,
+      body: body,
+      headers: headers,
+    );
   }
 
-  const Result({required this.statusCode, this.body, this.headers});
+  const Result({
+    required this.statusCode,
+    this.body,
+    this.headers,
+  });
 }
 
 class OkResult extends Result {
-  const OkResult({super.body, super.headers}) : super(statusCode: 200);
+  const OkResult({
+    super.body,
+    super.headers,
+  }) : super(statusCode: 200);
 }
 
 class BadRequestResult extends Result {
-  const BadRequestResult({super.body, super.headers}) : super(statusCode: 400);
+  const BadRequestResult({
+    super.body,
+    super.headers,
+  }) : super(statusCode: 400);
 }
 
 class UnauthorizedResult extends Result {
-  const UnauthorizedResult({super.body, super.headers})
-      : super(statusCode: 401);
+  const UnauthorizedResult({
+    super.body,
+    super.headers,
+  }) : super(statusCode: 401);
 }
 
 class InternalServerErrorResult extends Result {
-  const InternalServerErrorResult({super.body, super.headers})
-      : super(statusCode: 500);
+  const InternalServerErrorResult({
+    super.body,
+    super.headers,
+  }) : super(statusCode: 500);
 }
 
 class JsonResult extends Result {
-  JsonResult(Object? json, {int? statusCode, super.headers})
-      : super(statusCode: statusCode ?? 200, body: jsonEncode(json));
+  JsonResult(
+    Object? json, {
+    int? statusCode,
+    super.headers,
+  }) : super(statusCode: statusCode ?? 200, body: jsonEncode(json));
 
   @override
   Future<MinervaResponse> get response async {
@@ -49,7 +69,10 @@ class JsonResult extends Result {
 }
 
 class NotFoundResult extends Result {
-  const NotFoundResult({super.body, super.headers}) : super(statusCode: 404);
+  const NotFoundResult({
+    super.body,
+    super.headers,
+  }) : super(statusCode: 404);
 }
 
 class FileResult extends Result {
@@ -57,7 +80,11 @@ class FileResult extends Result {
 
   final String? name;
 
-  FileResult(this.file, {this.name, super.headers}) : super(statusCode: 200);
+  FileResult(
+    this.file, {
+    this.name,
+    super.headers,
+  }) : super(statusCode: 200);
 
   @override
   Future<MinervaResponse> get response async {
@@ -80,37 +107,55 @@ class FileResult extends Result {
     headers['Content-Disposition'] = header;
 
     return MinervaResponse(
-        statusCode: statusCode, body: body, headers: headers);
+      statusCode: statusCode,
+      body: body,
+      headers: headers,
+    );
   }
 }
 
 class FilePathResult extends FileResult {
-  FilePathResult(String path, {super.name, super.headers})
-      : super(File.fromUri(Uri.file(FilePathParser.parse(path))));
+  FilePathResult(
+    String path, {
+    super.name,
+    super.headers,
+  }) : super(File.fromUri(Uri.file(FilePathParser.parse(path))));
 }
 
 class FileContentResult extends Result {
   final File file;
 
-  FileContentResult(this.file, {super.headers}) : super(statusCode: 200);
+  FileContentResult(
+    this.file, {
+    super.headers,
+  }) : super(statusCode: 200);
 
   @override
   Future<MinervaResponse> get response async {
     final body = await file.readAsString();
 
-    return MinervaResponse(statusCode: statusCode, body: body);
+    return MinervaResponse(
+      statusCode: statusCode,
+      body: body,
+    );
   }
 }
 
 class FilePathContentResult extends FileContentResult {
-  FilePathContentResult(String path, {super.headers})
-      : super(File.fromUri(Uri.file(FilePathParser.parse(path))));
+  FilePathContentResult(
+    String path, {
+    super.headers,
+  }) : super(File.fromUri(Uri.file(FilePathParser.parse(path))));
 }
 
 class RedirectionResult extends Result {
   RedirectionResult(String location)
       : super(
-            statusCode: 301,
-            headers: MinervaHttpHeaders(
-                headers: {HttpHeaders.locationHeader: location}));
+          statusCode: 301,
+          headers: MinervaHttpHeaders(
+            headers: {
+              HttpHeaders.locationHeader: location,
+            },
+          ),
+        );
 }

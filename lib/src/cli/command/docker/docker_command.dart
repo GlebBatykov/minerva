@@ -14,12 +14,17 @@ class DockerCommand extends Command {
   ''';
 
   DockerCommand() {
-    argParser.addOption('directory',
-        abbr: 'd', defaultsTo: Directory.current.path);
-    argParser.addOption('compile-type',
-        abbr: 'c',
-        defaultsTo: CompileType.aot.toString(),
-        allowed: CompileType.values.map((e) => e.name));
+    argParser.addOption(
+      'directory',
+      abbr: 'd',
+      defaultsTo: Directory.current.path,
+    );
+    argParser.addOption(
+      'compile-type',
+      abbr: 'c',
+      defaultsTo: CompileType.aot.toString(),
+      allowed: CompileType.values.map((e) => e.name),
+    );
   }
 
   @override
@@ -31,6 +36,9 @@ class DockerCommand extends Command {
 
     final compileType = argResults!['compile-type'];
 
-    await CreateDockerFileCLICommand(directoryPath, compileType).run();
+    await CreateDockerFileCLICommand(
+      directoryPath,
+      compileType,
+    ).run();
   }
 }

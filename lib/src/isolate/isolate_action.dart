@@ -7,7 +7,10 @@ class IsolateStart extends IsolateAction {
 
   final Map<String, dynamic> data;
 
-  IsolateStart(this.handler, this.data);
+  IsolateStart(
+    this.handler,
+    this.data,
+  );
 }
 
 class IsolateStop extends IsolateAction {}

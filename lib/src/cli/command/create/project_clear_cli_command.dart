@@ -19,8 +19,9 @@ class ProjectClearCLICommand extends CLICommand<void> {
       }
     }
 
-    futures.add(Directory.fromUri(Uri.directory('$projectPath/bin'))
-        .delete(recursive: true));
+    futures.add(Directory.fromUri(Uri.directory('$projectPath/bin')).delete(
+      recursive: true,
+    ));
 
     futures.add(File.fromUri(Uri.file('$projectPath/.gitignore')).delete());
 

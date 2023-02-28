@@ -11,7 +11,10 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
 
   late final List<String> _assets;
 
-  CreateDockerFileCLICommand(this.projectPath, this.compileType);
+  CreateDockerFileCLICommand(
+    this.projectPath,
+    this.compileType,
+  );
 
   @override
   Future<void> run() async {
@@ -36,7 +39,9 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
     try {
       appSettingParseResult = await AppSettingParcer().parse(projectPath);
     } on AppSettingParserException catch (object) {
-      throw CLICommandException(message: object.message!);
+      throw CLICommandException(
+        message: object.message!,
+      );
     }
 
     _appSetting = appSettingParseResult.data;
@@ -45,7 +50,10 @@ class CreateDockerFileCLICommand extends CLICommand<void> {
         .parseCurrent(_appSetting, BuildMode.release);
 
     try {
-      _assets = AppSettingAssetsParser().parse(_appSetting, _buildSetting);
+      _assets = AppSettingAssetsParser().parse(
+        _appSetting,
+        _buildSetting,
+      );
     } on CLICommandException catch (_) {
       rethrow;
     }

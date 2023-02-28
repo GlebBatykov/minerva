@@ -13,8 +13,14 @@ class BuildCLICommand extends CLICommand<void> {
 
   final CurrentBuildAppSetting buildSetting;
 
-  BuildCLICommand(this.projectPath, this.mode, this.compileType,
-      this.appSettingFile, this.appSetting, this.buildSetting);
+  BuildCLICommand({
+    required this.projectPath,
+    required this.mode,
+    required this.compileType,
+    required this.appSettingFile,
+    required this.appSetting,
+    required this.buildSetting,
+  });
 
   @override
   Future<void> run() async {
@@ -22,25 +28,39 @@ class BuildCLICommand extends CLICommand<void> {
 
     final futures = <Future>[];
 
-    final buildAppSetting =
-        FinalBuildAppSettingBuilder(mode, appSetting, buildSetting).build();
+    final buildAppSetting = FinalBuildAppSettingBuilder(
+      mode: mode,
+      appSetting: appSetting,
+      buildSetting: buildSetting,
+    ).build();
 
-    futures.add(CompileCLICommand(projectPath, mode, compileType)
-        .run()
-        .then((value) => fileLogs.addAll(value)));
+    futures.add(CompileCLICommand(
+      projectPath: projectPath,
+      mode: mode,
+      compileType: compileType,
+    ).run().then((v) => fileLogs.addAll(v)));
 
-    futures.add(
-        CreateBuildAppSettingCLICommand(projectPath, mode, buildAppSetting)
-            .run());
+    futures.add(CreateBuildAppSettingCLICommand(
+      projectPath: projectPath,
+      mode: mode,
+      buildAppSetting: buildAppSetting,
+    ).run());
 
-    futures.add(
-        CloneAssetsCLICommand(projectPath, mode, appSetting, buildSetting)
-            .run()
-            .then((value) => fileLogs.addAll(value)));
+    futures.add(CloneAssetsCLICommand(
+      projectPath: projectPath,
+      mode: mode,
+      appSetting: appSetting,
+      buildAppSetting: buildSetting,
+    ).run().then((v) => fileLogs.addAll(v)));
 
-    if (appSetting.buildSetting.testSetting.createAppSetting) {
-      futures.add(
-          GenerateTestAppSettingCLICommand(projectPath, buildAppSetting).run());
+    final createAppSetting =
+        appSetting.buildSetting.testSetting.createAppSetting;
+
+    if (createAppSetting) {
+      futures.add(GenerateTestAppSettingCLICommand(
+        projectPath,
+        buildAppSetting,
+      ).run());
     } else {
       futures.add(DeleteTestAppSettingCLICommand(projectPath).run());
     }

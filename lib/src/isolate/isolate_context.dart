@@ -12,8 +12,10 @@ class IsolateContext {
   Map<String, dynamic> get data => Map.unmodifiable(_data);
 
   IsolateContext(
-      Stream receiveStream, SendPort supervisorPort, Map<String, dynamic> data)
-      : _receiveStream = receiveStream,
+    Stream receiveStream,
+    SendPort supervisorPort,
+    Map<String, dynamic> data,
+  )   : _receiveStream = receiveStream,
         _supervisorPort = supervisorPort,
         _data = data;
 

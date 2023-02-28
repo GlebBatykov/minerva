@@ -5,7 +5,10 @@ class CreateExampleTestCLICommand extends CLICommand<void> {
 
   final ProjectTemplate projectTemplate;
 
-  CreateExampleTestCLICommand(this.projectPath, this.projectTemplate);
+  CreateExampleTestCLICommand(
+    this.projectPath,
+    this.projectTemplate,
+  );
 
   @override
   Future<void> run() async {
@@ -13,7 +16,9 @@ class CreateExampleTestCLICommand extends CLICommand<void> {
 
     final examapleTestFile = File.fromUri(Uri.file(exampleTestFilePath));
 
-    await examapleTestFile.create(recursive: true);
+    await examapleTestFile.create(
+      recursive: true,
+    );
 
     await examapleTestFile.writeAsString(_getContent());
   }

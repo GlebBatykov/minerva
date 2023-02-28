@@ -5,5 +5,8 @@ class FormDataFile extends FormDataValue {
 
   final Uint8List bytes;
 
-  FormDataFile(this.name, this.bytes);
+  FormDataFile(
+    this.name,
+    this.bytes,
+  );
 }

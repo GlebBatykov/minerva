@@ -92,12 +92,15 @@ class MinervaRequest {
   /// If [protocolSelector] is provided, [protocolSelector] will be called to select what protocol to use, if any were provided by the client. [protocolSelector] is should return either a [String] or a [Future] completing with a [String]. The [String] must exist in the list of protocols.
   ///
   /// If [compression] is provided, the [WebSocket] created will be configured to negotiate with the specified [CompressionOptions]. If none is specified then the [WebSocket] will be created with the default [CompressionOptions].
-  Future<WebSocket> upgrade(
-      {dynamic Function(List<String>)? protocolSelector,
-      CompressionOptions compression =
-          CompressionOptions.compressionDefault}) async {
-    final socket = await WebSocketTransformer.upgrade(_request,
-        protocolSelector: protocolSelector, compression: compression);
+  Future<WebSocket> upgrade({
+    dynamic Function(List<String>)? protocolSelector,
+    CompressionOptions compression = CompressionOptions.compressionDefault,
+  }) async {
+    final socket = await WebSocketTransformer.upgrade(
+      _request,
+      protocolSelector: protocolSelector,
+      compression: compression,
+    );
 
     _isUpgraded = true;
 

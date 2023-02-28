@@ -7,15 +7,20 @@ class ConfigureAnalysisOptionsCLICommand extends CLICommand<void> {
 
   final ProjectTemplate projectTemplate;
 
-  ConfigureAnalysisOptionsCLICommand(
-      this.projectName, this.projectPath, this.projectTemplate);
+  ConfigureAnalysisOptionsCLICommand({
+    required this.projectName,
+    required this.projectPath,
+    required this.projectTemplate,
+  });
 
   @override
   Future<void> run() async {
     final pubSpecFile =
         File.fromUri(Uri.file('$projectPath/analysis_options.yaml'));
 
-    await pubSpecFile.create(recursive: true);
+    await pubSpecFile.create(
+      recursive: true,
+    );
 
     await pubSpecFile.writeAsString('''
 # This file configures the static analysis results for your project (errors,

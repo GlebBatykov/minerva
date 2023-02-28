@@ -16,7 +16,11 @@ class ClearDirectoryCLICommand extends CLICommand<void> {
 
       var fileCount = 0;
 
-      var childrens = await directory.list(recursive: true).toList();
+      var childrens = await directory
+          .list(
+            recursive: true,
+          )
+          .toList();
 
       childrens = childrens.whereType<File>().toList();
 
@@ -32,7 +36,9 @@ class ClearDirectoryCLICommand extends CLICommand<void> {
 
       await Future.wait(futures);
 
-      await directory.delete(recursive: true);
+      await directory.delete(
+        recursive: true,
+      );
 
       print('Cleared files: $fileCount');
       print('Cleared size: $size byte');

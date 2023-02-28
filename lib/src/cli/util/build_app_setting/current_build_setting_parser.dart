@@ -1,7 +1,10 @@
 part of minerva_cli;
 
 class CurrentBuildSettingParser {
-  CurrentBuildAppSetting parseCurrent(AppSetting appSetting, BuildMode mode) {
+  CurrentBuildAppSetting parseCurrent(
+    AppSetting appSetting,
+    BuildMode mode,
+  ) {
     late final BuildAppSetting? setting;
 
     if (mode == BuildMode.debug) {
@@ -22,9 +25,12 @@ class CurrentBuildSettingParser {
     }
 
     return CurrentBuildAppSetting(
-        setting.host!, setting.port!, setting.compileType,
-        assets: setting.assets,
-        logging: setting.logging,
-        values: setting.values);
+      setting.host!,
+      setting.port!,
+      setting.compileType,
+      assets: setting.assets,
+      logging: setting.logging,
+      values: setting.values,
+    );
   }
 }

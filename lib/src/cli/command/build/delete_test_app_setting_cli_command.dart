@@ -9,8 +9,10 @@ class DeleteTestAppSettingCLICommand extends CLICommand<void> {
   Future<void> run() async {
     final testAppSettingPath = '$projectPath/test/test_app_setting.g.dart';
 
-    final testAppSettingFile =
-        File.fromUri(Uri.file(testAppSettingPath, windows: Platform.isWindows));
+    final testAppSettingFile = File.fromUri(Uri.file(
+      testAppSettingPath,
+      windows: Platform.isWindows,
+    ));
 
     if (await testAppSettingFile.exists()) {
       await testAppSettingFile.delete();

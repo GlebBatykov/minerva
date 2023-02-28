@@ -7,7 +7,11 @@ class FinalBuildAppSettingBuilder {
 
   final CurrentBuildAppSetting buildSetting;
 
-  FinalBuildAppSettingBuilder(this.mode, this.appSetting, this.buildSetting);
+  FinalBuildAppSettingBuilder({
+    required this.mode,
+    required this.appSetting,
+    required this.buildSetting,
+  });
 
   FinalBuildAppSetting build() {
     final host = buildSetting.host;
@@ -28,8 +32,12 @@ class FinalBuildAppSettingBuilder {
       logging.addAll(buildSetting.logging!);
     }
 
-    return FinalBuildAppSetting(host, port, buildType,
-        values: values.isNotEmpty ? values : null,
-        logging: logging.isNotEmpty ? logging : null);
+    return FinalBuildAppSetting(
+      host,
+      port,
+      buildType,
+      values: values.isNotEmpty ? values : null,
+      logging: logging.isNotEmpty ? logging : null,
+    );
   }
 }

@@ -11,8 +11,12 @@ class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
 
   final List<File> _files = [];
 
-  CloneAssetsCLICommand(
-      this.projectPath, this.mode, this.appSetting, this.buildAppSetting);
+  CloneAssetsCLICommand({
+    required this.projectPath,
+    required this.mode,
+    required this.appSetting,
+    required this.buildAppSetting,
+  });
 
   @override
   Future<List<FileLog>> run() async {
@@ -44,10 +48,14 @@ class CloneAssetsCLICommand extends CLICommand<List<FileLog>> {
 
       final buildFilePath = '$projectPath/build/$mode$relativePath';
 
-      final buildFile =
-          File.fromUri(Uri.file(buildFilePath, windows: Platform.isWindows));
+      final buildFile = File.fromUri(Uri.file(
+        buildFilePath,
+        windows: Platform.isWindows,
+      ));
 
-      await buildFile.create(recursive: true);
+      await buildFile.create(
+        recursive: true,
+      );
 
       await buildFile.writeAsBytes(await file.readAsBytes());
     }

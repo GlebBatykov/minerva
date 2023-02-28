@@ -7,18 +7,24 @@ class CreateBuildAppSettingCLICommand extends CLICommand<File> {
 
   final FinalBuildAppSetting buildAppSetting;
 
-  CreateBuildAppSettingCLICommand(
-      this.projectPath, this.mode, this.buildAppSetting);
+  CreateBuildAppSettingCLICommand({
+    required this.projectPath,
+    required this.mode,
+    required this.buildAppSetting,
+  });
 
   @override
   Future<File> run() async {
     print('Creating appsetting.json file in the build...');
 
     final buildAppSettingFile = File.fromUri(Uri.file(
-        '$projectPath/build/$mode/appsetting.json',
-        windows: Platform.isWindows));
+      '$projectPath/build/$mode/appsetting.json',
+      windows: Platform.isWindows,
+    ));
 
-    await buildAppSettingFile.create(recursive: true);
+    await buildAppSettingFile.create(
+      recursive: true,
+    );
 
     await buildAppSettingFile
         .writeAsString(jsonEncode(buildAppSetting.toJson()));

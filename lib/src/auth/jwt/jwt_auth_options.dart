@@ -8,5 +8,8 @@ class JwtAuthOptions {
   /// The permission level that the user must have in order to access the endpoint.
   final int? permissionLevel;
 
-  const JwtAuthOptions({this.roles, this.permissionLevel});
+  const JwtAuthOptions({
+    this.roles,
+    this.permissionLevel,
+  });
 }

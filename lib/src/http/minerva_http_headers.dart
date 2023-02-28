@@ -17,15 +17,15 @@ class MinervaHttpHeaders {
 
   Map<String, Object> get headers => Map.unmodifiable(_headers);
 
-  MinervaHttpHeaders(
-      {this.chunkedTransferEncoding,
-      this.persistentConnection,
-      this.contentType,
-      this.contentLength,
-      this.host,
-      this.port,
-      Map<String, Object>? headers})
-      : _headers = headers ?? {};
+  MinervaHttpHeaders({
+    this.chunkedTransferEncoding,
+    this.persistentConnection,
+    this.contentType,
+    this.contentLength,
+    this.host,
+    this.port,
+    Map<String, Object>? headers,
+  }) : _headers = headers ?? {};
 
   void addEntries(Iterable<MapEntry<String, Object>> newEntries) {
     _headers.addEntries(newEntries);

@@ -38,7 +38,8 @@ class AppSetting {
   Future<void> initialize() async {
     if (!await _file.exists()) {
       throw AppSettingException(
-          message: 'The appsetting.json file not exist by path: $_path.');
+        message: 'The appsetting.json file not exist by path: $_path.',
+      );
     }
 
     try {
@@ -49,8 +50,9 @@ class AppSetting {
       _data.addAll(data);
     } catch (_) {
       throw AppSettingException(
-          message:
-              'An error occurred while parsing appsetting.json file by path: $_path.');
+        message:
+            'An error occurred while parsing appsetting.json file by path: $_path.',
+      );
     }
 
     _isInitialized = true;
@@ -69,7 +71,8 @@ class AppSetting {
       await _file.writeAsString(data);
     } else {
       throw AppSettingException(
-          message: 'The setting.json file not exist by path: $_path.');
+        message: 'The setting.json file not exist by path: $_path.',
+      );
     }
   }
 }
