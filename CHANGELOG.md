@@ -1,4 +1,12 @@
-# 0.3.3
+# 0.3.4
+
+- Optimized the decoding time of the request body into text and JSON;
+- Refactor code, refactor CLI tools;
+- Updated the standard application template;
+- Added choice of two initial application templates: with controllers and endpoints;
+- Update README files.
+
+## 0.3.3
 
 - Update README files.
 
