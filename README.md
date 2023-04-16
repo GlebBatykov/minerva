@@ -1103,8 +1103,10 @@ Next, after successfully creating a `Docker image`, you can safely deploy a `Doc
 - ✅ Finish error handling;
 - ✅ Make documentation;
 - ✅ Make more examples;
-- 🚧 Add Swagger, OpenAPI specification generation;
+- 🚧 Speed up JSON serialization and deserialization;
+- 🚧 Remove errors when working with multipart/form-data and speed up multipart/form-data parsing time;
 - 🚧 Cover with tests;
+- 🔜 Add Swagger, OpenAPI specification generation;
 - 🔜 Create training videos;
 - 🔜 Create website with documentation;
 - 🔜 Add performance tests.
