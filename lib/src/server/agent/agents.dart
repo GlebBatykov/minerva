@@ -16,8 +16,8 @@ class Agents {
       throw MinervaBindException(message: 'all agent names must be unique.');
     }
 
-    for (final data in _agentsData) {
-      _supervisors[data.name] = IsolateSupervisor();
+    for (var i = 0; i < _agentsData.length; i++) {
+      _supervisors[_agentsData[i].name] = IsolateSupervisor();
     }
 
     await Future.wait(_supervisors.values.map((e) => e.initialize()));
@@ -39,8 +39,9 @@ class Agents {
 
       if (error != null) {
         throw MinervaBindException(
-            message:
-                'an error occurred in the agent with name: ${data.name}.\n\nAgent error:\n\n${error!.error}\n\nAgent stack trace:\n\n${error!.stackTrace}');
+          message:
+              'an error occurred in the agent with name: ${data.name}.\n\nAgent error:\n\n${error!.error}\n\nAgent stack trace:\n\n${error!.stackTrace}',
+        );
       }
 
       _connectors.add(AgentConnector(data.name, supervisor.isolatePort!));

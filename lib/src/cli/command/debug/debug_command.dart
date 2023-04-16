@@ -10,10 +10,10 @@ class DebugCommand extends Command {
 
   @override
   String get usage => '''
-    -d  --directory               points to the project directory.
-    -m  --mode                    sets the project build mode. Possible values: debug (default), release.
-    -p  --pause-isolates-on-start pause isolates on start.
-    -e  --enable-asserts          enable assert statements.
+    -$directoryOptionAbbr  --$directoryOptionName               points to the project directory.
+    -$modeOptionAbbr  --$modeOptionName                    sets the project build mode. Possible values: debug (default), release.
+    -$pauseIsolatesOnStartFlagAbbr  --$pauseIsolatesOnStartFlagName pause isolates on start.
+    -$enableAssertsFlagAbbr  --$enableAssertsFlagName          enable assert statements.
   ''';
 
   late final String _directoryPath;
@@ -26,36 +26,42 @@ class DebugCommand extends Command {
 
   DebugCommand() {
     argParser.addOption(
-      'directory',
-      abbr: 'd',
+      directoryOptionName,
+      abbr: directoryOptionAbbr,
       defaultsTo: Directory.current.path,
     );
-    argParser.addOption('mode',
-        abbr: 'm',
-        defaultsTo: BuildMode.debug.toString(),
-        allowed: BuildMode.values.map(
-          (e) => e.name,
-        ));
-    argParser.addFlag(
-      'pause-isolates-on-start',
-      abbr: 'p',
+    argParser.addOption(
+      modeOptionName,
+      abbr: modeOptionAbbr,
+      defaultsTo: BuildMode.debug.toString(),
+      allowed: BuildMode.values.map(
+        (e) => e.name,
+      ),
     );
     argParser.addFlag(
-      'enable-asserts',
-      abbr: 'e',
+      pauseIsolatesOnStartFlagName,
+      abbr: pauseIsolatesOnStartFlagAbbr,
+    );
+    argParser.addFlag(
+      enableAssertsFlagName,
+      abbr: enableAssertsFlagAbbr,
     );
   }
 
   @override
   Future<void> run() async {
-    _directoryPath =
-        Directory.fromUri(Uri.parse(argResults!['directory'])).absolute.path;
+    final args = argResults!;
 
-    _mode = BuildMode.fromName(argResults!['mode']);
+    _directoryPath = Directory.fromUri(Uri.directory(
+      args[directoryOptionName],
+      windows: Platform.isWindows,
+    )).absolute.path;
 
-    _isPauseIsolatesOnStart = argResults!['pause-isolates-on-start'];
+    _mode = BuildMode.fromName(args[modeOptionName]);
 
-    _isEnalbeAsserts = argResults!['enable-asserts'];
+    _isPauseIsolatesOnStart = args[pauseIsolatesOnStartFlagName];
+
+    _isEnalbeAsserts = args[enableAssertsFlagName];
 
     await _checkAppSetting();
 
@@ -97,13 +103,17 @@ class DebugCommand extends Command {
   }
 
   Future<void> _runBuild() async {
-    final buildProcess = await Process.start('minerva', [
-      'build',
-      '-d',
-      _directoryPath,
-      '-m',
-      _mode.toString(),
-    ]);
+    final buildProcess = await Process.start(
+      'minerva',
+      [
+        'build',
+        '-d',
+        _directoryPath,
+        '-m',
+        _mode.toString(),
+      ],
+      runInShell: true,
+    );
 
     buildProcess.stdout.listen((e) => stdout.add(e));
     buildProcess.stderr.listen((e) => stderr.add(e));
@@ -114,13 +124,17 @@ class DebugCommand extends Command {
   Future<void> _runDebug() async {
     final entryPointPath = '$_directoryPath/build/$_mode/bin/main.dill';
 
-    final appProcess = await Process.start('dart', [
-      'run',
-      '--observe',
-      if (_isPauseIsolatesOnStart) '--pause-isolates-on-start',
-      if (_isEnalbeAsserts) '--enable-asserts',
-      entryPointPath,
-    ]);
+    final appProcess = await Process.start(
+      'dart',
+      [
+        'run',
+        '--observe',
+        if (_isPauseIsolatesOnStart) '--pause-isolates-on-start',
+        if (_isEnalbeAsserts) '--enable-asserts',
+        entryPointPath,
+      ],
+      runInShell: true,
+    );
 
     appProcess.stdout.listen((e) => stdout.add(e));
     appProcess.stderr.listen((e) => stdout.add(e));

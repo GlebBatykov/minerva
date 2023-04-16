@@ -81,7 +81,7 @@ void main() {
 
     final int port = \$TestAppSetting.port;
 
-    test('Get 'Hello, world!' message', () async {
+    test('Get "Hello, world!" message', () async {
       final response = await dio.get('http://\$host:\$port/hello');
 
       expect(response.data, 'Hello, world!');

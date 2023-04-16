@@ -5,7 +5,7 @@ class DateTimeInserter {
 
   final String _defaultDateTimePattern;
 
-  DateTimeInserter(String pattern, String defaultDateTimePattern)
+  const DateTimeInserter(String pattern, String defaultDateTimePattern)
       : _pattern = pattern,
         _defaultDateTimePattern = defaultDateTimePattern;
 

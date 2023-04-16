@@ -14,9 +14,10 @@ class RedirectionData {
   /// Authorization context.
   final AuthOptions? authOptions;
 
-  RedirectionData(
-      {required this.method,
-      required this.path,
-      required this.location,
-      this.authOptions});
+  RedirectionData({
+    required this.method,
+    required this.path,
+    required this.location,
+    this.authOptions,
+  });
 }

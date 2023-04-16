@@ -7,6 +7,9 @@ class ServerConfiguration {
 
   final bool v6Only;
 
-  ServerConfiguration(
-      {this.sessionTimeout, this.backlog = 0, this.v6Only = false});
+  ServerConfiguration({
+    this.sessionTimeout,
+    this.backlog = 0,
+    this.v6Only = false,
+  });
 }

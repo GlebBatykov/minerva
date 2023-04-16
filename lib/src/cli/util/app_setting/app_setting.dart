@@ -36,9 +36,7 @@ class AppSetting {
 class BuildSetting {
   final TestSetting testSetting;
 
-  const BuildSetting({
-    this.testSetting = const TestSetting(),
-  });
+  const BuildSetting({this.testSetting = const TestSetting()});
 
   BuildSetting.fromJson(Map<String, dynamic> json)
       : testSetting = TestSetting.fromJson(json['test'] ?? TestSetting());
@@ -47,9 +45,7 @@ class BuildSetting {
 class TestSetting {
   final bool createAppSetting;
 
-  const TestSetting({
-    this.createAppSetting = false,
-  });
+  const TestSetting({this.createAppSetting = false});
 
   TestSetting.fromJson(Map<String, dynamic> json)
       : createAppSetting = json['createAppSetting'] ?? false;

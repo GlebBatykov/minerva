@@ -7,7 +7,11 @@ class MinervaPath {
 
   final bool containsPathParameters;
 
-  MinervaPath(this.path, this.segments, this.containsPathParameters);
+  MinervaPath({
+    required this.path,
+    required this.segments,
+    required this.containsPathParameters,
+  });
 
   factory MinervaPath.parse(String path) {
     if (!path.startsWith('/')) {
@@ -20,9 +24,11 @@ class MinervaPath {
 
     final pathSegments = path.split('/');
 
-    pathSegments.removeWhere((element) => element.isEmpty);
+    pathSegments.removeWhere((e) => e.isEmpty);
 
-    for (final segment in pathSegments) {
+    for (var i = 0; i < pathSegments.length; i++) {
+      final segment = pathSegments[i];
+
       if (_isParameter(segment)) {
         segments.add(PathParameter.parse(segment));
 
@@ -32,7 +38,11 @@ class MinervaPath {
       }
     }
 
-    return MinervaPath(path, segments, containsPathParameters);
+    return MinervaPath(
+      path: path,
+      segments: segments,
+      containsPathParameters: containsPathParameters,
+    );
   }
 
   static bool _isParameter(String segment) {

@@ -4,57 +4,97 @@ part of minerva_logging;
 class ConsoleLogger extends Logger {
   final String _template;
 
-  final List<LoggerMiddleware> _middlewares = [
+  final List<LoggerMiddleware> _middlewares = const [
     TimeMiddleware(),
     DateMiddleware(),
     LogLevelMiddleware(),
     MessageMiddleware()
   ];
 
-  ConsoleLogger({String template = '[&time] [&level] &message'})
-      : _template = template,
+  ConsoleLogger({
+    String template = '[&time] [&level] &message',
+  })  : _template = template,
         super(name: 'console');
 
   @override
-  void info(dynamic object, {String? template}) {
+  void info(
+    Object? object, {
+    String? template,
+  }) {
     if (isLevelEnabled(LogLevel.info)) {
-      _log(object, template ?? _template, LogLevel.info);
+      _log(
+        object: object,
+        template: template ?? _template,
+        level: LogLevel.info,
+      );
     }
   }
 
   @override
-  void debug(dynamic object, {String? template}) {
+  void debug(
+    Object? object, {
+    String? template,
+  }) {
     if (isLevelEnabled(LogLevel.debug)) {
-      _log(object, template ?? _template, LogLevel.debug);
+      _log(
+        object: object,
+        template: template ?? _template,
+        level: LogLevel.debug,
+      );
     }
   }
 
   @override
-  void warning(object, {String? template}) {
+  void warning(
+    Object? object, {
+    String? template,
+  }) {
     if (isLevelEnabled(LogLevel.warning)) {
-      _log(object, template ?? _template, LogLevel.warning);
+      _log(
+        object: object,
+        template: template ?? _template,
+        level: LogLevel.warning,
+      );
     }
   }
 
   @override
-  void error(object, {String? template}) {
+  void error(
+    Object? object, {
+    String? template,
+  }) {
     if (isLevelEnabled(LogLevel.error)) {
-      _log(object, template ?? _template, LogLevel.error);
+      _log(
+        object: object,
+        template: template ?? _template,
+        level: LogLevel.error,
+      );
     }
   }
 
   @override
-  void critical(object, {String? template}) {
+  void critical(
+    Object? object, {
+    String? template,
+  }) {
     if (isLevelEnabled(LogLevel.critical)) {
-      _log(object, template ?? _template, LogLevel.critical);
+      _log(
+        object: object,
+        template: template ?? _template,
+        level: LogLevel.critical,
+      );
     }
   }
 
-  void _log(dynamic object, String template, LogLevel level) {
+  void _log({
+    required Object? object,
+    required String template,
+    required LogLevel level,
+  }) {
     var log = Log(template, level, object.toString());
 
-    for (final middleware in _middlewares) {
-      log = middleware.handle(log);
+    for (var i = 0; i < _middlewares.length; i++) {
+      log = _middlewares[i].handle(log);
     }
 
     print('${log.template}\n');

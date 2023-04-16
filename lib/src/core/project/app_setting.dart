@@ -58,7 +58,7 @@ class AppSetting {
     _isInitialized = true;
   }
 
-  Future<void> setValues(Map<String, dynamic> values) async {
+  Future<void> setValues(Map<String, Object?> values) async {
     _data['values'] = values;
 
     final json = jsonEncode(_data);

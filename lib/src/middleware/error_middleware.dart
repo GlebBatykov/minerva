@@ -12,7 +12,10 @@ class ErrorMiddleware extends Middleware {
 
   late final LogPipeline _logPipeline;
 
-  ErrorMiddleware({this.handler, this.trace = true});
+  ErrorMiddleware({
+    this.handler,
+    this.trace = true,
+  });
 
   @override
   void initialize(ServerContext context) {
@@ -21,7 +24,9 @@ class ErrorMiddleware extends Middleware {
 
   @override
   Future<dynamic> handle(
-      MiddlewareContext context, MiddlewarePipelineNode? next) async {
+    MiddlewareContext context,
+    MiddlewarePipelineNode? next,
+  ) async {
     if (next == null) {
       return NotFoundResult();
     }

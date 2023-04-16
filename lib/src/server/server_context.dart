@@ -14,5 +14,12 @@ class ServerContext {
   /// All agent connectors.
   final AgentConnectors connectors;
 
-  ServerContext(this.instance, this.logPipeline, this.connectors);
+  ///
+  final Utf8Converter converter = Utf8Converter();
+
+  ServerContext({
+    required this.instance,
+    required this.logPipeline,
+    required this.connectors,
+  });
 }

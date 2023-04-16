@@ -55,7 +55,10 @@ class JsonResult extends Result {
     Object? json, {
     int? statusCode,
     super.headers,
-  }) : super(statusCode: statusCode ?? 200, body: jsonEncode(json));
+  }) : super(
+          statusCode: statusCode ?? 200,
+          body: jsonEncode(json),
+        );
 
   @override
   Future<MinervaResponse> get response async {

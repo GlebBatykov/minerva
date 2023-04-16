@@ -315,7 +315,7 @@ class RebuildCLICommand extends CLICommand<void> {
     final detailsFile =
         File.fromUri(Uri.file('$projectPath/build/$mode/details.json'));
 
-    final details = <String, dynamic>{
+    final details = <String, Object?>{
       'compile-type': compileType.toString(),
       'files': fileLogs.map((e) => e.toJson()).toList()
     };

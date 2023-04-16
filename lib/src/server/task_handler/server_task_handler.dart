@@ -15,9 +15,14 @@ class ServerTaskHandler extends IsolateTaskHandler {
 
   late final Server _server;
 
-  ServerTaskHandler(int instance, ServerSetting setting, Endpoints endpoints,
-      Apis apis, LogPipeline logPipeline, AgentConnectors connectors)
-      : _instance = instance,
+  ServerTaskHandler({
+    required int instance,
+    required ServerSetting setting,
+    required Endpoints endpoints,
+    required Apis apis,
+    required LogPipeline logPipeline,
+    required AgentConnectors connectors,
+  })  : _instance = instance,
         _setting = setting,
         _endpoints = endpoints,
         _apis = apis,
@@ -28,7 +33,13 @@ class ServerTaskHandler extends IsolateTaskHandler {
   Future<void> onStart(IsolateContext context) async {
     try {
       _server = await Server.bind(
-          _instance, _setting, _endpoints, _apis, _logPipeline, _connectors);
+        instance: _instance,
+        setting: _setting,
+        endpoints: _endpoints,
+        apis: _apis,
+        logPipeline: _logPipeline,
+        connectors: _connectors,
+      );
     } catch (error, stackTrace) {
       context.send(IsolateError(error, stackTrace));
     }

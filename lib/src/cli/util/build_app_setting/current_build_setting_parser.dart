@@ -15,13 +15,14 @@ class CurrentBuildSettingParser {
 
     if (setting == null) {
       throw BuildSettingParserException(
-          message:
-              'Setting for $mode mode is not exist in appsetting.json file.');
+        message: 'Setting for $mode mode is not exist in appsetting.json file.',
+      );
     }
 
     if (setting.host == null || setting.port == null) {
       throw BuildSettingParserException(
-          message: 'Setting for $mode mode not contains host and port values.');
+        message: 'Setting for $mode mode not contains host and port values.',
+      );
     }
 
     return CurrentBuildAppSetting(

@@ -13,12 +13,12 @@ class FileLog {
     required this.modificationTime,
   });
 
-  FileLog.fromJson(Map<String, dynamic> json)
+  FileLog.fromJson(Map<String, Object?> json)
       : type = FileLogType.values.firstWhere((e) => e.name == json['type']),
-        path = json['path'],
-        modificationTime = DateTime.parse(json['modificationTime']);
+        path = json['path'] as String,
+        modificationTime = DateTime.parse(json['modificationTime'] as String);
 
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
         'type': type.name,
         'path': path,
         'modificationTime': modificationTime.toString(),

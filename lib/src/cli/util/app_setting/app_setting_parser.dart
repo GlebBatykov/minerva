@@ -12,14 +12,11 @@ class AppSettingParcer {
           message: 'Current directory not exist appsetting.json file.');
     }
 
-    final json = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+    final json = jsonDecode(await file.readAsString()) as Map<String, Object?>;
 
     final data = AppSetting.fromJson(json);
 
-    final result = AppSettingParseResult(
-      file,
-      data,
-    );
+    final result = AppSettingParseResult(file, data);
 
     return result;
   }

@@ -2,7 +2,6 @@ library minerva_core;
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:path/path.dart';
 

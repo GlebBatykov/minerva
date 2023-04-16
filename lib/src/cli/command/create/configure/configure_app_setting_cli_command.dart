@@ -22,15 +22,15 @@ class ConfigureAppSettingCLICommand extends CLICommand<void> {
       recursive: true,
     );
 
-    final appSetting = <String, dynamic>{};
+    final appSetting = <String, Object?>{};
 
-    appSetting['debug'] = <String, dynamic>{
+    appSetting['debug'] = <String, Object?>{
       'compile-type': debugCompileType.toString(),
       'host': '127.0.0.1',
       'port': 5000,
     };
 
-    appSetting['release'] = <String, dynamic>{
+    appSetting['release'] = <String, Object?>{
       'compile-type': releaseCompileType.toString(),
       'host': '0.0.0.0',
       'port': 8080,

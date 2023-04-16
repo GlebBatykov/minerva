@@ -3,13 +3,14 @@ part of minerva_server;
 class Servers {
   final List<IsolateSupervisor> _supervisors = [];
 
-  Future<void> initialize(
-      int instance,
-      ServerSetting setting,
-      MinervaApisBuilder? apisBuilder,
-      MinervaEndpointsBuilder? endpointsBuilder,
-      LogPipeline logPipeline,
-      AgentConnectors connectors) async {
+  Future<void> initialize({
+    required int instance,
+    required ServerSetting setting,
+    required MinervaApisBuilder? apisBuilder,
+    required MinervaEndpointsBuilder? endpointsBuilder,
+    required LogPipeline logPipeline,
+    required AgentConnectors connectors,
+  }) async {
     final endpoints = Endpoints();
 
     final apis = Apis(await apisBuilder?.build() ?? []);
@@ -32,7 +33,13 @@ class Servers {
       });
 
       await _supervisors[i].start(ServerTaskHandler(
-          i, setting, endpoints, apis, logPipeline, connectors));
+        instance: i,
+        setting: setting,
+        endpoints: endpoints,
+        apis: apis,
+        logPipeline: logPipeline,
+        connectors: connectors,
+      ));
 
       subscription.cancel();
 

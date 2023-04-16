@@ -6,20 +6,20 @@ class Apis {
   Apis(List<Api> apis) : _apis = apis;
 
   Future<void> initialize(ServerContext context) async {
-    for (final api in _apis) {
-      await api.initialize(context);
+    for (var i = 0; i < _apis.length; i++) {
+      await _apis[i].initialize(context);
     }
   }
 
   Future<void> build(Endpoints endpoints) async {
-    for (final api in _apis) {
-      await api.build(endpoints);
+    for (var i = 0; i < _apis.length; i++) {
+      await _apis[i].build(endpoints);
     }
   }
 
   Future<void> dispose(ServerContext context) async {
-    for (final api in _apis) {
-      await api.dispose(context);
+    for (var i = 0; i < _apis.length; i++) {
+      await _apis[i].dispose(context);
     }
   }
 }

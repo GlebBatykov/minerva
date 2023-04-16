@@ -13,8 +13,11 @@ class StaticFilesMiddleware extends Middleware {
 
   late final String _directoryPath;
 
-  StaticFilesMiddleware(
-      {required this.directory, required this.path, this.root}) {
+  StaticFilesMiddleware({
+    required this.directory,
+    required this.path,
+    this.root,
+  }) {
     _initialize();
   }
 
@@ -24,7 +27,9 @@ class StaticFilesMiddleware extends Middleware {
 
   @override
   Future<dynamic> handle(
-      MiddlewareContext context, MiddlewarePipelineNode? next) async {
+    MiddlewareContext context,
+    MiddlewarePipelineNode? next,
+  ) async {
     final request = context.request;
 
     final requestPath = request.uri.path;

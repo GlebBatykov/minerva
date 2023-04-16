@@ -9,6 +9,10 @@ class ServerSetting {
 
   final MinervaServerBuilder? builder;
 
-  ServerSetting(
-      this.address, this.configuration, this.middlewares, this.builder);
+  ServerSetting({
+    required this.address,
+    required this.configuration,
+    required this.middlewares,
+    required this.builder,
+  });
 }

@@ -26,13 +26,14 @@ class MinervaSetting {
   /// Used for agents configuration.
   final MinervaAgentsBuilder? agentsBuilder;
 
-  MinervaSetting(
-      {this.instance = 1,
-      this.configuration,
-      required this.middlewaresBuilder,
-      this.endpointsBuilder,
-      this.apisBuilder,
-      this.serverBuilder,
-      required this.loggersBuilder,
-      this.agentsBuilder});
+  MinervaSetting({
+    this.instance = 1,
+    this.configuration,
+    required this.middlewaresBuilder,
+    this.endpointsBuilder,
+    this.apisBuilder,
+    this.serverBuilder,
+    required this.loggersBuilder,
+    this.agentsBuilder,
+  });
 }

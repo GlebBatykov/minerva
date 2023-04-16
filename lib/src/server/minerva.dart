@@ -11,9 +11,10 @@ class Minerva {
   Minerva._();
 
   /// Binds server with current [setting].
-  static Future<Minerva> bind(
-      {required List<String> args,
-      required MinervaSettingBuilder settingBuilder}) async {
+  static Future<Minerva> bind({
+    required List<String> args,
+    required MinervaSettingBuilder settingBuilder,
+  }) async {
     if (!AppSetting.instance.isInitialized) {
       await AppSetting.instance.initialize();
     }
@@ -24,23 +25,25 @@ class Minerva {
 
     final address = _getAddress();
 
-    final middlwares = await setting.middlewaresBuilder.build();
+    final middlewares = await setting.middlewaresBuilder.build();
 
     final serverSetting = ServerSetting(
-        address,
-        setting.configuration ?? ServerConfiguration(),
-        middlwares,
-        setting.serverBuilder);
+      address: address,
+      configuration: setting.configuration ?? ServerConfiguration(),
+      middlewares: middlewares,
+      builder: setting.serverBuilder,
+    );
 
     final agentsData = await setting.agentsBuilder?.build();
 
     await minerva._initialize(
-        setting.instance,
-        serverSetting,
-        setting.loggersBuilder,
-        setting.apisBuilder,
-        setting.endpointsBuilder,
-        agentsData ?? []);
+      instance: setting.instance,
+      setting: serverSetting,
+      loggersBuilder: setting.loggersBuilder,
+      apisBuilder: setting.apisBuilder,
+      endpointsBuilder: setting.endpointsBuilder,
+      agentsData: agentsData ?? [],
+    );
 
     return minerva;
   }
@@ -53,22 +56,24 @@ class Minerva {
         return ServerAddress(AppSetting.instance.host!, port!);
       } catch (_) {
         throw MinervaBindException(
-            message:
-                'Invalid host or port values in the appsetting.json file.');
+          message: 'Invalid host or port values in the appsetting.json file.',
+        );
       }
     } else {
       throw MinervaBindException(
-          message: 'In the appsetting.json file is missing host or port.');
+        message: 'In the appsetting.json file is missing host or port.',
+      );
     }
   }
 
-  Future<void> _initialize(
-      int instance,
-      ServerSetting setting,
-      MinervaLoggersBuilder loggersBuilder,
-      MinervaApisBuilder? apisBuilder,
-      MinervaEndpointsBuilder? endpointsBuilder,
-      List<AgentData> agentsData) async {
+  Future<void> _initialize({
+    required int instance,
+    required ServerSetting setting,
+    required MinervaLoggersBuilder loggersBuilder,
+    required MinervaApisBuilder? apisBuilder,
+    required MinervaEndpointsBuilder? endpointsBuilder,
+    required List<AgentData> agentsData,
+  }) async {
     _agents = Agents(agentsData);
 
     await _agents.initialize();
@@ -77,8 +82,14 @@ class Minerva {
 
     final connectors = AgentConnectors(_agents.connectors);
 
-    await _servers.initialize(instance, setting, apisBuilder, endpointsBuilder,
-        LogPipeline(List.from(loggers)), connectors);
+    await _servers.initialize(
+      instance: instance,
+      setting: setting,
+      apisBuilder: apisBuilder,
+      endpointsBuilder: endpointsBuilder,
+      logPipeline: LogPipeline(List.from(loggers)),
+      connectors: connectors,
+    );
 
     _logPipeline = LogPipeline(List.from(loggers));
 

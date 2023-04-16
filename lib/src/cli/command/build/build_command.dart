@@ -9,8 +9,8 @@ class BuildCommand extends Command {
 
   @override
   String get usage => '''
-    -d  --directory points to the project directory.
-    -m  --mode      sets the project build mode. Possible values: debug (default), release.
+    -$directoryOptionAbbr  --$directoryOptionName points to the project directory.
+    -$modeOptionAbbr  --$modeOptionName      sets the project build mode. Possible values: debug (default), release.
   ''';
 
   late final String _directoryPath;
@@ -27,13 +27,13 @@ class BuildCommand extends Command {
 
   BuildCommand() {
     argParser.addOption(
-      'directory',
-      abbr: 'd',
+      directoryOptionName,
+      abbr: directoryOptionAbbr,
       defaultsTo: Directory.current.path,
     );
     argParser.addOption(
-      'mode',
-      abbr: 'm',
+      modeOptionName,
+      abbr: modeOptionAbbr,
       defaultsTo: BuildMode.debug.toString(),
       allowed: BuildMode.values.map((e) => e.name),
     );
@@ -41,12 +41,14 @@ class BuildCommand extends Command {
 
   @override
   Future<void> run() async {
+    final args = argResults!;
+
     _directoryPath = Directory.fromUri(Uri.directory(
-      argResults!['directory'],
+      args[directoryOptionName],
       windows: Platform.isWindows,
     )).absolute.path;
 
-    _mode = BuildMode.fromName(argResults!['mode']);
+    _mode = BuildMode.fromName(args[modeOptionName]);
 
     late AppSettingParseResult appSettingParseResult;
 

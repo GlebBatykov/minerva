@@ -17,7 +17,9 @@ part 'cli/runner.dart';
 part 'cli/command/get_dependencies_cli_command.dart';
 part 'cli/cli_configuration.dart';
 
-part 'cli/enums/enums.dart';
+part 'cli/enums.dart';
+
+part 'cli/constants.dart';
 
 part 'cli/util/app_setting/app_setting_parser.dart';
 part 'cli/util/asset/app_setting_assets_parser.dart';

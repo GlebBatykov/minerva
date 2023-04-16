@@ -9,11 +9,15 @@ class MiddlewareContext {
   final List<Endpoint> httpEndpoints;
 
   /// Websocket endpoints.
-  final List<WebSocketEndpoint> webSocketEndponts;
+  final List<WebSocketEndpoint> webSocketEndpoints;
 
   /// Context of current server instance.
   final ServerContext context;
 
-  MiddlewareContext(
-      this.request, this.httpEndpoints, this.webSocketEndponts, this.context);
+  MiddlewareContext({
+    required this.request,
+    required this.httpEndpoints,
+    required this.webSocketEndpoints,
+    required this.context,
+  });
 }

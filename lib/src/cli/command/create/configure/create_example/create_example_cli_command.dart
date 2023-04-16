@@ -155,11 +155,13 @@ class WeatherForecastController extends ControllerBase {
   @Get()
   JsonResult get() {
     final weatherForecasts = List.generate(
-        _random.nextInt(5) + 1,
-        (index) => WeatherForecast(
-            date: DateTime.now().add(Duration(days: index)),
-            temperature: _random.nextInt(75) - 20,
-            summary: _summaries[_random.nextInt(_summaries.length)]));
+      _random.nextInt(5) + 1,
+      (index) => WeatherForecast(
+        date: DateTime.now().add(Duration(days: index)),
+        temperature: _random.nextInt(75) - 20,
+        summary: _summaries[_random.nextInt(_summaries.length)],
+      ),
+    );
 
     final json = weatherForecasts.map((e) => e.toJson()).toList();
 
@@ -176,10 +178,13 @@ class WeatherForecast {
 
   final String summary;
 
-  WeatherForecast(
-      {required this.date, required this.temperature, required this.summary});
+  WeatherForecast({
+    required this.date,
+    required this.temperature,
+    required this.summary,
+  });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, Object?> toJson() => {
         'date': date.toIso8601String(),
         'temperature': temperature,
         'summary': summary
@@ -204,7 +209,8 @@ class SettingBuilder extends MinervaSettingBuilder {
         instance: Platform.numberOfProcessors,
         loggersBuilder: LoggersBuilder(),
         apisBuilder: ApisBuilder(),
-        middlewaresBuilder: MiddlewaresBuilder());
+        middlewaresBuilder: MiddlewaresBuilder(),
+    );
   }
 }
 ''';
@@ -318,11 +324,8 @@ import 'dart:io';
 
 import 'package:minerva/minerva.dart';
 
-import 'agents_builder.dart';
-import 'apis_builder.dart';
 import 'endpoints_builder.dart';
 import 'middlewares_builder.dart';
-import 'server_builder.dart';
 import 'loggers_builder.dart';
 
 class SettingBuilder extends MinervaSettingBuilder {
@@ -330,10 +333,11 @@ class SettingBuilder extends MinervaSettingBuilder {
   MinervaSetting build() {
     // Creates server setting
     return MinervaSetting(
-        instance: Platform.numberOfProcessors,
-        loggersBuilder: LoggersBuilder(),
-        endpointsBuilder: EndpointsBuilder(),
-        middlewaresBuilder: MiddlewaresBuilder());
+      instance: Platform.numberOfProcessors,
+      loggersBuilder: LoggersBuilder(),
+      endpointsBuilder: EndpointsBuilder(),
+      middlewaresBuilder: MiddlewaresBuilder(),
+    );
   }
 }
 ''';

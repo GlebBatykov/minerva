@@ -12,14 +12,17 @@ class JwtAuthMiddleware extends Middleware {
 
   final GetRolesCallback? _getRole;
 
-  const JwtAuthMiddleware(
-      {required TokenVerifyCallback tokenVerify, GetRolesCallback? getRole})
-      : _tokenVerify = tokenVerify,
+  const JwtAuthMiddleware({
+    required TokenVerifyCallback tokenVerify,
+    GetRolesCallback? getRole,
+  })  : _tokenVerify = tokenVerify,
         _getRole = getRole;
 
   @override
   Future<dynamic> handle(
-      MiddlewareContext context, MiddlewarePipelineNode? next) async {
+    MiddlewareContext context,
+    MiddlewarePipelineNode? next,
+  ) async {
     final header = context.request.headers[HttpHeaders.authorizationHeader];
 
     if (header != null) {

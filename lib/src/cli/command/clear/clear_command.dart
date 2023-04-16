@@ -9,23 +9,25 @@ class ClearCommand extends Command {
 
   @override
   String get usage => '''
-    -d  --directory points to the project directory.
+    -$directoryOptionAbbr  --$directoryOptionName points to the project directory.
   ''';
 
   late final String _directoryPath;
 
   ClearCommand() {
     argParser.addOption(
-      'directory',
-      abbr: 'd',
+      directoryOptionName,
+      abbr: directoryOptionAbbr,
       defaultsTo: Directory.current.path,
     );
   }
 
   @override
   Future<void> run() async {
+    final args = argResults!;
+
     _directoryPath = Directory.fromUri(Uri.directory(
-      argResults!['directory'],
+      args[directoryOptionName],
       windows: Platform.isWindows,
     )).absolute.path;
 

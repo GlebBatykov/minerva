@@ -5,10 +5,10 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
+import 'package:minerva/minerva.dart';
+
 import 'isolate.dart';
 import 'middleware.dart';
-import 'routing.dart';
-import 'http.dart';
 import 'core.dart';
 import 'logging.dart';
 

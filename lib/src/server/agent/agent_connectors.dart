@@ -13,9 +13,9 @@ class AgentConnectors {
   ///
   /// If no such agent exists, it returns null.
   AgentConnector? get(String name) {
-    for (final connector in _connectors) {
-      if (connector.name == name) {
-        return connector;
+    for (var i = 0; i < _connectors.length; i++) {
+      if (_connectors[i].name == name) {
+        return _connectors[i];
       }
     }
 

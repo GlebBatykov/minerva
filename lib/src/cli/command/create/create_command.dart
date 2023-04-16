@@ -9,15 +9,15 @@ class CreateCommand extends Command {
 
   @override
   String get usage => '''
-    -n,   --name                  required parameter specifying the name of the project.
-    -t,   --template              specifies project template.
+    -$nameOptionAbbr,   --$nameOptionName                  required parameter specifying the name of the project.
+    -$templateOptionAbbr,   --$templateOptionName              specifies project template.
 
-       [controllers](default)     project that uses controllers to configure endpoints.
-       [endpoints]                simple project, endpoints are created manually.
+       [${ProjectTemplate.controllers.name}](default)     project that uses controllers to configure endpoints.
+       [${ProjectTemplate.endpoints.name}]                simple project, endpoints are created manually.
 
-    -d,   --debug-compile-type    specifies compile type of debug build of project. Possible values: AOT, JIT (default).
-    -r,   --release-compile-type  specifies compile type of release build of project. Possible values: AOT (default), JIT.
-    -o,   --docker-compile-type   specifies the compilation type to be used in the docker container. Possible values: AOT (default), JIT.                  
+    -$debugCompileTypeOptionAbbr,   --$debugCompileTypeOptionName    specifies compile type of debug build of project. Possible values: AOT, JIT (default).
+    -$releaseCompileTypeOptionAbbr,   --$releaseCompileTypeOptionName  specifies compile type of release build of project. Possible values: AOT (default), JIT.
+    -$dockerCompileTypeOptionAbbr,   --$dockerCompileTypeOptionName   specifies the compilation type to be used in the docker container. Possible values: AOT (default), JIT.                  
   ''';
 
   String? _projectName;
@@ -26,41 +26,40 @@ class CreateCommand extends Command {
 
   CreateCommand() {
     argParser.addOption(
-      'name',
-      abbr: 'n',
+      nameOptionName,
+      abbr: nameOptionAbbr,
     );
     argParser.addOption(
-      'debug-compile-type',
-      abbr: 'c',
+      debugCompileTypeOptionName,
+      abbr: debugCompileTypeOptionAbbr,
       defaultsTo: CompileType.jit.toString(),
       allowed: CompileType.values.map((e) => e.name),
     );
     argParser.addOption(
-      'release-compile-type',
-      abbr: 'r',
+      releaseCompileTypeOptionName,
+      abbr: releaseCompileTypeOptionAbbr,
       defaultsTo: CompileType.aot.toString(),
       allowed: CompileType.values.map((e) => e.name),
     );
     argParser.addOption(
-      'docker-compile-type',
-      abbr: 'o',
+      dockerCompileTypeOptionName,
+      abbr: dockerCompileTypeOptionAbbr,
       defaultsTo: CompileType.aot.toString(),
       allowed: CompileType.values.map((e) => e.name),
     );
     argParser.addOption(
-      'template',
-      abbr: 't',
-      defaultsTo: 'controllers',
-      allowed: [
-        'controllers',
-        'endpoints',
-      ],
+      templateOptionName,
+      abbr: templateOptionAbbr,
+      defaultsTo: ProjectTemplate.controllers.name,
+      allowed: ProjectTemplate.values.map((e) => e.name),
     );
   }
 
   @override
   Future<void> run() async {
-    _projectName = argResults!['name'];
+    final args = argResults!;
+
+    _projectName = args[nameOptionName];
 
     if (_projectName == null) {
       usageException('Project name must be specified.');
@@ -69,15 +68,15 @@ class CreateCommand extends Command {
     final projectPath = '${Directory.current.path}/$_projectName';
 
     final debugCompileType =
-        CompileType.fromName(argResults!['debug-compile-type']);
+        CompileType.fromName(args[debugCompileTypeOptionName]);
 
     final releaseCompileType =
-        CompileType.fromName(argResults!['release-compile-type']);
+        CompileType.fromName(args[releaseCompileTypeOptionName]);
 
     final dockerCompileType =
-        CompileType.fromName(argResults!['docker-compile-type']);
+        CompileType.fromName(args[dockerCompileTypeOptionName]);
 
-    _projectTemplate = ProjectTemplate.fromName(argResults!['template']);
+    _projectTemplate = ProjectTemplate.fromName(args[templateOptionName]);
 
     print('Creating Minerva project with name $_projectName...');
 

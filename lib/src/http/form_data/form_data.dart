@@ -27,14 +27,16 @@ class FormData {
 
     final bytesStream = Stream.fromIterable(bytes.map((e) => e.toList()));
 
-    final parts = await transformer.bind(bytesStream).toList();
+    final transformStream = transformer.bind(bytesStream);
 
-    for (final part in parts) {
+    await for (final part in transformStream) {
       final values = part.headers['content-disposition']!.split(';');
 
       String? name, filename;
 
-      for (final value in values) {
+      for (var i = 0; i < values.length; i++) {
+        final value = values[i];
+
         if (value.contains('filename') && filename == null) {
           filename = value.substring(
             value.indexOf('=') + 2,
@@ -49,11 +51,10 @@ class FormData {
       }
 
       if (filename != null) {
-        data[name!] = FormDataFile(
-            filename, Uint8List.fromList(await (part.cast<List<int>>()).first));
+        data[name!] =
+            FormDataFile(filename, Uint8List.fromList(await part.first));
       } else {
-        data[name!] = FormDataString(await utf8.decodeStream(
-            Stream.fromIterable([await part.cast<List<int>>().first])));
+        data[name!] = FormDataString(utf8.decode(await part.first));
       }
     }
 

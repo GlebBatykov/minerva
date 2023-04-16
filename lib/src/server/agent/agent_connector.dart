@@ -12,13 +12,22 @@ class AgentConnector {
   /// Sends a request to the agent.
   ///
   /// A request of this type implies a response to it.
-  Future<T> call<T>(String action, {Map<String, dynamic>? data}) async {
+  Future<T> call<T>(
+    String action, {
+    Map<String, Object?>? data,
+  }) async {
     final receivePort = ReceivePort();
 
-    _agentPort.send(AgentCall(action, data ?? {}, receivePort.sendPort));
+    final callAction = AgentCall(
+      action: action,
+      data: data ?? {},
+      feedbackPort: receivePort.sendPort,
+    );
 
-    final callResult = await receivePort
-        .firstWhere((element) => element is AgentCallResult) as AgentCallResult;
+    _agentPort.send(callAction);
+
+    final callResult = await receivePort.firstWhere((e) => e is AgentCallResult)
+        as AgentCallResult;
 
     receivePort.close();
 
@@ -28,7 +37,10 @@ class AgentConnector {
   /// Sends a request to the agent.
   ///
   /// A request of this type does not imply a response to it.
-  void cast(String action, {Map<String, dynamic>? data}) {
+  void cast(
+    String action, {
+    Map<String, Object?>? data,
+  }) {
     _agentPort.send(AgentCast(action, data ?? {}));
   }
 }

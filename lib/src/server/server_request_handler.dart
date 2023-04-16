@@ -7,33 +7,31 @@ class ServerRequestHandler {
 
   final MiddlewarePipeline _pipeline;
 
-  ServerRequestHandler(
-      Endpoints endpoints, ServerContext context, MiddlewarePipeline pipeline)
-      : _endpoints = endpoints,
+  ServerRequestHandler({
+    required Endpoints endpoints,
+    required ServerContext context,
+    required MiddlewarePipeline pipeline,
+  })  : _endpoints = endpoints,
         _context = context,
         _pipeline = pipeline;
 
   Future<void> handleHttpRequest(HttpRequest request) async {
-    final minervaRequest = MinervaRequest(request);
+    final minervaRequest = MinervaRequest(request, _context.converter);
 
-    final context = MiddlewareContext(minervaRequest, _endpoints.httpEndpoints,
-        _endpoints.webSocketEndpoints, _context);
+    final context = MiddlewareContext(
+      request: minervaRequest,
+      httpEndpoints: _endpoints.httpEndpoints,
+      webSocketEndpoints: _endpoints.webSocketEndpoints,
+      context: _context,
+    );
 
     final result = await _pipeline.handle(context);
-
-    late MinervaResponse minervaResponse;
-
-    if (result is Result) {
-      minervaResponse = await result.response;
-    } else if (result is Map<String, dynamic>) {
-      minervaResponse = await JsonResult(result).response;
-    } else {
-      minervaResponse = await OkResult(body: result).response;
-    }
 
     if (minervaRequest.isUpgraded) {
       return;
     }
+
+    final minervaResponse = await _mapResultToResponse(result);
 
     final response = request.response;
 
@@ -44,6 +42,20 @@ class ServerRequestHandler {
     _writeBody(response, minervaResponse.body);
 
     await response.close();
+  }
+
+  Future<MinervaResponse> _mapResultToResponse(Object? result) async {
+    late MinervaResponse response;
+
+    if (result is Result) {
+      response = await result.response;
+    } else if (result is Map<String, dynamic>) {
+      response = await JsonResult(result).response;
+    } else {
+      response = await OkResult(body: result).response;
+    }
+
+    return response;
   }
 
   void _setHeaders(HttpHeaders headers, MinervaHttpHeaders? minervaHeaders) {

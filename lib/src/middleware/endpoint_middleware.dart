@@ -8,26 +8,36 @@ class EndpointMiddleware extends Middleware {
   final FilterMatcher _filterMatcher = FilterMatcher();
 
   @override
-  Future<dynamic> handle(
-      MiddlewareContext context, MiddlewarePipelineNode? next) async {
+  Future<Object?> handle(
+    MiddlewareContext context,
+    MiddlewarePipelineNode? next,
+  ) async {
     final request = context.request;
 
     final serverContext = context.context;
 
     if (request.isUpgradeRequest) {
       return await _handleWebSocket(
-          serverContext, request, context.webSocketEndponts);
+        context: serverContext,
+        request: request,
+        endpoints: context.webSocketEndpoints,
+      );
     } else {
       return await _handleHttpRequest(
-          serverContext, request, context.httpEndpoints);
+        context: serverContext,
+        request: request,
+        endpoints: context.httpEndpoints,
+      );
     }
   }
 
-  Future<dynamic> _handleHttpRequest(ServerContext context,
-      MinervaRequest request, List<Endpoint> endpoints) async {
-    final selectedEndpoints = endpoints
-        .where((element) => element.method.value == request.method)
-        .toList();
+  Future<Object?> _handleHttpRequest({
+    required ServerContext context,
+    required MinervaRequest request,
+    required List<Endpoint> endpoints,
+  }) async {
+    final selectedEndpoints =
+        endpoints.where((e) => e.method.value == request.method).toList();
 
     if (selectedEndpoints.isEmpty) {
       return NotFoundResult();
@@ -51,19 +61,29 @@ class EndpointMiddleware extends Middleware {
       return result;
     } catch (object, stackTrace) {
       if (endpoint.errorHandler == null) {
-        throw EndpointHandleException(object, stackTrace, request);
+        throw EndpointHandleException(
+          error: object,
+          stackTrace: stackTrace,
+          request: request,
+        );
       } else {
         try {
           return endpoint.errorHandler!.call(context, request, object);
         } catch (object, stackTrace) {
-          throw EndpointHandleException(object, stackTrace, request);
+          throw EndpointHandleException(
+            error: object,
+            stackTrace: stackTrace,
+            request: request,
+          );
         }
       }
     }
   }
 
   Future<Endpoint?> _getEndpoint(
-      List<Endpoint> endpoints, MinervaRequest request) async {
+    List<Endpoint> endpoints,
+    MinervaRequest request,
+  ) async {
     final matchedEndpoints = <Endpoint>[];
 
     for (var i = 0; i < endpoints.length; i++) {
@@ -88,8 +108,9 @@ class EndpointMiddleware extends Middleware {
 
       if (matchedEndpoints.length > 1) {
         throw MiddlewareHandleException(
-            message:
-                'An error occurred while searching for the endpoint. The request matched multiple endpoints.');
+          message:
+              'An error occurred while searching for the endpoint. The request matched multiple endpoints.',
+        );
       }
 
       if (result.pathParameters != null) {
@@ -104,15 +125,20 @@ class EndpointMiddleware extends Middleware {
     }
   }
 
-  Future<dynamic> _handleWebSocket(ServerContext context,
-      MinervaRequest request, List<WebSocketEndpoint> endpoints) async {
+  Future<Object?> _handleWebSocket({
+    required ServerContext context,
+    required MinervaRequest request,
+    required List<WebSocketEndpoint> endpoints,
+  }) async {
     final selectedEndpoints =
-        endpoints.where((element) => element.path == request.uri.path).toList();
+        endpoints.where((e) => e.path == request.uri.path).toList();
 
     if (selectedEndpoints.isNotEmpty) {
       final socket = await request.upgrade();
 
       await selectedEndpoints.first.handler(context, socket);
+
+      return null;
     } else {
       return NotFoundResult();
     }

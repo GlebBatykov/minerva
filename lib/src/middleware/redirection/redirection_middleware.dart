@@ -8,15 +8,18 @@ class RedirectionMiddleware extends Middleware {
 
   late final List<Redirection> _redirections;
 
-  RedirectionMiddleware({required List<RedirectionData> redirections})
-      : _redirections = redirections
+  RedirectionMiddleware({
+    required List<RedirectionData> redirections,
+  }) : _redirections = redirections
             .map((e) => Redirection(e.method, MinervaPath.parse(e.path),
                 RedirectionLocation(e.location), e.authOptions))
             .toList();
 
   @override
   Future<dynamic> handle(
-      MiddlewareContext context, MiddlewarePipelineNode? next) async {
+    MiddlewareContext context,
+    MiddlewarePipelineNode? next,
+  ) async {
     final request = context.request;
 
     final redirections = _redirections
@@ -47,7 +50,9 @@ class RedirectionMiddleware extends Middleware {
   }
 
   Redirection? _getRedirection(
-      List<Redirection> redirections, MinervaRequest request) {
+    List<Redirection> redirections,
+    MinervaRequest request,
+  ) {
     final matchedRedirection = <Redirection>[];
 
     for (var i = 0; i < redirections.length; i++) {

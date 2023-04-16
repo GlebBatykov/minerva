@@ -5,10 +5,11 @@ class SecureServerConfiguration extends ServerConfiguration {
 
   final bool requestClientCertificate;
 
-  SecureServerConfiguration(
-      {required this.securityContext,
-      this.requestClientCertificate = false,
-      super.sessionTimeout,
-      super.backlog,
-      super.v6Only});
+  SecureServerConfiguration({
+    required this.securityContext,
+    this.requestClientCertificate = false,
+    super.sessionTimeout,
+    super.backlog,
+    super.v6Only,
+  });
 }

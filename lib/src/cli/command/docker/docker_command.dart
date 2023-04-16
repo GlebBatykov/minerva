@@ -9,19 +9,19 @@ class DockerCommand extends Command {
 
   @override
   String get usage => '''
-    -d  --directory     points to the directory.
-    -c, --compile-type  specifies compile type of project in docker container. Possible values: AOT (default), JIT.
+    -$directoryOptionAbbr  --$directoryOptionName     points to the directory.
+    -$compileTypeOptionAbbr, --$compileTypeOptionName  specifies compile type of project in docker container. Possible values: AOT (default), JIT.
   ''';
 
   DockerCommand() {
     argParser.addOption(
-      'directory',
-      abbr: 'd',
+      directoryOptionName,
+      abbr: directoryOptionAbbr,
       defaultsTo: Directory.current.path,
     );
     argParser.addOption(
-      'compile-type',
-      abbr: 'c',
+      compileTypeOptionName,
+      abbr: compileTypeOptionAbbr,
       defaultsTo: CompileType.aot.toString(),
       allowed: CompileType.values.map((e) => e.name),
     );
@@ -29,12 +29,14 @@ class DockerCommand extends Command {
 
   @override
   Future<void> run() async {
+    final args = argResults!;
+
     final directoryPath =
-        Directory.fromUri(Uri.directory(argResults!['directory']))
+        Directory.fromUri(Uri.directory(args[directoryOptionName]))
             .absolute
             .path;
 
-    final compileType = argResults!['compile-type'];
+    final compileType = CompileType.fromName(args[compileTypeOptionName]);
 
     await CreateDockerFileCLICommand(
       directoryPath,

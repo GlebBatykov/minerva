@@ -6,10 +6,10 @@ import 'dart:typed_data';
 import 'dart:io';
 
 import 'package:mime/mime.dart';
+import 'package:minerva/minerva.dart';
 import 'package:path/path.dart';
 
 import 'core.dart';
-import 'auth.dart';
 
 part 'http/minerva_request.dart';
 part 'http/response/minerva_response.dart';

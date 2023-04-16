@@ -83,9 +83,13 @@ class MinervaRequest {
   /// Checks whether the update request was made before the websocket.
   bool get isUpgraded => _isUpgraded;
 
-  MinervaRequest(HttpRequest request)
+  MinervaRequest(HttpRequest request, Utf8Converter converter)
       : _request = request,
-        _body = RequestBody(request.asBroadcastStream(), request.headers);
+        _body = RequestBody(
+          dataStream: request,
+          headers: request.headers,
+          converter: converter,
+        );
 
   /// Upgrades a [HttpRequest] to a [WebSocket] connection. If the request is not a valid WebSocket upgrade request an HTTP response with status code 500 will be returned. Otherwise the returned future will complete with the [WebSocket] when the upgrade process is complete.
   ///

@@ -9,19 +9,19 @@ class TestCommand extends Command {
 
   @override
   String get usage => '''
-    -d  --directory points to the project directory.
-    -m  --mode      sets the project build mode. Possible values: debug (default), release.
+    -$directoryOptionAbbr  --$directoryOptionName points to the project directory.
+    -$modeOptionAbbr  --$modeOptionName      sets the project build mode. Possible values: debug (default), release.
   ''';
 
   TestCommand() {
     argParser.addOption(
-      'directory',
-      abbr: 'd',
+      directoryOptionName,
+      abbr: directoryOptionAbbr,
       defaultsTo: Directory.current.path,
     );
     argParser.addOption(
-      'mode',
-      abbr: 'm',
+      modeOptionName,
+      abbr: modeOptionAbbr,
       defaultsTo: BuildMode.debug.toString(),
       allowed: BuildMode.values.map((e) => e.name),
     );
@@ -29,12 +29,14 @@ class TestCommand extends Command {
 
   @override
   Future<void> run() async {
+    final args = argResults!;
+
     final directoryPath = Directory.fromUri(Uri.directory(
-      argResults!['directory'],
+      args[directoryOptionName],
       windows: Platform.isWindows,
     )).absolute.path;
 
-    final mode = BuildMode.fromName(argResults!['mode']);
+    final mode = BuildMode.fromName(args[modeOptionName]);
 
     final appProcess = await RunApplicationCLICommand(
       directoryPath,

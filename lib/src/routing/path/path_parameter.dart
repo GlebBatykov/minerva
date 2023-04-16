@@ -5,7 +5,11 @@ class PathParameter extends PathSegment {
 
   final RegExp? regExp;
 
-  PathParameter(this.type, super.value, [this.regExp]);
+  PathParameter({
+    required this.type,
+    required String value,
+    this.regExp,
+  }) : super(value);
 
   factory PathParameter.parse(String segment) {
     late PathParameterType type;
@@ -50,6 +54,10 @@ class PathParameter extends PathSegment {
       }
     }
 
-    return PathParameter(type, name, regExp);
+    return PathParameter(
+      type: type,
+      value: name,
+      regExp: regExp,
+    );
   }
 }
