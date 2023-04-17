@@ -92,6 +92,7 @@ Dart фреймворк для создания серверов
 
 - [emerald](https://pub.dev/packages/emerald) - `JSON` сериализатор/десериализатор, основан на `dart:mirros`, работает только с `JIT` типом компиляции;
 - [mcache](https://pub.dev/packages/mcache) - пакет для кэширования значений. Поддерживает удаление значение по истечению их срока жизни;
+- [minerva_mcache](https://pub.dev/packages/minerva_mcache) - пакет для интеграции [mcache](https://pub.dev/packages/mcache) пакета в `Minerva` фреймворк. Содержит средства позволяющие работать из разных экземпляров сервера с общим кэшем находящимся в агенте;
 - [minerva_controller_generator](https://pub.dev/packages/minerva_controller_generator) - пакет позволяет конфигурировать сервер при помощи контроллеров, построенных на генерации кода.
 
 # Установка
@@ -104,7 +105,7 @@ Dart фреймворк для создания серверов
 dart pub global activate minerva
 ```
 
-Создать проект и запустить пример:
+Создать проект с стандартным шаблоном по умолчанию (controllers) и запустить пример:
 
 ```dart
 minerva create -n my_application
@@ -112,6 +113,16 @@ minerva create -n my_application
 cd my_application
 
 dart pub run build_runner build
+
+minerva run
+```
+
+Создать проект с шаблоном endpoints и запустить пример:
+
+```dart
+minerva create -n my_application -t endpoints
+
+cd my_application
 
 minerva run
 ```

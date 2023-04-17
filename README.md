@@ -92,7 +92,8 @@ Currently existing my packages that may be useful to you:
 
 - [emerald](https://pub.dev/packages/emerald) - `JSON` serializer/deserializer, based on `dart:mirrors`, works only with `JIT` compilation type;
 - [mcache](https://pub.dev/packages/mcache) - package for caching values. Supports deleting values after their expiration date;
-- [minerva_controller_generator](https://pub.dev/packages/minerva_controller_generator ) - the package allows you to configure the server using controllers built on code generation.
+- [minerva_mcache](https://pub.dev/packages/minerva_mcache) - package for integration [mcache](https://pub.dev/packages/mcache) package in the `Minerva` framework. Contains tools that allow you to work from different server instances with shared cache located in the agent;
+- [minerva_controller_generator](https://pub.dev/packages/minerva_controller_generator) - the package allows you to configure the server using controllers built on code generation.
 
 # Installing
 
@@ -104,10 +105,22 @@ Installing `Minerva`:
 dart pub global activate minerva
 ```
 
-Create project and run example:
+Create project with standart template (controllers) and run example:
 
 ```dart
 minerva create -n my_application
+
+cd my_application
+
+dart pub run build_runner build
+
+minerva run
+```
+
+Create project with endpoints template and run example:
+
+```dart
+minerva create -n my_application -t endpoints
 
 cd my_application
 
