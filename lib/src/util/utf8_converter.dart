@@ -6,15 +6,19 @@ class Utf8Converter {
 
   ///
   String decodeChunks(List<List<int>> chunks) {
-    return _joinStrings(chunks.map((e) => _bytesToString(e)).toList());
+    final buffer = StringBuffer();
+
+    for (var i = 0; i < chunks.length; i++) {
+      for (var j = 0; j < chunks[i].length; j++) {
+        buffer.writeCharCode(chunks[i][j]);
+      }
+    }
+
+    return buffer.toString();
   }
 
   ///
   String decodeBytes(List<int> bytes) {
-    return _bytesToString(bytes);
-  }
-
-  String _bytesToString(List<int> bytes) {
     final buffer = StringBuffer();
 
     for (var i = 0; i < bytes.length; i++) {
@@ -24,19 +28,16 @@ class Utf8Converter {
     return buffer.toString();
   }
 
-  String _joinStrings(List<String> strings) {
-    final buffer = StringBuffer();
-
-    for (var i = 0; i < strings.length; i++) {
-      buffer.write(strings[i]);
-    }
-
-    return buffer.toString();
-  }
-
   ///
-  List<int> encode(String string) {
-    final bytes = List<int>.filled(string.length, 0);
+  List<int> encode(
+    String string, {
+    bool growable = false,
+  }) {
+    final bytes = List<int>.filled(
+      string.length,
+      0,
+      growable: growable,
+    );
 
     final codeUnits = string.codeUnits;
 
