@@ -38,11 +38,11 @@ class ConfigureAnalysisOptionsCLICommand extends CLICommand<void> {
 
 include: package:lints/recommended.yaml
 
-# Uncomment the following section to specify additional rules.
+linter:
+  rules:
+    depend_on_referenced_packages: false
 
-# linter:
-#   rules:
-#     - camel_case_types
+# Uncomment the following section to specify additional rules.
 
 # analyzer:
 #   exclude:
