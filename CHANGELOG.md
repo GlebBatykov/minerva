@@ -1,4 +1,8 @@
-# 0.3.4
+# 0.3.5
+
+- Update minerva_controller_generator version.
+
+## 0.3.4
 
 - Optimized the decoding time of the request body into text and JSON;
 - Refactor code, refactor CLI tools;
