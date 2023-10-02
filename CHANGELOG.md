@@ -1,4 +1,8 @@
-# 0.3.5
+# 0.3.6
+
+- Fix CLI tools.
+
+## 0.3.5
 
 - Update minerva_controller_generator version.
 

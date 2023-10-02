@@ -1,7 +1,7 @@
 part of minerva_cli;
 
 abstract class CLIConfiguration {
-  static const String minervaVersion = '0.3.4';
+  static const String minervaVersion = '0.3.6';
 
   static const String minervaControllerGeneratorVersion = '0.9.5';
 
